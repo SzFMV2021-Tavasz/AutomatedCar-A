@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "0ZjS8T2UoNMjWQnpJYr/NzIUp/0kUJa+b62VwE1gKuUrpimG7uweozH/4duUK45eDULg+QgatuNuS73IDUJrTw==",
+  "success": true,
+  "projectFilePath": "C:\\code\\AutomatedCar-WPF\\src\\AutomatedCar\\AutomatedCar.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\IEUser\\.nuget\\packages\\dynamicdata\\7.1.1\\dynamicdata.7.1.1.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\reactiveui\\13.1.1\\reactiveui.13.1.1.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\reactiveui.wpf\\13.1.1\\reactiveui.wpf.13.1.1.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\splat\\10.0.1\\splat.10.0.1.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.reactive\\5.0.0\\system.reactive.5.0.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.resources.resourcemanager\\4.3.0\\system.resources.resourcemanager.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.runtime.serialization.primitives\\4.3.0\\system.runtime.serialization.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
+    "C:\\Users\\IEUser\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,6 +1,7 @@
 namespace AutomatedCar.Models
 {
     using SystemComponents;
+    using System.Windows.Shapes;
 
     public class AutomatedCar : Car
     {
@@ -27,5 +28,7 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus.Stop();
         }
+
+        public Polyline Geometry { get; set; }
     }
 }

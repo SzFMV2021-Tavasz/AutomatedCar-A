@@ -44,7 +44,7 @@
                     <Canvas>
                         <Image Width="{Binding Width}" Height="{Binding Height}"
                             Source="{Binding Filename, Converter={x:Static visualization:WorldObjectTransformer.Instance}}"/>
-                        <!-- <Polyline Stroke="{Binding Brush, Mode=OneWay}" Points="{Binding Geometry.Points, Mode=OneWay}" /> -->
+                        <Polyline Stroke="red" Points="{Binding Geometry.Points, Mode=OneWay}" />
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.Resources>

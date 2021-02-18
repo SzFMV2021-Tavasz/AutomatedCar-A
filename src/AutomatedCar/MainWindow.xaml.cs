@@ -3,6 +3,7 @@ using System.Security.AccessControl;
 using System.Runtime.CompilerServices;
 using System.Globalization;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using AutomatedCar.Models;
 using AutomatedCar.ViewModels;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace AutomatedCar
 {
@@ -57,7 +60,20 @@ namespace AutomatedCar
             var controlledCar = new Models.AutomatedCar(50, 50, "car_1_white.png");
             controlledCar.Width = 108;
             controlledCar.Height = 240;
-            // controlledCar.Geometry = geom;
+
+            // read the world object polygons, get the one for the car in a primitive way
+            // this is just a sample, the proecssing shold be much more general
+            string json_text = System.IO.File.ReadAllText($"src/AutomatedCar/Assets/worldobject_polygons.json");
+            dynamic stuff = JObject.Parse(json_text);
+            var geom = new Polyline();
+            // get the points from the json and add to the polyline
+            foreach (var i in stuff["objects"][0]["polys"][0]["points"])
+            {
+                geom.Points.Add(new Point(i[0].ToObject<int>(), i[1].ToObject<int>()));
+            }
+            // add polyline to the car
+            controlledCar.Geometry = geom;
+
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();

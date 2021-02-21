@@ -63,7 +63,7 @@ namespace AutomatedCar
 
             // read the world object polygons, get the one for the car in a primitive way
             // this is just a sample, the proecssing shold be much more general
-            string json_text = System.IO.File.ReadAllText($"src/AutomatedCar/Assets/worldobject_polygons.json");
+            string json_text = System.IO.File.ReadAllText($"Assets/worldobject_polygons.json");
             dynamic stuff = JObject.Parse(json_text);
             var geom = new Polyline();
             // get the points from the json and add to the polyline

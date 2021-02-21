@@ -19,7 +19,7 @@ namespace AutomatedCar.Visualization
         {
             if (!cache.ContainsKey(filename))
             {
-                var image = new BitmapImage(new Uri($"src/AutomatedCar/Assets/WorldObjects/{filename}", UriKind.Relative));
+                var image = new BitmapImage(new Uri($"Assets/WorldObjects/{filename}", UriKind.Relative));
                 image.Freeze();
                 cache.Add(filename, image);
             }

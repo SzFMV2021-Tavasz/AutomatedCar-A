@@ -12,7 +12,7 @@
 
         public static World Instance { get; } = new World();
 
-        public ObservableCollection<WorldObject> WorldObjects { get; } = new ObservableCollection<WorldObject>();
+        public ObservableCollection<RenderableWorldObject> WorldObjects { get; } = new ObservableCollection<RenderableWorldObject>();
 
         public AutomatedCar ControlledCar
         {
@@ -24,7 +24,7 @@
 
         public int Height { get; set; }
 
-        public void AddObject(WorldObject worldObject)
+        public void AddObject(RenderableWorldObject worldObject)
         {
             this.WorldObjects.Add(worldObject);
         }

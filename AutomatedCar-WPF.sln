@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{83166C64-0337-4EC5-B990-77B72A5A5BC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedCar", "src\AutomatedCar\AutomatedCar.csproj", "{7E6D20D5-3E1A-48AF-BFAA-A97BB5EFCCB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomatedCar", "src\AutomatedCar\AutomatedCar.csproj", "{7E6D20D5-3E1A-48AF-BFAA-A97BB5EFCCB1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{538DC930-20CF-4D03-B8D9-212B5657E1EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatedCarTest", "test\AutomatedCarTest\AutomatedCarTest.csproj", "{9C761B49-F72E-42E6-B47A-DC3953430875}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomatedCarTest", "test\AutomatedCarTest\AutomatedCarTest.csproj", "{9C761B49-F72E-42E6-B47A-DC3953430875}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseModel", "BaseModel\BaseModel.csproj", "{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7E6D20D5-3E1A-48AF-BFAA-A97BB5EFCCB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,9 +47,28 @@ Global
 		{9C761B49-F72E-42E6-B47A-DC3953430875}.Release|x64.Build.0 = Release|Any CPU
 		{9C761B49-F72E-42E6-B47A-DC3953430875}.Release|x86.ActiveCfg = Release|Any CPU
 		{9C761B49-F72E-42E6-B47A-DC3953430875}.Release|x86.Build.0 = Release|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Debug|x86.Build.0 = Debug|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Release|x64.Build.0 = Release|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7E6D20D5-3E1A-48AF-BFAA-A97BB5EFCCB1} = {83166C64-0337-4EC5-B990-77B72A5A5BC7}
 		{9C761B49-F72E-42E6-B47A-DC3953430875} = {538DC930-20CF-4D03-B8D9-212B5657E1EA}
+		{C3F216CF-3041-47AB-8E7C-ED93D8C26D72} = {83166C64-0337-4EC5-B990-77B72A5A5BC7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8ED9562-FE0B-409A-A815-1601F0521BC3}
 	EndGlobalSection
 EndGlobal

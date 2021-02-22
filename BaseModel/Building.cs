@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace BaseModel
 {
-    public class Tree : WorldObject
+    public class Building : WorldObject
     {
-        public Tree() : base(Type.TREE) {}
+        public Building(Type type) : base(type) {}
 
-        public override Type[] AllowedTypes => new[] { Type.TREE };
+        public override Type[] AllowedTypes => new Type[] { 
+            Type.GARAGE
+        };
 
         public override bool IsDynamic => false;
     }

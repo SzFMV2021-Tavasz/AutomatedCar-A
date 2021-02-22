@@ -41,8 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Building.cs" />
+    <Compile Include="Iso5218_Person.cs" />
+    <Compile Include="Obstacle.cs" />
+    <Compile Include="ParkingSpot.cs" />
+    <Compile Include="Vehicle.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Road.cs" />
+    <Compile Include="RoadSign.cs" />
+    <None Include="SpeedLimitSign.cs.bak" />
     <Compile Include="Tree.cs" />
     <Compile Include="WorldObject.cs" />
   </ItemGroup>

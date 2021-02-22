@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BaseModel
+{
+    public class SpeedLimitSign : WorldObject
+    {
+        private int speedLimit;
+
+        public SpeedLimitSign(int speedLimit)
+        {
+            this.speedLimit = speedLimit;
+        }
+
+        public override bool IsDynamic => false;
+
+        public override Type ObjectType => Type.ROAD_SIGN;
+
+        public override RoadSignType_t RoadSignType => RoadSignType_t.SPEED_LIMIT;
+
+        public override int SpeedLimitSignValue => speedLimit;
+    }
+}

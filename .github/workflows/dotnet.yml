@@ -22,4 +22,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal -collect:"XPlat Code Coverage"
+    - name: Codecov report
+      if: success()
+      run: |
+        curl -s https://codecov.io/bash -o codecov.bash
+        ./codecov.bash -t ${{ secrets.CODECOV_TOKEN }}

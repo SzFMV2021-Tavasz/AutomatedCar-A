@@ -46,20 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Building.cs" />
-    <Compile Include="Iso5218_Person.cs" />
-    <Compile Include="Obstacle.cs" />
-    <Compile Include="ParkingSpot.cs" />
-    <Compile Include="Vehicle.cs" />
+    <Compile Include="WorldObjects\Building.cs" />
+    <Compile Include="WorldObjects\Iso5218_Person.cs" />
+    <Compile Include="WorldObjects\Obstacle.cs" />
+    <Compile Include="WorldObjects\ParkingSpot.cs" />
+    <Compile Include="WorldObjects\Vehicle.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Road.cs" />
-    <Compile Include="RoadSign.cs" />
+    <Compile Include="WorldObjects\Road.cs" />
+    <Compile Include="WorldObjects\RoadSign.cs" />
     <None Include="packages.config" />
     <None Include="SpeedLimitSign.cs.bak" />
-    <Compile Include="Tree.cs" />
+    <Compile Include="WorldObjects\Tree.cs" />
     <Compile Include="World.cs" />
-    <Compile Include="WorldObject.cs" />
+    <Compile Include="WorldObjects\WorldObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

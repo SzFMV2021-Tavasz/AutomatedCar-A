@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseModel
+namespace BaseModel.WorldObjects
 {
     public abstract class WorldObject
     {

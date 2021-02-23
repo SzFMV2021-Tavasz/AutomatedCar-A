@@ -1,4 +1,4 @@
-
+[![.NET](https://github.com/SzFMV2021-Tavasz/AutomatedCar-A/actions/workflows/dotnet.yml/badge.svg)](https://github.com/SzFMV2021-Tavasz/AutomatedCar-A/actions/workflows/dotnet.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/szfmv2021-tavasz/automatedcar-a/badge)](https://www.codefactor.io/repository/github/szfmv2021-tavasz/automatedcar-a)
 [![codecov](https://codecov.io/gh/SzFMV2021-Tavasz/AutomatedCar-A/branch/master/graph/badge.svg?token=HY18EWW4YD)](https://codecov.io/gh/SzFMV2021-Tavasz/AutomatedCar-A)
 [![Handout](https://img.shields.io/badge/handout-jegyzet-48165B.svg?style=flat)](https://szfmv2021-tavasz.github.io/handout/)

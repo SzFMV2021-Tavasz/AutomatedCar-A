@@ -15,6 +15,6 @@ namespace BaseModel
             Type.WOMAN
         };
 
-        public override bool IsDynamic => false;
+        public override Tag Tags => Tag.DYNAMIC | Tag.PEDESTRIAN;
     }
 }

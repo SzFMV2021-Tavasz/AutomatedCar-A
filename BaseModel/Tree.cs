@@ -12,6 +12,6 @@ namespace BaseModel
 
         public override Type[] AllowedTypes => new[] { Type.TREE };
 
-        public override bool IsDynamic => false;
+        public override Tag Tags => Tag.NATURE;
     }
 }

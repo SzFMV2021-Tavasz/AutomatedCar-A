@@ -10,7 +10,6 @@ namespace BaseModel
     {
         public RoadSign(Type type) : base(type) {}
 
-        public override bool IsDynamic => false;
 
         public override Type[] AllowedTypes => new[] {
             Type.ROADSIGN_PARKING_RIGHT,
@@ -19,5 +18,7 @@ namespace BaseModel
             Type.ROADSIGN_SPEED_50,
             Type.ROADSIGN_SPEED_60
         };
+
+        public override Tag Tags => Tag.ROAD_SIGN | Tag.SIGN;
     }
 }

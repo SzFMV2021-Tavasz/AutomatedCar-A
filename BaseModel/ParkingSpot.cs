@@ -16,6 +16,6 @@ namespace BaseModel
             Type.PARKING_SPACE_PARALLEL,
         };
 
-        public override bool IsDynamic => throw new NotImplementedException();
+        public override Tag Tags => Tag.NONE;
     }
 }

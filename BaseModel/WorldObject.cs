@@ -16,10 +16,25 @@ namespace BaseModel
             ValidateType(type, AllowedTypes);
         }
 
-        public int ID { get; set; }
-        public abstract bool IsDynamic { get; }
+        public int ID { get; set; }        
         public virtual Polygon Polygon { get => null; }
 
+        [Flags]
+        public enum Tag
+        {
+            NONE = 0,
+            DYNAMIC = 1,
+            BUILDING = 2,
+            ROAD_OBSTACLE = 4,
+            ROAD = 8,
+            SIGN = 16,
+            ROAD_SIGN = 32,
+            NATURE = 64,
+            VEHICLE = 128,
+            PEDESTRIAN = 256
+        }
+
+        public abstract Tag Tags { get; }
 
         public int X { get; set; }
         public int Y { get; set; }

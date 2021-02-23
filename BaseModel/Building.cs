@@ -8,12 +8,12 @@ namespace BaseModel
 {
     public class Building : WorldObject
     {
-        public Building(Type type) : base(type) {}
+        public Building(Type type) : base(type) { }
 
-        public override Type[] AllowedTypes => new Type[] { 
+        public override Type[] AllowedTypes => new Type[] {
             Type.GARAGE
         };
 
-        public override bool IsDynamic => false;
+        public override Tag Tags => Tag.BUILDING;
     }
 }

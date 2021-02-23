@@ -29,6 +29,6 @@ namespace BaseModel
             Type._2_CROSSROAD_2
         };
 
-        public override bool IsDynamic => false;
+        public override Tag Tags => Tag.ROAD;
     }
 }

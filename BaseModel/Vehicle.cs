@@ -21,6 +21,6 @@ namespace BaseModel
             Type.BICYCLE
         };
 
-        public override bool IsDynamic => true;
+        public override Tag Tags => Tag.VEHICLE;
     }
 }

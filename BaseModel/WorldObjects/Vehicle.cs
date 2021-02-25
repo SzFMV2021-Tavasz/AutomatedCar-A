@@ -8,9 +8,12 @@ namespace BaseModel.WorldObjects
 {
     public class Vehicle : WorldObject
     {
-        public Vehicle(Type type) : base(type) {}
+        public Vehicle(Type type) : base(type)
+        {
+            validate();
+        }
 
-        public override Type[] AllowedTypes => new Type[] {
+        protected override Type[] AllowedTypes => new Type[] {
             Type.CAR_1_BLUE,
             Type.CAR_1_RED,
             Type.CAR_1_WHITE,

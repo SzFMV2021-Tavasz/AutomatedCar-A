@@ -8,18 +8,55 @@ namespace BaseModel.WorldObjects
 {
     public abstract class WorldObject
     {
-        private Dictionary<Type, Polygon> polyDict;
+        /// <summary>
+        /// After inheriting from this object, you are expected to call validate() to ensure
+        /// that an allowed objectType is given.
+        /// </summary>
+        protected abstract Type[] AllowedTypes { get; }
 
-        public abstract Type[] AllowedTypes { get; }
-        
         internal WorldObject(Type type)
         {
             this._objectType = type;
-            ValidateType(type, AllowedTypes);
         }
 
-        public int ID { get; set; }        
-        public virtual Polygon Polygon { get => null; }
+        /// <summary>
+        /// @see AllowedTypes
+        /// </summary>
+        protected void validate()
+        {
+            ValidateType(this._objectType, AllowedTypes);
+        }
+
+        private Dictionary<Type, Polygon> polygonDict;
+        
+        public int ID { get; set; }
+
+        /// <summary>
+        /// If a type is not found in the dictionary, then it is interpreted as the object 
+        /// not being able to collide with other objects possessing this trait.
+        /// </summary>
+        public void SetPolygonNameDictionary(Dictionary<Type, Polygon> dictionary)
+        {
+            this.polygonDict = dictionary;
+        } 
+
+        /// <summary>
+        /// If the object is able to collide with other object possessing the same trait,
+        /// 
+        /// </summary>
+        public Polygon Polygon
+        {
+            get
+            {
+                try
+                {
+                    return polygonDict[this._objectType];
+                } catch (KeyNotFoundException)
+                {
+                    return null;
+                }
+            }
+        }
 
         public abstract Tag Tags { get; }
 
@@ -47,7 +84,7 @@ namespace BaseModel.WorldObjects
             throw new NotSupportedException();
         }
 
-        protected Type _objectType;
+        private readonly Type _objectType;
         
         public Type ObjectType => _objectType;
 

@@ -8,9 +8,12 @@ namespace BaseModel.WorldObjects
 {
     public class ParkingSpot : WorldObject
     {
-        public ParkingSpot(Type type) : base(type) {}
+        public ParkingSpot(Type type) : base(type)
+        {
+            validate();
+        }
 
-        public override Type[] AllowedTypes => new Type[]
+        protected override Type[] AllowedTypes => new Type[]
         {
             Type.PARKING_90,
             Type.PARKING_SPACE_PARALLEL,

@@ -10,9 +10,10 @@ namespace BaseModel.WorldObjects
     {
         public Road(Type type) : base(type)
         {
+            validate();
         }
 
-        public override Type[] AllowedTypes => new Type[]
+        protected override Type[] AllowedTypes => new Type[]
         {
             Type.ROAD_2LANE_45LEFT,
             Type.ROAD_2LANE_45RIGHT,

@@ -8,9 +8,12 @@ namespace BaseModel.WorldObjects
 {
     public class Building : WorldObject
     {
-        public Building(Type type) : base(type) { }
+        public Building(Type type) : base(type)
+        {
+            validate();
+        }
 
-        public override Type[] AllowedTypes => new Type[] {
+        protected override Type[] AllowedTypes => new Type[] {
             Type.GARAGE
         };
 

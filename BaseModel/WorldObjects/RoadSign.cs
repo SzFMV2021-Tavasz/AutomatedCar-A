@@ -8,10 +8,12 @@ namespace BaseModel.WorldObjects
 {
     public class RoadSign : WorldObject
     {
-        public RoadSign(Type type) : base(type) {}
+        public RoadSign(Type type) : base(type) {
+            validate();
+        }
 
 
-        public override Type[] AllowedTypes => new[] {
+        protected override Type[] AllowedTypes => new[] {
             Type.ROADSIGN_PARKING_RIGHT,
             Type.ROADSIGN_PRIORITY_STOP,
             Type.ROADSIGN_SPEED_40,

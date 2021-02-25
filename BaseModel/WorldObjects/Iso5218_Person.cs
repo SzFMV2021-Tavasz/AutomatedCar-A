@@ -8,9 +8,12 @@ namespace BaseModel.WorldObjects
 {
     public class Iso5218_Person : WorldObject
     {
-        public Iso5218_Person(Type type) : base(type) { }
+        public Iso5218_Person(Type type) : base(type)
+        {
+            validate();
+        }
 
-        public override Type[] AllowedTypes => new Type[] {
+        protected override Type[] AllowedTypes => new Type[] {
             Type.MAN,
             Type.WOMAN
         };

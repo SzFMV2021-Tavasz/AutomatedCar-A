@@ -19,9 +19,22 @@ namespace BaseModel
             this.objects = objects;
         }
 
+        /// <summary>
+        /// @attention The ID of the supplied worldObject is going to be altered accordingly to this World instance.
+        /// </summary>
+        public void AddObject(WorldObject worldObject)
+        {
+            objects.Add(worldObject);
+        }
+        
+        public void RemoveObject(int ID)
+        {
+            objects.Remove( objects.First(o => o.ID == ID));
+        }
+
         public WorldObject GetObjectByID(int ID)
         {
-            return objects.Where(o => o.ID == ID).First();
+            return objects.First(o => o.ID == ID);
         }
 
         public WorldObject[] GetObjectsWithTags(WorldObject.Tag tag)

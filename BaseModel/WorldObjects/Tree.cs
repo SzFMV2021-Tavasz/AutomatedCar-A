@@ -8,9 +8,12 @@ namespace BaseModel.WorldObjects
 {
     public class Tree : WorldObject
     {
-        public Tree() : base(Type.TREE) {}
+        public Tree() : base(Type.TREE)
+        {
+            validate();
+        }
 
-        public override Type[] AllowedTypes => new[] { Type.TREE };
+        protected override Type[] AllowedTypes => new[] { Type.TREE };
 
         public override Tag Tags => Tag.NATURE;
     }

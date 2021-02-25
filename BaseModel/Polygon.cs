@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BaseModel.WorldObjects;
 
-namespace BaseModel.WorldObjects
+namespace BaseModel
 {
+
+    // WPF shape ehelyett? vagy WPF geometry?
     public class Polygon
     {
         public string Name { get; }
@@ -15,7 +15,7 @@ namespace BaseModel.WorldObjects
         /// </summary>
         /// <returns>Null if the object is not collidable, the collision polygons otherwise.</returns>
         public Tuple<int, int>[] points { get; }
-
+        
         private static Dictionary<WorldObject.Type, string> polygonNames = new Dictionary<WorldObject.Type, string>
         {
             { WorldObject.Type._2_CROSSROAD_1, "2_crossroad_1" },

@@ -10,7 +10,7 @@ namespace BaseModel
 {
     public class World
     {
-        public List<WorldObject> objects = new List<WorldObject>();        
+        public List<WorldObject> objects = new List<WorldObject>();
 
         public World() { }
 
@@ -27,6 +27,11 @@ namespace BaseModel
         public WorldObject[] GetObjectsWithTags(WorldObject.Tag tag)
         {
             return objects.Where(o => (o.Tags & tag) == tag).ToArray();
+        }
+
+        public WorldObject[] GetObjectsWithoutTags(WorldObject.Tag tag)
+        {
+            return objects.Where(o => (o.Tags & ~tag) == 0).ToArray();
         }
     }
 }

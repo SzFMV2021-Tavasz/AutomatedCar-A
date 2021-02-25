@@ -8,6 +8,8 @@ namespace BaseModel.WorldObjects
 {
     public abstract class WorldObject
     {
+        private Dictionary<Type, Polygon> polyDict;
+
         public abstract Type[] AllowedTypes { get; }
         
         internal WorldObject(Type type)
@@ -18,21 +20,6 @@ namespace BaseModel.WorldObjects
 
         public int ID { get; set; }        
         public virtual Polygon Polygon { get => null; }
-
-        [Flags]
-        public enum Tag
-        {
-            NONE = 0,
-            DYNAMIC = 1,
-            BUILDING = 2,
-            ROAD_OBSTACLE = 4,
-            ROAD = 8,
-            SIGN = 16,
-            ROAD_SIGN = 32,
-            NATURE = 64,
-            VEHICLE = 128,
-            PEDESTRIAN = 256
-        }
 
         public abstract Tag Tags { get; }
 
@@ -101,6 +88,22 @@ namespace BaseModel.WorldObjects
             ROAD_2LANE_TJUNCTIONRIGHT,
             TREE,
             WOMAN,
+        }
+
+
+        [Flags]
+        public enum Tag
+        {
+            NONE = 0,
+            DYNAMIC = 1,
+            BUILDING = 2,
+            ROAD_OBSTACLE = 4,
+            ROAD = 8,
+            SIGN = 16,
+            ROAD_SIGN = 32,
+            NATURE = 64,
+            VEHICLE = 128,
+            PEDESTRIAN = 256
         }
 
     }

@@ -1,3 +1,5 @@
+using BaseModel.WorldObjects;
+
 namespace AutomatedCar.Models
 {
     using BaseModel;
@@ -9,8 +11,6 @@ namespace AutomatedCar.Models
         private int _y;
 
         WorldObject wo = new Tree();
-        
-
 
         public RenderableWorldObject(int x, int y, string filename)
         {

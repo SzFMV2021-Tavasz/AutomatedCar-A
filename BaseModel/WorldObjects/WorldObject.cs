@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using System.Runtime.Serialization;
 
 namespace BaseModel.WorldObjects
 {
@@ -28,7 +31,8 @@ namespace BaseModel.WorldObjects
         }
 
         private Dictionary<Type, Polygon> polygonDict;
-        
+
+        [JsonIgnore]
         public int ID { get; set; }
 
         /// <summary>
@@ -38,12 +42,12 @@ namespace BaseModel.WorldObjects
         public void SetPolygonNameDictionary(Dictionary<Type, Polygon> dictionary)
         {
             this.polygonDict = dictionary;
-        } 
+        }
 
         /// <summary>
         /// If the object is able to collide with other object possessing the same trait,
-        /// 
         /// </summary>
+        [JsonIgnore]
         public Polygon Polygon
         {
             get
@@ -58,15 +62,23 @@ namespace BaseModel.WorldObjects
             }
         }
 
+        [JsonIgnore]
         public abstract Tag Tags { get; }
 
+        [JsonProperty("x")]
         public int X { get; set; }
+        [JsonProperty("y")]
         public int Y { get; set; }
+        [JsonIgnore]
         public int ZIndex { get; set; }
 
+        [JsonProperty("m11")]
         public float Transformation_m11;
+        [JsonProperty("m12")]
         public float Transformation_m12;
+        [JsonProperty("m21")]
         public float Transformation_m21;
+        [JsonProperty("m22")]
         public float Transformation_m22;
 
         // customState?     pl dictionary sajat mezoknek
@@ -85,7 +97,9 @@ namespace BaseModel.WorldObjects
         }
 
         private readonly Type _objectType;
-        
+
+        [JsonProperty("type")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Type ObjectType => _objectType;
 
         public enum Type

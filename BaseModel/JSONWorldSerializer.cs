@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using BaseModel.WorldObjects;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BaseModel
 {
@@ -15,13 +18,27 @@ namespace BaseModel
         
         public World Load(string path)
         {
-            throw new NotImplementedException();
+            string json = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<World>(json, new JsonHelper.WorldConverter());
         }
 
         public void Save(World world, string path)
         {
-            throw new NotImplementedException();
+            string json = JsonConvert.SerializeObject(world, Formatting.Indented, new JsonHelper.WorldObjectJsonConverter(WorldObjectTypes));
+            File.WriteAllText(path, json);
         }
+
+        public static Type[] WorldObjectTypes =
+        {
+            typeof(Building),
+            typeof(Iso5218_Person),
+            typeof(Obstacle),
+            typeof(ParkingSpot),
+            typeof(Road),
+            typeof(RoadSign),
+            typeof(Tree),
+            typeof(Vehicle)
+        };
 
         public static Dictionary<WorldObject.Type, string> TypenameStringDictionary =
             new Dictionary<WorldObject.Type, string>()

@@ -18,6 +18,17 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         }
 
         [Fact]
+        public void DragIsZeroForZeroVelocity()
+        {
+            var forceCalculator = new VehicleForces(constants.Object);
+            var vel = Vector2.Zero;
+
+            var force = forceCalculator.GetDragForce(vel);
+
+            Assert.True(force.Length() < float.Epsilon);
+        }
+
+        [Fact]
         public void DragIsProportionalToSpeed()
         {
             var forceCalculator = new VehicleForces(constants.Object);

@@ -6,7 +6,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
     public class VehicleForces
     {
         private readonly IVehicleConstants vehicleConstants;
-        private readonly float epsilon = 0.001f;
 
         public VehicleForces(IVehicleConstants vehicleConstants)
         {
@@ -24,7 +23,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
             // If the relative velocity is (near) zero we pretend that there is
             // no drag force present, since a zero vector cannot be normalized.
-            if (relativeVelocity.LengthSquared() < epsilon)
+            if (relativeVelocity.LengthSquared() < float.Epsilon)
             {
                 return Vector2.Zero;
             }

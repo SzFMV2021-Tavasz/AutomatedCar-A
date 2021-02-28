@@ -1,6 +1,7 @@
 using AutomatedCar.SystemComponents.Powertrain;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         }
 
         [Fact]
-        public void DragIsZeroForZeroVelocity()
+        public void DragIsZeroAtZeroVelocity()
         {
             var forceCalculator = new VehicleForces(constants.Object);
             var vel = Vector2.Zero;
@@ -28,12 +29,18 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             Assert.True(force.Length() < float.Epsilon);
         }
 
-        [Fact]
-        public void DragIsProportionalToSpeed()
+        public static IEnumerable<object[]> dragProportionalTestVectors =>
+            new List<object[]>
+            {
+                new object[] { Vector2.Zero,        new Vector2(0, 28) },
+                new object[] { new Vector2(0, 10),  new Vector2(0, 28) },
+            };
+
+        [Theory]
+        [MemberData(nameof(dragProportionalTestVectors))]
+        public void DragIsProportionalToSpeed(Vector2 vel0, Vector2 vel1)
         {
             var forceCalculator = new VehicleForces(constants.Object);
-            var vel0 = Vector2.Zero;
-            var vel1 = new Vector2(0, 28);
 
             var force0 = forceCalculator.GetDragForce(vel0);
             var force1 = forceCalculator.GetDragForce(vel1);

@@ -36,4 +36,3 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
     }
 }
-

@@ -66,5 +66,15 @@ namespace AutomatedCar.SystemComponents.Powertrain
         /// Constant used when calculating the braking force; kilograms.
         /// </summary>
         public float BrakingConstant { get; }
+
+        /// <summary>
+        /// Total mass of the vehicle; kilograms.
+        /// </summary>
+        public float CurbWeight { get; }
+
+        /// <summary>
+        /// Distance between the front and rear wheels; meters.
+        /// </summary>
+        public float WheelBase { get; }
     }
 }

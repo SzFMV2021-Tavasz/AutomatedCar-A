@@ -24,8 +24,6 @@ namespace BaseModel.JsonHelper
 
             while (reader.Read())
             {
-                // var debug = reader.Value;
-
                 if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "objects")
                 {
                     reader.Read();  // StartArray
@@ -35,6 +33,7 @@ namespace BaseModel.JsonHelper
                     {
                         reader.Read();  // type
 
+                        // TODO: simplify
                         switch (reader.ReadAsString())
                         {
                             case "2_crossroad_1":
@@ -156,12 +155,9 @@ namespace BaseModel.JsonHelper
                         int currentIndex = worldObjects.Count - 1;
 
                         reader.Read();  // X
-                        var debug1 = reader.Value;
                         worldObjects[currentIndex].X = (int)reader.ReadAsInt32();
 
-                        var debug2 = reader.Value;
                         reader.Read();  // Y
-                        var debug = reader.Value;
                         worldObjects[currentIndex].Y = (int)reader.ReadAsInt32();
 
 
@@ -178,11 +174,11 @@ namespace BaseModel.JsonHelper
                         reader.Read(); // StartObject or EndArray
                     }
                 }
-                else if (reader.TokenType == JsonToken.PropertyName && reader.ReadAsString() == "width")
+                else if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "width")
                 {
                     worldWidth = (int)reader.ReadAsInt32();
                 }
-                else if (reader.TokenType == JsonToken.PropertyName && reader.ReadAsString() == "height")
+                else if (reader.TokenType == JsonToken.PropertyName && (string)reader.Value == "height")
                 {
                     worldHeight = (int)reader.ReadAsInt32();
                 }

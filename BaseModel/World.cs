@@ -3,8 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BaseModel
 {
@@ -18,6 +18,11 @@ namespace BaseModel
         {
             this.objects = objects;
         }
+
+        [JsonProperty("width")]
+        public int Width { get; set; }
+        [JsonProperty("height")]
+        public int Height { get; set; }
 
         /// <summary>
         /// @attention The ID of the supplied worldObject is going to be altered accordingly to this World instance.

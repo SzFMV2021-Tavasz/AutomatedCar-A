@@ -43,9 +43,9 @@ namespace BaseModelTest
             "SerializingDummies\\test_world.json",
             0,
             WorldObject.Type.ROAD_2LANE_STRAIGHT,
-            1700, 144, 0.0, 1.0, -1.0, 0.0)]
+            1700, 144, 0.0f, 1.0f, -1.0f, 0.0f)]
         public void Test_SomeKnownValuesInWorld(
-            string fileToLoad, int objectId, int x, int y, float m11, float m12, float m21, float m22
+            string fileToLoad, int objectId, WorldObject.Type type, int x, int y, float m11, float m12, float m21, float m22
         )
         {
             JSONWorldSerializer serializer = GetSerializer(); 
@@ -55,6 +55,7 @@ namespace BaseModelTest
             
             Assert.AreEqual(knownObject.X, x);
             Assert.AreEqual(knownObject.Y, y);
+            Assert.AreEqual(knownObject.ObjectType, type);
             Assert.AreEqual(knownObject.Transformation_m11, m11);
             Assert.AreEqual(knownObject.Transformation_m12, m12);
             Assert.AreEqual(knownObject.Transformation_m21, m21);

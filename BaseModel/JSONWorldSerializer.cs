@@ -24,7 +24,11 @@ namespace BaseModel
 
         public void Save(World world, string path)
         {
-            string json = JsonConvert.SerializeObject(world, Formatting.Indented, new JsonHelper.WorldObjectJsonConverter(WorldObjectTypes));
+            string json = JsonConvert.SerializeObject(
+                world,
+                Formatting.Indented,
+                new JsonHelper.WorldObjectJsonConverter(WorldObjectTypes)
+            );
             File.WriteAllText(path, json);
         }
 

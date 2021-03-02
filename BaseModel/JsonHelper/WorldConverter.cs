@@ -32,10 +32,10 @@ namespace BaseModel.JsonHelper
                     while (reader.TokenType != JsonToken.EndArray)
                     {
                         reader.Read();  // type
-
-                        // TODO: simplify
+                        
                         switch (reader.ReadAsString())
                         {
+                            // TODO: lehetséges duplikátum - lásd: JSONWorldSerializer-ben a Dictionary-t.
                             case "2_crossroad_1":
                                 worldObjects.Add(new WorldObjects.Road(WorldObject.Type._2_CROSSROAD_1));
                                 break;

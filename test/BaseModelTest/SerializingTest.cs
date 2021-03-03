@@ -62,6 +62,7 @@ namespace BaseModelTest
         }
         
         [Test]
+        [Ignore("In progress...")]
         public void Test_KnownPolygonOfWorldObjects()
         {
             Dictionary<WorldObject.Type, Polygon> polygonDictionary = GetPolygonDictionary();

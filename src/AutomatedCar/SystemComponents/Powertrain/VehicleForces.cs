@@ -34,5 +34,35 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
             return 0.5f * vehicleConstants.AirDensity * velocitySquared * dragArea * forceDir;
         }
+
+        public Vector2 GetTractiveForce(float gasPedal, Vector2 wheelDirection, bool isReverse, int? gearIdx)
+        {
+            if(!isReverse && gearIdx == null)
+            {
+                throw new ArgumentException($"{nameof(gearIdx)} can't be null when {nameof(isReverse)} is false", nameof(gearIdx));
+            }
+
+            if(gearIdx != null && gearIdx >= vehicleConstants.NumberOfGears)
+            {
+                throw new ArgumentException("Gear index is out of bounds.", nameof(gearIdx));
+            }
+
+            float gearRatio;
+            if(!isReverse)
+            {
+                gearRatio = vehicleConstants.GearRatios[gearIdx.Value];
+            }
+            else
+            {
+                gearRatio = -vehicleConstants.ReverseGearRatio;
+            }
+
+            var engineTorque = vehicleConstants.GetEngineTorque(vehicleConstants.GetCrankshaftSpeed(gasPedal));
+            var differentialRatio = vehicleConstants.DifferentialRatio;
+            var transmissionEfficiency = vehicleConstants.TransmissionEfficiency;
+            var wheelRadius = vehicleConstants.OverallWheelRadius;
+
+            return wheelDirection * engineTorque * gearRatio * differentialRatio * transmissionEfficiency / wheelRadius;
+        }
     }
 }

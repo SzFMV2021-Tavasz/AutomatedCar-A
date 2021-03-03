@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonHelper\PolygonDictionaryConverter.cs" />
     <Compile Include="JsonHelper\WorldConverter.cs" />
     <Compile Include="JsonHelper\WorldObjectJsonConverter.cs" />
     <Compile Include="JSONPolygonDictionaryDeserializer.cs" />

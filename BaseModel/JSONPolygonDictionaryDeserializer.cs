@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using BaseModel.WorldObjects;
+using Newtonsoft.Json;
 
 namespace BaseModel
 {
@@ -19,7 +21,12 @@ namespace BaseModel
         /// </summary>
         public Dictionary<WorldObject.Type, Polygon> Load(string polygonsPath)
         {
-            throw new NotImplementedException();
+            Dictionary<WorldObject.Type, Polygon> polygonDictionary = new Dictionary<WorldObject.Type, Polygon>();
+            Dictionary<string, Polygon> helper = new Dictionary<string, Polygon>();
+
+            string jsonFile = File.ReadAllText(polygonsPath);
+            
+            return polygonDictionary = JsonConvert.DeserializeObject<Dictionary<WorldObject.Type, Polygon>>(jsonFile, new JsonHelper.PoligonDictionaryConverter()); ;
         }
     }
 }

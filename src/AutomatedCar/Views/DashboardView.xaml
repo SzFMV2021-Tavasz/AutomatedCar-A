@@ -1,27 +1,74 @@
 <UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:gauge ="clr-namespace:Syncfusion.UI.Xaml.Gauges;assembly=Syncfusion.SfGauge.Wpf"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:models="clr-namespace:AutomatedCar.Models"
+             xmlns:Syncfusion="http://schemas.syncfusion.com/wpf" 
          mc:Ignorable="d" 
          d:DesignHeight="720" d:DesignWidth="320"
              x:Class="AutomatedCar.Views.DashboardView"
-             xmlns:models="clr-namespace:AutomatedCar.Models"
              DataContext="{Binding World}"
              >
-             <!-- DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}" -->
-        <DockPanel>
+    <!-- DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}" -->
+    <DockPanel>
         <Border Padding="2 0 0 0" >
-            <ContentControl Name="Dashboard" Content="{Binding ControlledCar, Mode=OneWay}">
-                
+            <ContentControl x:Name="Dashboard" Content="{Binding ControlledCar, Mode=OneWay}">
+
                 <ContentControl.ContentTemplate>
                     <DataTemplate DataType="{x:Type models:AutomatedCar}">
                         <StackPanel Background="#424242">
                             <StackPanel.Resources>
-                                <Style TargetType="TextBlock">
+                                <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Foreground" Value="#EEEEEE"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <TextBlock Text="Dashboard"/>
+                            <Grid Height="100">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160" />
+                                    <ColumnDefinition Width="160" />
+                                </Grid.ColumnDefinitions>
+                                <gauge:SfCircularGauge Grid.Column="1" Height="90" Width="45" HeaderAlignment="Bottom" >
+                                    <gauge:SfCircularGauge.GaugeHeader>
+                                        <TextBlock Text="km/h" Height="20" Width="40" FontSize="10" Foreground="White" FontWeight="Regular" TextAlignment="Center"/>
+                                    </gauge:SfCircularGauge.GaugeHeader>
+                                    <gauge:SfCircularGauge.Scales>
+                                        <gauge:CircularScale ShowRim="True" StartValue="0" EndValue="100" RimStroke="LightGray" RimStrokeThickness="3" LabelOffset="0.1" ShowLabels="True">
+                                            <gauge:CircularScale.MajorTickSettings>
+                                                <gauge:MajorTickSetting Length="10" StrokeThickness="1" />
+                                            </gauge:CircularScale.MajorTickSettings>
+                                            <gauge:CircularScale.MinorTickSettings>
+                                                <gauge:MinorTickSetting Length="5" StrokeThickness="1" />
+                                            </gauge:CircularScale.MinorTickSettings>
+                                            <gauge:CircularScale.Pointers>
+                                                <gauge:CircularPointer PointerType="NeedlePointer" Value="{Binding Y}" NeedleLengthFactor="0.6" NeedlePointerType="Rectangle" PointerCapDiameter="12" NeedlePointerStroke="White" KnobFill="White" KnobStroke="White" NeedlePointerStrokeThickness="2" />
+                                            </gauge:CircularScale.Pointers>
+                                        </gauge:CircularScale>
+                                    </gauge:SfCircularGauge.Scales>
+                                </gauge:SfCircularGauge>
+
+                                <gauge:SfCircularGauge Grid.Column="0" Height="90" Width="45" HeaderAlignment="Bottom" >
+                                    <gauge:SfCircularGauge.GaugeHeader>
+                                        <TextBlock Text="rpm" Height="20" Width="40" FontSize="10" Foreground="White" FontWeight="Regular" TextAlignment="Center"/>
+                                    </gauge:SfCircularGauge.GaugeHeader>
+                                    <gauge:SfCircularGauge.Scales>
+                                        <gauge:CircularScale ShowRim="True" StartValue="0" EndValue="5000" RimStroke="LightGray" RimStrokeThickness="3" LabelOffset="0.1" ShowLabels="True">
+                                            <gauge:CircularScale.MajorTickSettings>
+                                                <gauge:MajorTickSetting Length="10" StrokeThickness="1" />
+                                            </gauge:CircularScale.MajorTickSettings>
+                                            <gauge:CircularScale.MinorTickSettings>
+                                                <gauge:MinorTickSetting Length="5" StrokeThickness="1" />
+                                            </gauge:CircularScale.MinorTickSettings>
+                                            <gauge:CircularScale.Pointers>
+                                                <gauge:CircularPointer PointerType="NeedlePointer" Value="{Binding X}" NeedleLengthFactor="0.6" NeedlePointerType="Rectangle" PointerCapDiameter="12" NeedlePointerStroke="White" KnobFill="White" KnobStroke="White" NeedlePointerStrokeThickness="2" />
+                                            </gauge:CircularScale.Pointers>
+                                            <gauge:CircularScale.Ranges>
+                                                <gauge:CircularRange  StartValue="4250" EndValue="5000" Stroke="#C1252C" StrokeThickness="5"/>
+                                            </gauge:CircularScale.Ranges>
+                                        </gauge:CircularScale>
+                                    </gauge:SfCircularGauge.Scales>
+                                </gauge:SfCircularGauge>
+                            </Grid>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -34,17 +81,18 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0">X:</TextBlock>
+                                <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="X:"/></TextBlock>
                                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding X}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0">Y:</TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="0"><Run Text="Y:"/></TextBlock>
                                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Y}"/>
-                                <TextBlock Grid.Row="2" Grid.Column="0">Filename:</TextBlock>
+                                <TextBlock Grid.Row="2" Grid.Column="0"><Run Text="Filename:"/></TextBlock>
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
-                                <TextBlock Grid.Row="3" Grid.Column="0">Distance X:</TextBlock>
+                                <TextBlock Grid.Row="3" Grid.Column="0"><Run Text="Distance X:"/></TextBlock>
                                 <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceX}"/>
-                                <TextBlock Grid.Row="4" Grid.Column="0">Distance Y:</TextBlock>
+                                <TextBlock Grid.Row="4" Grid.Column="0"><Run Text="Distance Y:"/></TextBlock>
                                 <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
                             </Grid>
+                            <TextBlock Text="Dashboard"/>
                         </StackPanel>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>

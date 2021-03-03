@@ -2,6 +2,9 @@
 
 namespace AutomatedCar.SystemComponents.Powertrain
 {
+    /// <summary>
+    /// Constants for the in-game car.
+    /// </summary>
     public class VehicleConstants : IVehicleConstants
     {
         public float[] GearRatios => new float[] {
@@ -44,6 +47,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         public float GetEngineTorque(float rpm)
         {
+            // A real-valued function approximating the torque function:
             // y = 470 - (x - 4000)**2 / 50000
             var torque = 470 - (float)Math.Pow(rpm - 4000, 2) / 50000;
             // torque should be atleast 350 Nm

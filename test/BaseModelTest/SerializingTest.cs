@@ -10,7 +10,6 @@ namespace BaseModelTest
 {
     public class Tests
     {
-
         private static readonly string POLYGON_JSON_PATH = "SerializingDummies\\worldobject_polygons.json";
         
         [SetUp]
@@ -87,6 +86,5 @@ namespace BaseModelTest
                 new JSONPolygonDictionaryDeserializer(JSONWorldSerializer.TypenameStringDictionary)
                     .Load(POLYGON_JSON_PATH);
         }
-
     }
 }

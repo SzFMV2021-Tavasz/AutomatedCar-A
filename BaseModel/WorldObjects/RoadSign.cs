@@ -11,8 +11,7 @@ namespace BaseModel.WorldObjects
         public RoadSign(Type type) : base(type) {
             validate();
         }
-
-
+        
         protected override Type[] AllowedTypes => new[] {
             Type.ROADSIGN_PARKING_RIGHT,
             Type.ROADSIGN_PRIORITY_STOP,

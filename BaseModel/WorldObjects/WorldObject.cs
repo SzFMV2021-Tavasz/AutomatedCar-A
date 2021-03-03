@@ -140,8 +140,7 @@ namespace BaseModel.WorldObjects
             TREE,
             WOMAN,
         }
-
-
+        
         [Flags]
         public enum Tag
         {
@@ -156,6 +155,5 @@ namespace BaseModel.WorldObjects
             VEHICLE = 128,
             PEDESTRIAN = 256
         }
-
     }
 }

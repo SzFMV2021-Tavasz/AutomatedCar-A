@@ -14,6 +14,5 @@ namespace BaseModel
         /// </summary>
         /// <returns>Null if the object is not collidable, the collision polygons otherwise.</returns>
         public Tuple<int, int>[] points { get; }
-
     }
 }

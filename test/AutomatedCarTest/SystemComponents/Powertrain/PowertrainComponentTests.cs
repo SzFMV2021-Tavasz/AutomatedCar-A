@@ -20,5 +20,14 @@ namespace Test.SystemComponents.Powertrain
 
             mockBus.Verify(m => m.RegisterComponent(ptr), Times.Once);
         }
+
+        [Fact]
+        public void VFBGetsPowertrainPacketAfterCreatingPowertrainComponent()
+        {
+            VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+            PowertrainComponent powertrain = new PowertrainComponent(virtualFunctionBus);
+
+            Assert.True(virtualFunctionBus.PowertrainPacket != null);
+        }
     }
 }

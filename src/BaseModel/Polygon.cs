@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BaseModel.WorldObjects;
 
-
 namespace BaseModel
 {
     // WPF shape ehelyett? vagy WPF geometry?

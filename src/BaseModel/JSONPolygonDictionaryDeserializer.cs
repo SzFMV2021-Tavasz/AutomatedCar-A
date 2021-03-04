@@ -48,7 +48,6 @@ namespace BaseModel
             {
                 throw new JSONReadingException("Failed to parse JSON.", e);
             }
-            
         }
 
         private Dictionary<WorldObject.Type, List<Polygon>> ParseJson_Objects(JToken j_objects)
@@ -95,6 +94,5 @@ namespace BaseModel
         {
             return new(int.Parse(j_point[0].ToString()), int.Parse(j_point[1].ToString()));
         }
-
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AutomatedCar.SystemComponents.Powertrain
 {
-    public class Powertrain : SystemComponent
+    public class PowertrainComponent : SystemComponent
     {
-        public Powertrain(VirtualFunctionBus virtualFunctionBus)
+        public PowertrainComponent(VirtualFunctionBus virtualFunctionBus)
            : base(virtualFunctionBus)
         {
             

@@ -18,7 +18,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
         public override void Process()
         {
-            
         }
     }
 }

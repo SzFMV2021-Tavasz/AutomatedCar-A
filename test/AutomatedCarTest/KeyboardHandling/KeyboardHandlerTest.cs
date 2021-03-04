@@ -1,13 +1,13 @@
 ﻿using NUnit.Framework;
 
-namespace AutomatedCarTest.KeyboardHandler
+namespace AutomatedCarTest.KeyboardHandling
 {
     public class KeyboardHandlerTest
     {
         [Test]
         public void PressableKeyOnPressEventIsCalledCorrectlyFromKeyboardHandler()
         {
-
+            
         }
 
         [Test]
@@ -47,13 +47,13 @@ namespace AutomatedCarTest.KeyboardHandler
         }
 
         [Test]
-        public void HoldableKeyStateChangesOnPress()
+        public void HoldableKeyIsBeingHeldAfterPress()
         {
 
         }
 
         [Test]
-        public void HoldableKeyStateChangesOnRelease()
+        public void HoldableKeyIsNotBeingHeldAfterRelease()
         {
 
         }

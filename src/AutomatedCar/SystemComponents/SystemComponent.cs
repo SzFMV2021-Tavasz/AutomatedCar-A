@@ -2,9 +2,9 @@ namespace AutomatedCar.SystemComponents
 {
     public abstract class SystemComponent
     {
-        protected VirtualFunctionBus virtualFunctionBus;
+        protected IVirtualFunctionBus virtualFunctionBus;
 
-        protected SystemComponent(VirtualFunctionBus virtualFunctionBus)
+        protected SystemComponent(IVirtualFunctionBus virtualFunctionBus)
         {
             this.virtualFunctionBus = virtualFunctionBus;
             virtualFunctionBus.RegisterComponent(this);

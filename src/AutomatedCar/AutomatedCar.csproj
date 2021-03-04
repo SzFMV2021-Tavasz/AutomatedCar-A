@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BaseModel\BaseModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Assets\car-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

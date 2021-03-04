@@ -83,6 +83,5 @@ namespace BaseModel
                 { WorldObject.Type.TREE, "tree" },
                 { WorldObject.Type.WOMAN, "woman" },
             };
-
     }
 }

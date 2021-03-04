@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="ReactiveUI.WPF" Version="13.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

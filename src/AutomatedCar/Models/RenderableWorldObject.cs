@@ -1,13 +1,18 @@
+using BaseModel.WorldObjects;
+
 namespace AutomatedCar.Models
 {
+    using BaseModel;
     using ReactiveUI;
 
-    public abstract class WorldObject : ReactiveObject
+    public abstract class RenderableWorldObject : ReactiveObject
     {
         private int _x;
         private int _y;
 
-        public WorldObject(int x, int y, string filename)
+        WorldObject wo = new Tree();
+
+        public RenderableWorldObject(int x, int y, string filename)
         {
             this.X = x;
             this.Y = y;

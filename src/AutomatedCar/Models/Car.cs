@@ -1,6 +1,6 @@
 namespace AutomatedCar.Models
 {
-    public class Car : WorldObject
+    public class Car : RenderableWorldObject
     {
         public Car(int x, int y, string filename)
             : base(x, y, filename)

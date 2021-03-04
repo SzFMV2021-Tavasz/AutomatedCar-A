@@ -62,18 +62,17 @@ namespace BaseModelTest
         }
         
         [Test]
-        [Ignore("In progress...")]
         public void Test_KnownPolygonOfWorldObjects()
         {
-            Dictionary<WorldObject.Type, Polygon> polygonDictionary = GetPolygonDictionary();
+            Dictionary<WorldObject.Type, List<Polygon>> polygonDictionary = GetPolygonDictionary();
             
             Vehicle car = new Vehicle(WorldObject.Type.CAR_1_WHITE);
             car.SetPolygonNameDictionary(polygonDictionary);
 
-            Assert.Equals(car.Polygon.points[0], new Tuple<int, int>(51, 239));
-            Assert.Equals(car.Polygon.points[1], new Tuple<int, int>(40, 238));
-            Assert.Equals(car.Polygon.points[2], new Tuple<int, int>(26, 236));
-            Assert.Equals(car.Polygon.points[3], new Tuple<int, int>(18, 231));
+            Assert.Equals(car.Polygons[0].points[0], new Tuple<int, int>(51, 239));
+            Assert.Equals(car.Polygons[0].points[1], new Tuple<int, int>(40, 238));
+            Assert.Equals(car.Polygons[0].points[2], new Tuple<int, int>(26, 236));
+            Assert.Equals(car.Polygons[0].points[3], new Tuple<int, int>(18, 231));
         }
 
         private JSONWorldSerializer GetSerializer()
@@ -81,7 +80,7 @@ namespace BaseModelTest
             return new JSONWorldSerializer(JSONWorldSerializer.TypenameStringDictionary);
         }
 
-        private Dictionary<WorldObject.Type, Polygon> GetPolygonDictionary()
+        private Dictionary<WorldObject.Type, List<Polygon>> GetPolygonDictionary()
         {
             return 
                 new JSONPolygonDictionaryDeserializer(JSONWorldSerializer.TypenameStringDictionary)

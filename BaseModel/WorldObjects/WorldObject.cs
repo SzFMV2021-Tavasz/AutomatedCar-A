@@ -30,7 +30,7 @@ namespace BaseModel.WorldObjects
             ValidateType(this._objectType, AllowedTypes);
         }
 
-        private Dictionary<Type, Polygon> polygonDict;
+        private Dictionary<Type, List<Polygon>> polygonDict;
 
         [JsonIgnore]
         public int ID { get; set; }
@@ -39,7 +39,7 @@ namespace BaseModel.WorldObjects
         /// If a type is not found in the dictionary, then it is interpreted as the object 
         /// not being able to collide with other objects possessing this trait.
         /// </summary>
-        public void SetPolygonNameDictionary(Dictionary<Type, Polygon> dictionary)
+        public void SetPolygonNameDictionary(Dictionary<Type, List<Polygon>> dictionary)
         {
             this.polygonDict = dictionary;
         }
@@ -48,7 +48,7 @@ namespace BaseModel.WorldObjects
         /// If the object is able to collide with other object possessing the same trait,
         /// </summary>
         [JsonIgnore]
-        public Polygon Polygon
+        public List<Polygon> Polygons
         {
             get
             {

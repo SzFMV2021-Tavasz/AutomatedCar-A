@@ -10,6 +10,7 @@ namespace AutomatedCar.SystemComponents
         private List<SystemComponent> components = new List<SystemComponent>();
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
+        public IReadOnlyPowertrainComponentPacket PowertrainPacket { get; set; }
 
         private DispatcherTimer timer = new DispatcherTimer();
 

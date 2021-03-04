@@ -69,10 +69,10 @@ namespace BaseModelTest
             Vehicle car = new Vehicle(WorldObject.Type.CAR_1_WHITE);
             car.SetPolygonNameDictionary(polygonDictionary);
 
-            Assert.Equals(car.Polygons[0].points[0], new Tuple<int, int>(51, 239));
-            Assert.Equals(car.Polygons[0].points[1], new Tuple<int, int>(40, 238));
-            Assert.Equals(car.Polygons[0].points[2], new Tuple<int, int>(26, 236));
-            Assert.Equals(car.Polygons[0].points[3], new Tuple<int, int>(18, 231));
+            Assert.AreEqual(car.Polygons[0].Points[0], new Tuple<int, int>(51, 239));
+            Assert.AreEqual(car.Polygons[0].Points[1], new Tuple<int, int>(40, 238));
+            Assert.AreEqual(car.Polygons[0].Points[2], new Tuple<int, int>(26, 236));
+            Assert.AreEqual(car.Polygons[0].Points[3], new Tuple<int, int>(18, 231));
         }
 
         private JSONWorldSerializer GetSerializer()

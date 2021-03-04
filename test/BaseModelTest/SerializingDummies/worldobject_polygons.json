@@ -1891,7 +1891,7 @@
     ]
   },
   {
-    "typename": "bollard",
+    "typename": "parking_bollard",
     "polys": [
       {
         "type": "standalone",

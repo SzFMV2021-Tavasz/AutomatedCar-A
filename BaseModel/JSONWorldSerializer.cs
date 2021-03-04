@@ -45,7 +45,7 @@ namespace BaseModel
         };
 
         public static Dictionary<WorldObject.Type, string> TypenameStringDictionary =
-            new Dictionary<WorldObject.Type, string>()
+            new ()
             {
                 { WorldObject.Type._2_CROSSROAD_1, "2_crossroad_1" },
                 { WorldObject.Type._2_CROSSROAD_2, "2_crossroad_2" },

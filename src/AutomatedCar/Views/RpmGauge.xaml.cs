@@ -27,8 +27,6 @@ namespace AutomatedCar.Views
         public RpmGauge()
         {
             InitializeComponent();
-
-
             DataContext = this;
         }
 

@@ -26,8 +26,6 @@ namespace AutomatedCar.Views
         public SpeedGauge()
         {
             InitializeComponent();
-
-
             DataContext = this;
         }
 

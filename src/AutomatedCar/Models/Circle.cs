@@ -3,7 +3,7 @@ namespace AutomatedCar.Models
     using System;
 
     /// <summary>This is a dummy object for demonstrating the codebase.</summary>
-    public class Circle : WorldObject
+    public class Circle : RenderableWorldObject
     {
         public Circle(int x, int y, string filename, int radius)
             : base(x, y, filename)

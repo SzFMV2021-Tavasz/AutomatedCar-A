@@ -8,7 +8,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 {
     public class PowertrainComponent : SystemComponent
     {
-        public PowertrainComponent(VirtualFunctionBus virtualFunctionBus)
+        public PowertrainComponent(IVirtualFunctionBus virtualFunctionBus)
            : base(virtualFunctionBus)
         {
             

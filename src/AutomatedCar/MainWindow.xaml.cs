@@ -23,6 +23,7 @@ using AutomatedCar.Models;
 using AutomatedCar.ViewModels;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using AutomatedCar.KeyboardHandling;
 
 namespace AutomatedCar
 {
@@ -36,12 +37,19 @@ namespace AutomatedCar
         public MainWindowViewModel ViewModel { get; set; }
         DispatcherTimer timer = new DispatcherTimer();
         World world = World.Instance;
-        bool moveLeft, moveRight, moveUp, moveDown;
-        
+
+        private KeyboardHandler keyboardHandler;
+
         public MainWindow()
         {
             ViewModel = new MainWindowViewModel(world);
             InitializeComponent();
+
+            keyboardHandler = new KeyboardHandler(tickInterval);
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Left, (duration) => World.Instance.ControlledCar.X -= 5, null));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right, (duration) => World.Instance.ControlledCar.X += 5, null));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up, (duration) => World.Instance.ControlledCar.Y -= 5, null));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down, (duration) => World.Instance.ControlledCar.Y += 5, null));
 
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
@@ -49,7 +57,7 @@ namespace AutomatedCar
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
 
- 
+
             world.Width = 2000;
             world.Height = 1000;
 
@@ -83,61 +91,16 @@ namespace AutomatedCar
 
         private void onKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Left)
-            {
-                moveLeft = true;
-            }
-            if (e.Key == Key.Right)
-            {
-                moveRight = true;
-            }
-             if (e.Key == Key.Up)
-            {
-                moveUp = true;
-            }
-            if (e.Key == Key.Down)
-            {
-                moveDown = true;
-            }
+            keyboardHandler.OnKeyDown(e.Key);
         }
         private void onKeyUp(object sender, KeyEventArgs e)
         {
-             if (e.Key == Key.Left)
-            {
-                moveLeft = false;
-            }
-            if (e.Key == Key.Right)
-            {
-                moveRight = false;
-            }
-            if (e.Key == Key.Up)
-            {
-                moveUp = false;
-            }
-            if (e.Key == Key.Down)
-            {
-                moveDown = false;
-            }
+            keyboardHandler.OnKeyUp(e.Key);
         }
 
         private void logic(object sender, EventArgs e)
         {
-            if (moveLeft)
-            {
-                World.Instance.ControlledCar.X -= 5;
-            }
-            if (moveRight)
-            {
-                World.Instance.ControlledCar.X += 5;
-            }
-            if (moveUp)
-            {
-                World.Instance.ControlledCar.Y -= 5;
-            }
-            if (moveDown)
-            {
-                World.Instance.ControlledCar.Y += 5;
-            }
+            keyboardHandler.Tick();
         }
 
     }

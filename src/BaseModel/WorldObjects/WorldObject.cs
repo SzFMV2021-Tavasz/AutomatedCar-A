@@ -30,19 +30,14 @@ namespace BaseModel.WorldObjects
             ValidateType(this._objectType, AllowedTypes);
         }
 
-        private Dictionary<Type, List<Polygon>> polygonDict;
-
-        [JsonIgnore]
-        public int ID { get; set; }
-
         /// <summary>
         /// If a type is not found in the dictionary, then it is interpreted as the object 
         /// not being able to collide with other objects possessing this trait.
         /// </summary>
-        public void SetPolygonNameDictionary(Dictionary<Type, List<Polygon>> dictionary)
-        {
-            this.polygonDict = dictionary;
-        }
+        public Dictionary<Type, List<Polygon>> PolygonDictionary { private get; set; }
+
+        [JsonIgnore]
+        public int ID { get; set; }
 
         /// <summary>
         /// If the object is able to collide with other object possessing the same trait,
@@ -54,7 +49,7 @@ namespace BaseModel.WorldObjects
             {
                 try
                 {
-                    return polygonDict[this._objectType];
+                    return PolygonDictionary[this._objectType];
                 } catch (KeyNotFoundException)
                 {
                     return null;

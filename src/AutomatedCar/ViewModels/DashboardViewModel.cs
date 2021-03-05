@@ -10,6 +10,8 @@ namespace AutomatedCar.ViewModels
         private RpmGaugeViewModel _rpmGaugeViewModel;
         private SpeedGaugeViewModel _speedGaugeViewModel;
         private TransmissionViewModel _transmissionViewModel;
+        private TurnSignalViewModelBase _leftTurnSignalViewModel;
+        private TurnSignalViewModelBase _rightTurnSignalViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -17,6 +19,8 @@ namespace AutomatedCar.ViewModels
             this.RpmGaugeViewModel = new RpmGaugeViewModel();
             this.SpeedGaugeViewModel = new SpeedGaugeViewModel();
             this.TransmissionViewModel = new TransmissionViewModel();
+            this.LeftTurnSignalViewModel = new TurnSignalViewModelBase();
+            this.RightTurnSignalViewModel = new TurnSignalViewModelBase();
             this.RpmGaugeViewModel.Value = 3000;
             this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
             this.SpeedGaugeViewModel.Value = 50;
@@ -49,5 +53,16 @@ namespace AutomatedCar.ViewModels
             set => this.RaiseAndSetIfChanged(ref this._transmissionViewModel, value);
         }
 
+        public TurnSignalViewModelBase LeftTurnSignalViewModel
+        {
+            get => this._leftTurnSignalViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._leftTurnSignalViewModel, value);
+        }
+
+        public TurnSignalViewModelBase RightTurnSignalViewModel
+        {
+            get => this._rightTurnSignalViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._rightTurnSignalViewModel, value);
+        }
     }
 }

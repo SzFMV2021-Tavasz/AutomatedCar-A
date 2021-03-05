@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AutomatedCar.Views.LeftTurnSignal"
+﻿<UserControl x:Class="AutomatedCar.Views.RightTurnSignal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,11 +7,11 @@
              xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="100"
-             d:DataContext="{d:DesignInstance viewmodels:LeftTurnSignalViewModel}">
+             d:DataContext="{d:DesignInstance viewmodels:RightTurnSignalViewModel}">
     <Grid>
         <Image Width="30" Height="30">
             <Image.Source>
-                <BitmapImage UriSource="/Assets/arrow.png" Rotation="Rotate270"/>
+                <BitmapImage UriSource="/Assets/arrow.png" Rotation="Rotate90"/>
             </Image.Source>
         </Image>
     </Grid>

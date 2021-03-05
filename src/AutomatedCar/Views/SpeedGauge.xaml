@@ -14,11 +14,11 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Caption}" Foreground="White" Grid.Row="0" HorizontalAlignment="Center"/>
         <lvc:AngularGauge Grid.Row="1" Value="{Binding Value}" FromValue="0" ToValue="100"
                           TicksStep="5" Wedge="300" LabelsStep="10000" NeedleFill="White"
                           TicksForeground="White" Foreground="White" 
                           FontWeight="Regular" FontSize="16"
-                          SectionsInnerRadius=".5" HorizontalAlignment="Center" Width="106" Margin="0,0,0,8" Height="97" VerticalAlignment="Bottom"/>
-        <TextBlock Text="{Binding Caption}" HorizontalAlignment="Center"/>
+                          SectionsInnerRadius=".5" HorizontalAlignment="Center" Width="106" Margin="0,0,0,8" Height="97" VerticalAlignment="Bottom"/>        
     </Grid>
 </UserControl>

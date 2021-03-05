@@ -3,63 +3,20 @@
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
          xmlns:models="clr-namespace:AutomatedCar.Models"
+             xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels"
          xmlns:uc="clr-namespace:AutomatedCar.Views"
          mc:Ignorable="d" 
+         d:DataContext="{d:DesignInstance viewmodels:DashboardViewModel}"
          d:DesignHeight="720" d:DesignWidth="320"
              x:Class="AutomatedCar.Views.DashboardView"
              DataContext="{Binding Dashboard}"
              >
-    <!-- DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}" -->
-    <DockPanel>
-        <Border Padding="2 0 0 0" >
-            <ContentControl x:Name="Dashboard" Content="{Binding ControlledCar, Mode=OneWay}">
+    <StackPanel Background="#424242" Orientation="Vertical">
+        <StackPanel Orientation="Horizontal">
+            <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}"/>
+            <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
+        </StackPanel>
+        <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
 
-                <ContentControl.ContentTemplate>
-                    <DataTemplate DataType="{x:Type models:AutomatedCar}">
-                        <StackPanel Background="#424242">
-                            <StackPanel.Resources>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Foreground" Value="#EEEEEE"/>
-                                </Style>
-                            </StackPanel.Resources>
-                            <Grid Height="150" Width="320">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="180" />
-                                    <ColumnDefinition Width="140" />
-                                </Grid.ColumnDefinitions>
-                                
-                                <uc:RpmGauge Grid.Column="0" />
-                                <uc:SpeedGauge Grid.Column="1" />
-
-                            </Grid>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="X:"/></TextBlock>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding X}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0"><Run Text="Y:"/></TextBlock>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Y}"/>
-                                <TextBlock Grid.Row="2" Grid.Column="0"><Run Text="Filename:"/></TextBlock>
-                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Filename}"/>
-                                <TextBlock Grid.Row="3" Grid.Column="0"><Run Text="Distance X:"/></TextBlock>
-                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceX}"/>
-                                <TextBlock Grid.Row="4" Grid.Column="0"><Run Text="Distance Y:"/></TextBlock>
-                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding VirtualFunctionBus.DummyPacket.DistanceY}"/>
-                            </Grid>
-                            <TextBlock Text="Dashboard"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ContentControl.ContentTemplate>
-            </ContentControl>
-        </Border>
-    </DockPanel>
+    </StackPanel>
 </UserControl>

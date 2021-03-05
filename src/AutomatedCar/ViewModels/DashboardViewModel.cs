@@ -5,19 +5,25 @@ namespace AutomatedCar.ViewModels
 
     public class DashboardViewModel : ViewModelBase
     {
-        private AutomatedCar controlledCar;
+        private AutomatedCar _controlledCar;
         private RpmGaugeViewModel _rpmGaugeViewModel;
         private SpeedGaugeViewModel _speedGaugeViewModel;
 
-        public DashboardViewModel(Models.AutomatedCar controlledCar)
+        public DashboardViewModel(AutomatedCar controlledCar)
         {
             this.ControlledCar = controlledCar;
+            this.RpmGaugeViewModel = new RpmGaugeViewModel();
+            this.SpeedGaugeViewModel = new SpeedGaugeViewModel();
+            this.RpmGaugeViewModel.Value = 3000;
+            this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
+            this.SpeedGaugeViewModel.Value = 50;
+            this.SpeedGaugeViewModel.Caption = $"{this.SpeedGaugeViewModel.Value} km/h";
         }
 
-        public Models.AutomatedCar ControlledCar
+        public AutomatedCar ControlledCar
         {
-            get => this.controlledCar;
-            private set => this.RaiseAndSetIfChanged(ref this.controlledCar, value);
+            get => this._controlledCar;
+            private set => this.RaiseAndSetIfChanged(ref this._controlledCar, value);
         }
 
         public RpmGaugeViewModel RpmGaugeViewModel

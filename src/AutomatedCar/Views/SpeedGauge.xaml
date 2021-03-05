@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutomatedCar.Views"
-             xmlns:model="clr-namespace:AutomatedCar.Models"
+             xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="105" d:DesignWidth="126" 
-             d:DataContext="{d:DesignInstance local:SpeedGauge}">
+             d:DataContext="{d:DesignInstance viewmodels:SpeedGaugeViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -19,5 +19,6 @@
                           TicksForeground="White" Foreground="White" 
                           FontWeight="Regular" FontSize="16"
                           SectionsInnerRadius=".5" HorizontalAlignment="Center" Width="106" Margin="0,0,0,8" Height="97" VerticalAlignment="Bottom"/>
+        <TextBlock Text="{Binding Caption}" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

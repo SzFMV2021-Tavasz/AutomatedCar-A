@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BaseModel
+namespace BaseModel.JsonHelper
 {
     public class JSONReadingException: Exception
     {

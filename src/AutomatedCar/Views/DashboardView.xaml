@@ -7,7 +7,7 @@
          mc:Ignorable="d" 
          d:DesignHeight="720" d:DesignWidth="320"
              x:Class="AutomatedCar.Views.DashboardView"
-             DataContext="{Binding World}"
+             DataContext="{Binding Dashboard}"
              >
     <!-- DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}" -->
     <DockPanel>

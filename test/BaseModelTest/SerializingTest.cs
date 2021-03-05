@@ -13,7 +13,6 @@ namespace BaseModelTest
     {
         private static readonly string POLYGON_JSON_PATH = "SerializingDummies\\worldobject_polygons.json";
         
-        
         [SetUp]
         public void Setup()
         {
@@ -189,7 +188,6 @@ namespace BaseModelTest
             Assert.AreEqual(new Tuple<int, int>(350, 700), obj.Polygons[2].Points[1]);
         }
         
-
         private static JSONWorldSerializer GetSerializer()
         {
             return new(JSONWorldSerializer.TypenameStringDictionary);

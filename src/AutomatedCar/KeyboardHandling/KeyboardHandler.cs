@@ -17,33 +17,22 @@ namespace AutomatedCar.KeyboardHandling
 
         public void OnKeyDown(Key key)
         {
-            foreach (PressableKey pressableKey in PressableKeys)
+            PressableKeys.Find(pressableKey => pressableKey.Key == key)?.OnPress();
+            HoldableKey holdableKey = HoldableKeys.Find(holdableKey => holdableKey.Key == key);
+            if (holdableKey != null)
             {
-                if (key == pressableKey.Key)
-                {
-                    pressableKey.OnPress();
-                }
-            }
-
-            foreach (HoldableKey holdableKey in HoldableKeys)
-            {
-                if (key == holdableKey.Key)
-                {
-                    holdableKey.CurrentStateDuration = 0;
-                    holdableKey.IsBeingHeld = true;
-                }
+                holdableKey.CurrentStateDuration = 0;
+                holdableKey.IsBeingHeld = true;
             }
         }
 
         public void OnKeyUp(Key key)
         {
-            foreach (HoldableKey holdableKey in HoldableKeys)
+            HoldableKey holdableKey = HoldableKeys.Find(holdableKey => holdableKey.Key == key);
+            if (holdableKey != null)
             {
-                if (key == holdableKey.Key)
-                {
-                    holdableKey.IsBeingHeld = false;
-                    holdableKey.CurrentStateDuration = 0;
-                }
+                holdableKey.IsBeingHeld = false;
+                holdableKey.CurrentStateDuration = 0;
             }
         }
 

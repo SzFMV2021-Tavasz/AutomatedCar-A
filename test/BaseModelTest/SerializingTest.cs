@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using BaseModel;
 using BaseModel.WorldObjects;
-using Microsoft.VisualBasic.CompilerServices;
 using NUnit.Framework;
 
 namespace BaseModelTest

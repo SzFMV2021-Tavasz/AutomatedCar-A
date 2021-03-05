@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{538DC930-2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutomatedCarTest", "test\AutomatedCarTest\AutomatedCarTest.csproj", "{9C761B49-F72E-42E6-B47A-DC3953430875}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseModel", "BaseModel\BaseModel.csproj", "{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseModel", "src\BaseModel\BaseModel.csproj", "{C3F216CF-3041-47AB-8E7C-ED93D8C26D72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseModelTest", "test\BaseModelTest\BaseModelTest.csproj", "{7EC930E7-5765-463E-B0D6-5B59DFF1D785}"
 EndProject

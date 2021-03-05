@@ -1,27 +1,11 @@
-﻿using System.Diagnostics;
-using System.Security.AccessControl;
-using System.Runtime.CompilerServices;
-using System.Globalization;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.Windows.Threading;
 using AutomatedCar.Models;
 using AutomatedCar.ViewModels;
-using System.Reflection;
 using Newtonsoft.Json.Linq;
 using AutomatedCar.KeyboardHandling;
 
@@ -86,7 +70,7 @@ namespace AutomatedCar
 
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
-            controlledCar.Start();
+            controlledCar.Start();            
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)

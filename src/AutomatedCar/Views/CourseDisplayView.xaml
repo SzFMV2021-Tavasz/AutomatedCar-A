@@ -2,7 +2,6 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-         xmlns:local="clr-namespace:AutomatedCar.Rendering"
          mc:Ignorable="d" 
          d:DesignHeight="720" d:DesignWidth="960"
              x:Class="AutomatedCar.Views.CourseDisplayView"
@@ -13,6 +12,6 @@
              <!-- DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}" -->
 
     <ScrollViewer Width="960" Height="720" HorizontalAlignment="Left" VerticalAlignment="Top"  Background="#97D1A2">
-        <local:WorldRenderer />
+        <visualization:WorldRenderer />
     </ScrollViewer>
 </UserControl>

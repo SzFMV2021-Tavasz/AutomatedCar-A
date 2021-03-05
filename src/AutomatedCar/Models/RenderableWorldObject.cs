@@ -2,7 +2,6 @@ using BaseModel.WorldObjects;
 
 namespace AutomatedCar.Models
 {
-    using BaseModel;
     using ReactiveUI;
 
     public abstract class RenderableWorldObject : ReactiveObject

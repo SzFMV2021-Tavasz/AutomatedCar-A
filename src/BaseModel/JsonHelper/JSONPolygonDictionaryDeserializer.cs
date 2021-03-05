@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BaseModel.JsonHelper;
 using BaseModel.WorldObjects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace BaseModel
 {
-    public class JSONPolygonDictionaryDeserializer
+    class JSONPolygonDictionaryDeserializer
     {
         private Dictionary<WorldObject.Type, string> typenamesStringDictionary;
         private Dictionary<string, WorldObject.Type> typenamesStringDictionaryReverse = new Dictionary<string, WorldObject.Type>();

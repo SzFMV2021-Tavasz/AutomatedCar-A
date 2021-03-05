@@ -1,14 +1,12 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.IO;
 using BaseModel.WorldObjects;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
-namespace BaseModel
+namespace BaseModel.JsonHelper
 {
-    public class JSONWorldSerializer
+    internal class JSONWorldSerializer
     {
         private Dictionary<WorldObject.Type, string> typenamesStringDictionary;
         public JSONWorldSerializer(Dictionary<WorldObject.Type, string> typenamesStringDictionary)

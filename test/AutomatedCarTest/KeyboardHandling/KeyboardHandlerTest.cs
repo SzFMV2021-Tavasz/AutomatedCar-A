@@ -10,7 +10,7 @@ namespace AutomatedCarTest.KeyboardHandling
         private KeyboardHandler keyboardHandler;
         private int testInt1;
         private int testInt2;
-        private int testInt3;
+        private double testDouble;
 
         [SetUp]
         public void SetUp()
@@ -21,7 +21,7 @@ namespace AutomatedCarTest.KeyboardHandling
             PressableKey key2 = new PressableKey(Key.D, () => testInt1--);
 
             HoldableKey key3 = new HoldableKey(Key.Q, (x) => testInt2 += 2, (x) => testInt2 -= 2);
-            HoldableKey key4 = new HoldableKey(Key.E, (x) => testInt3 += 4, (x) => testInt3 -= 4);
+            HoldableKey key4 = new HoldableKey(Key.E, (x) => testDouble += x, (x) => testDouble -= x);
 
             keyboardHandler.PressableKeys.Add(key1);
             keyboardHandler.PressableKeys.Add(key2);
@@ -58,12 +58,12 @@ namespace AutomatedCarTest.KeyboardHandling
         [Test]
         public void HoldableKeyOnIdleEventIsCalledAfterEveryTickFromKeyboardHandlerIfKeyIsNotPressed()
         {
-            testInt3 = 0;
+            testDouble = 0;
             keyboardHandler.Tick();
             keyboardHandler.Tick();
             keyboardHandler.Tick();
 
-            Assert.That(testInt3, Is.EqualTo(-12));
+            Assert.That(testDouble, Is.LessThan(-0.02));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace AutomatedCarTest.KeyboardHandling
         {
             testInt1 = 0;
             testInt2 = 0;
-            testInt3 = 0;
+            testDouble = 0;
             keyboardHandler.OnKeyDown(Key.A);
             keyboardHandler.OnKeyDown(Key.D);
             keyboardHandler.OnKeyDown(Key.Q);
@@ -80,41 +80,18 @@ namespace AutomatedCarTest.KeyboardHandling
             keyboardHandler.Tick();
 
             Assert.That(testInt1, Is.EqualTo(0));
-            Assert.That(testInt2, Is.EqualTo(4));
-            Assert.That(testInt3, Is.EqualTo(8));
+            Assert.That(testInt2, Is.GreaterThan(0));
+            Assert.That(testDouble, Is.GreaterThan(0));
         }
 
         [Test]
-        public void HoldableKeyDurationIsCorrectAfterSeveralTicksWhenHolding()
+        public void HoldableKeyTickDurationIsCorrectWhenHolding()
         {
-            keyboardHandler.OnKeyDown(Key.Q);
-            keyboardHandler.Tick();
-            keyboardHandler.Tick();
-            keyboardHandler.Tick();
-
-            Assert.That(keyboardHandler.HoldableKeys[0].CurrentStateDuration, Is.EqualTo(0.06));
-        }
-
-        [Test]
-        public void HoldableKeyDurationIsCorrectAfterSeveralTicksWhenIdle()
-        {
-            keyboardHandler.Tick();
-            keyboardHandler.Tick();
-            keyboardHandler.Tick();
+            testDouble = 0;
+            keyboardHandler.OnKeyDown(Key.E);
             keyboardHandler.Tick();
 
-            Assert.That(keyboardHandler.HoldableKeys[1].CurrentStateDuration, Is.EqualTo(0.08));
-        }
-
-        [Test]
-        public void HoldableKeyDurationResetsAfterStateChange()
-        {
-            keyboardHandler.OnKeyDown(Key.Q);
-            keyboardHandler.Tick();
-            keyboardHandler.Tick();
-            keyboardHandler.OnKeyUp(Key.Q);
-
-            Assert.That(keyboardHandler.HoldableKeys[0].CurrentStateDuration, Is.EqualTo(0));
+            Assert.That(testDouble, Is.EqualTo(0.02));
         }
 
         [Test]

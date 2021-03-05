@@ -21,7 +21,6 @@ namespace AutomatedCar.KeyboardHandling
             HoldableKey holdableKey = HoldableKeys.Find(holdableKey => holdableKey.Key == key);
             if (holdableKey != null)
             {
-                holdableKey.CurrentStateDuration = 0;
                 holdableKey.IsBeingHeld = true;
             }
         }
@@ -32,7 +31,6 @@ namespace AutomatedCar.KeyboardHandling
             if (holdableKey != null)
             {
                 holdableKey.IsBeingHeld = false;
-                holdableKey.CurrentStateDuration = 0;
             }
         }
 
@@ -40,9 +38,8 @@ namespace AutomatedCar.KeyboardHandling
         {
             foreach (HoldableKey holdableKey in HoldableKeys)
             {
-                holdableKey.CurrentStateDuration += tickInterval / 1000;
-                if (holdableKey.IsBeingHeld && holdableKey.OnHold != null) holdableKey.OnHold(holdableKey.CurrentStateDuration);
-                else if (holdableKey.OnIdle != null) holdableKey.OnIdle(holdableKey.CurrentStateDuration);
+                if (holdableKey.IsBeingHeld && holdableKey.OnHold != null) holdableKey.OnHold(tickInterval / 1000);
+                else if (holdableKey.OnIdle != null) holdableKey.OnIdle(tickInterval / 1000);
             }
         }
     }

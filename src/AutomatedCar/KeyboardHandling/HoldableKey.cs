@@ -10,7 +10,6 @@ namespace AutomatedCar.KeyboardHandling
         public Action<double> OnHold { get; }
         public Action<double> OnIdle { get; }
 
-        public double CurrentStateDuration { get; set; }
         public bool IsBeingHeld { get; set; }
 
         public HoldableKey(Key key, Action<double> onHold, Action<double> onIdle)

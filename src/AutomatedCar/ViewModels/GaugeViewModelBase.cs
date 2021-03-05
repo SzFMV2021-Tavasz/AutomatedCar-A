@@ -9,7 +9,6 @@ namespace AutomatedCar.ViewModels
 
         public GaugeViewModelBase()
         {
-
         }
 
         public double Value

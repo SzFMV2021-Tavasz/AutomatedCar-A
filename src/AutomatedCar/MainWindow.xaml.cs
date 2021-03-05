@@ -32,6 +32,7 @@ namespace AutomatedCar
     public partial class MainWindow : Window
     {
         public MainWindowViewModel ViewModel { get; set; }
+
         DispatcherTimer timer = new DispatcherTimer();
         World world = World.Instance;
         bool moveLeft, moveRight, moveUp, moveDown;
@@ -42,7 +43,7 @@ namespace AutomatedCar
             InitializeComponent();
 
             timer.Interval = TimeSpan.FromMilliseconds(20);
-            timer.Tick += logic;
+            timer.Tick += Tick;
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
@@ -118,7 +119,13 @@ namespace AutomatedCar
             }
         }
 
-        private void logic(object sender, EventArgs e)
+        private void Tick(object sender, EventArgs e)
+        {
+            HandleMovement();
+            CourseDisplay.InvalidateVisual();
+        }
+
+        private void HandleMovement()
         {
             if (moveLeft)
             {

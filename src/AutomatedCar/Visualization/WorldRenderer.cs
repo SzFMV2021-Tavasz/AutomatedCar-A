@@ -1,48 +1,61 @@
 ﻿using AutomatedCar.Models;
-using AutomatedCar.ViewModels;
-using System.Collections.ObjectModel;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace AutomatedCar.Visualization
 {
     public class WorldRenderer : FrameworkElement
     {
-        public BitmapImage CarSprite { get; set; }
+        private readonly DispatcherTimer renderTimer = new DispatcherTimer();
 
-        public World World { get; set; }
+        public World World => World.Instance;
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            if (World == null) 
+            if (World == null || CarImage == null)
                 return;
 
             foreach (var worldObject in World.WorldObjects)
             {
-                //worldObject.Render(drawingContext);
+                // worldObject.Render(drawingContext);
             }
 
             var car = World.ControlledCar;
-            drawingContext.DrawImage(CarSprite, new Rect(car.X, car.Y, car.Width, car.Height));
-
-            base.OnRender(drawingContext);
+            drawingContext.DrawImage(CarImage, new Rect(car.X, car.Y, car.Width, car.Height));
         }
 
         public WorldRenderer()
         {
-            Loaded += WorldRenderer_Loaded;
+            renderTimer.Interval = TimeSpan.FromMilliseconds(20);
+            renderTimer.Tick += Timer_Tick;
+            renderTimer.Start();
         }
 
-        private void WorldRenderer_Loaded(object sender, RoutedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            this.World = World.Instance;
+            InvalidateVisual();
+        }
 
-            //CarSprite = new BitmapImage();
-            //CarSprite.BeginInit();
-            //CarSprite.UriSource = new System.Uri($"{Directory.GetCurrentDirectory()}/Assets/WorldObjects/{World.ControlledCar.Filename}", System.UriKind.Absolute);
-            //CarSprite.EndInit();
+        private BitmapImage _carImage;
+
+        public BitmapImage CarImage
+        {
+            get
+            {
+                if (_carImage == null)
+                {
+                    _carImage = new BitmapImage();
+                    _carImage.BeginInit();
+                    _carImage.UriSource = new System.Uri($"{Directory.GetCurrentDirectory()}/Assets/WorldObjects/{World.ControlledCar.Filename}", System.UriKind.Absolute);
+                    _carImage.EndInit();
+                }
+
+                return _carImage;
+            }
         }
     }
 }

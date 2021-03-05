@@ -13,8 +13,13 @@
              >
     <StackPanel Background="#424242" Orientation="Vertical">
         <StackPanel Orientation="Horizontal">
-            <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}"/>
-            <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
+            <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}" VerticalAlignment="Bottom"/>
+            <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" VerticalAlignment="Bottom"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <uc:LeftTurnSignal Height="40" Width="100"/>
+            <uc:Transmission Height="40" Width="120" DataContext="{Binding TransmissionViewModel}"/>
+            <uc:LeftTurnSignal Height="40" Width="100"/>
         </StackPanel>
         <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
 

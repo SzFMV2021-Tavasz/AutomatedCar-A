@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutomatedCar.Views"
+             xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="120">
+             d:DesignHeight="30" d:DesignWidth="120"
+             d:DataContext="{d:DesignInstance viewmodels:TransmissionViewModel}">
     <Grid>
-        <Label Content="Gear: " Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="12" Foreground="White"/>
+        <Label Content="{Binding Caption}" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="15" Foreground="White"/>
     </Grid>
 </UserControl>

@@ -1,6 +1,7 @@
 namespace AutomatedCar.ViewModels
 {
     using AutomatedCar.Models;
+    using AutomatedCar.Models.Enums;
     using ReactiveUI;
 
     public class DashboardViewModel : ViewModelBase
@@ -8,16 +9,20 @@ namespace AutomatedCar.ViewModels
         private AutomatedCar _controlledCar;
         private RpmGaugeViewModel _rpmGaugeViewModel;
         private SpeedGaugeViewModel _speedGaugeViewModel;
+        private TransmissionViewModel _transmissionViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
             this.ControlledCar = controlledCar;
             this.RpmGaugeViewModel = new RpmGaugeViewModel();
             this.SpeedGaugeViewModel = new SpeedGaugeViewModel();
+            this.TransmissionViewModel = new TransmissionViewModel();
             this.RpmGaugeViewModel.Value = 3000;
             this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
             this.SpeedGaugeViewModel.Value = 50;
             this.SpeedGaugeViewModel.Caption = $"{this.SpeedGaugeViewModel.Value} km/h";
+            this.TransmissionViewModel.CurrentGear = Gear.P;
+            this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
         }
 
         public AutomatedCar ControlledCar
@@ -37,5 +42,12 @@ namespace AutomatedCar.ViewModels
             get => this._speedGaugeViewModel;
             set => this.RaiseAndSetIfChanged(ref this._speedGaugeViewModel, value);
         }
+
+        public TransmissionViewModel TransmissionViewModel
+        {
+            get => this._transmissionViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._transmissionViewModel, value);
+        }
+
     }
 }

@@ -23,7 +23,6 @@ namespace AutomatedCar.Views
         public LeftTurnSignal()
         {
             InitializeComponent();
-            DataContext = this;
         }
     }
 }

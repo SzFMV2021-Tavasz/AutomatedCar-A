@@ -23,7 +23,6 @@ namespace AutomatedCar.Views
         public Transmission()
         {
             InitializeComponent();
-            DataContext = this;
         }
     }
 }

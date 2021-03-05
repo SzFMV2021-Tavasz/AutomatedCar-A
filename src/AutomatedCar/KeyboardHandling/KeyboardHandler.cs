@@ -41,8 +41,8 @@ namespace AutomatedCar.KeyboardHandling
             foreach (HoldableKey holdableKey in HoldableKeys)
             {
                 holdableKey.CurrentStateDuration += tickInterval / 1000;
-                if (holdableKey.IsBeingHeld) holdableKey.OnHold(holdableKey.CurrentStateDuration);
-                else holdableKey.OnIdle(holdableKey.CurrentStateDuration);
+                if (holdableKey.IsBeingHeld && holdableKey.OnHold != null) holdableKey.OnHold(holdableKey.CurrentStateDuration);
+                else if (holdableKey.OnIdle != null) holdableKey.OnIdle(holdableKey.CurrentStateDuration);
             }
         }
     }

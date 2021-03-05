@@ -10,13 +10,22 @@ namespace BaseModel
 {
     public class World
     {
-        public List<WorldObject> objects = new List<WorldObject>();
+        private int nextId = 0;
+        
+        public List<WorldObject> objects = new();
 
         public World() { }
 
         public World(List<WorldObject> objects)
         {
             this.objects = objects;
+            foreach (var worldObject in this.objects) assignId(worldObject);
+        }
+        
+        private void assignId(WorldObject obj)
+        {
+            obj.ID = nextId;
+            nextId++;
         }
 
         [JsonProperty("width")]
@@ -29,6 +38,7 @@ namespace BaseModel
         /// </summary>
         public void AddObject(WorldObject worldObject)
         {
+            assignId(worldObject);
             objects.Add(worldObject);
         }
         
@@ -42,6 +52,11 @@ namespace BaseModel
             return objects.First(o => o.ID == ID);
         }
 
+        public WorldObject[] GetObjectsByType(WorldObject.Type type)
+        {
+            return objects.Where(o => o.ObjectType == type).ToArray();
+        }
+
         public WorldObject[] GetObjectsWithTags(WorldObject.Tag tag)
         {
             return objects.Where(o => (o.Tags & tag) == tag).ToArray();
@@ -49,7 +64,7 @@ namespace BaseModel
 
         public WorldObject[] GetObjectsWithoutTags(WorldObject.Tag tag)
         {
-            return objects.Where(o => (o.Tags & ~tag) == 0).ToArray();
+            return objects.Where(o => (o.Tags & tag) == 0).ToArray();
         }
     }
 }

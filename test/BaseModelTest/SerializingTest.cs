@@ -13,6 +13,7 @@ namespace BaseModelTest
     {
         private static readonly string POLYGON_JSON_PATH = "SerializingDummies\\worldobject_polygons.json";
         
+        
         [SetUp]
         public void Setup()
         {
@@ -90,7 +91,7 @@ namespace BaseModelTest
             WorldObject.Type expectedType,
             int expectedX, int expectedY)
         {
-            World world = MakeWorldWithJsonSerializer(fileToLoad);
+            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH);
             WorldObject knownObject = world.GetObjectsWithTags(tags).First();
             WorldObject_AssertEqual_XYType(knownObject, expectedX, expectedY, expectedType);
         }
@@ -107,7 +108,7 @@ namespace BaseModelTest
             WorldObject.Type expectedType,
             int expectedX, int expectedY)
         {
-            World world = MakeWorldWithJsonSerializer(fileToLoad);
+            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH);
             WorldObject knownObject = world.GetObjectsWithoutTags(tagsWithout).First();
             WorldObject_AssertEqual_XYType(knownObject, expectedX, expectedY, expectedType);
         }
@@ -135,13 +136,59 @@ namespace BaseModelTest
             Dictionary<WorldObject.Type, List<Polygon>> polygonDictionary = GetPolygonDictionary();
             
             Vehicle car = new Vehicle(WorldObject.Type.CAR_1_WHITE);
-            car.SetPolygonNameDictionary(polygonDictionary);
+            car.PolygonDictionary = polygonDictionary;
 
             Assert.AreEqual(car.Polygons[0].Points[0], new Tuple<int, int>(51, 239));
             Assert.AreEqual(car.Polygons[0].Points[1], new Tuple<int, int>(40, 238));
             Assert.AreEqual(car.Polygons[0].Points[2], new Tuple<int, int>(26, 236));
             Assert.AreEqual(car.Polygons[0].Points[3], new Tuple<int, int>(18, 231));
         }
+
+        [TestCase(
+            "SerializingDummies\\test_world.json",
+            WorldObject.Type.TREE,
+            92, 81,
+            91, 88
+        )]
+        [TestCase(
+            "SerializingDummies\\test_world.json",
+            WorldObject.Type._2_CROSSROAD_1,
+            0, 865,
+            350, 865
+        )]
+        public void Test_SomeKnownPolygonsOfTestWorld(
+            string fileToLoad,
+            WorldObject.Type type,
+            
+            int expectedP0X0, int expectedP0Y0, int expectedP0X1, int expectedP0Y1
+        )
+        {
+            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH);
+            
+            WorldObject obj = world.GetObjectsByType(type).First();
+            
+            Assert.AreEqual(new Tuple<int, int>(expectedP0X1, expectedP0Y1), obj.Polygons[0].Points[1]);
+            Assert.AreEqual(new Tuple<int, int>(expectedP0X0, expectedP0Y0), obj.Polygons[0].Points[0]);
+        }
+
+        [Test]
+        public void Test_MultiPoly()
+        {
+            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH);
+            WorldObject obj = world.GetObjectsByType(WorldObject.Type._2_CROSSROAD_1).First();
+            
+            Assert.AreEqual(obj.Polygons[0].Type, Polygon.Type_t.LANE);
+            Assert.AreEqual(obj.Polygons[1].Type, Polygon.Type_t.LANE);
+            Assert.AreEqual(obj.Polygons[2].Type, Polygon.Type_t.LANE);
+            
+            Assert.AreEqual(new Tuple<int, int>(0,   865), obj.Polygons[0].Points[0]);
+            Assert.AreEqual(new Tuple<int, int>(350, 865), obj.Polygons[0].Points[1]);
+            Assert.AreEqual(new Tuple<int, int>(0,   535), obj.Polygons[1].Points[0]);
+            Assert.AreEqual(new Tuple<int, int>(350, 535), obj.Polygons[1].Points[1]);
+            Assert.AreEqual(new Tuple<int, int>(0,   700), obj.Polygons[2].Points[0]);
+            Assert.AreEqual(new Tuple<int, int>(350, 700), obj.Polygons[2].Points[1]);
+        }
+        
 
         private static JSONWorldSerializer GetSerializer()
         {

@@ -3,12 +3,14 @@ namespace AutomatedCar.SystemComponents
     using System.Collections.Generic;
     using System.Windows.Threading;
     using System;
+    using AutomatedCar.SystemComponents.Packets;
 
-    public class VirtualFunctionBus
+    public class VirtualFunctionBus : IVirtualFunctionBus
     {
         private List<SystemComponent> components = new List<SystemComponent>();
 
         public IReadOnlyDummyPacket DummyPacket { get; set; }
+        public IReadOnlyPowertrainComponentPacket PowertrainPacket { get; set; }
 
         private DispatcherTimer timer = new DispatcherTimer();
 

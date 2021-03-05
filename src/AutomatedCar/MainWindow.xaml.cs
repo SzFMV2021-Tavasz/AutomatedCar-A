@@ -31,6 +31,8 @@ namespace AutomatedCar
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly double tickInterval = 20;
+
         public MainWindowViewModel ViewModel { get; set; }
         DispatcherTimer timer = new DispatcherTimer();
         World world = World.Instance;
@@ -41,7 +43,7 @@ namespace AutomatedCar
             ViewModel = new MainWindowViewModel(world);
             InitializeComponent();
 
-            timer.Interval = TimeSpan.FromMilliseconds(20);
+            timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
             timer.Start();
             // make my dockpanel focus of this game

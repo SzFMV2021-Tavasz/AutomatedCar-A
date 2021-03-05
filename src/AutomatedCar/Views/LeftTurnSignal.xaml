@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="AutomatedCar.Views.LeftTurnSignal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AutomatedCar.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="100">
+    <Grid>
+        <Image Width="30" Height="30">
+            <Image.Source>
+                <BitmapImage UriSource="/Assets/arrow.png" Rotation="Rotate270"/>
+            </Image.Source>
+        </Image>
+    </Grid>
+</UserControl>

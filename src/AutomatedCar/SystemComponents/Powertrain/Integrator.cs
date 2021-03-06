@@ -132,18 +132,24 @@ namespace AutomatedCar.SystemComponents.Powertrain
             // where theta is the angle between the two vectors.
             // sin(theta) can be calculated by
             //
-            // sin(theta) = sqrt(1 - cos**2(theta))
+            // sin(theta) = sin(acos[dot(normalized[relativePosition], normalized[force])])
             //
-            // and cos(theta) is simply the dot product of the two vectors
-            // after normalization.
+            // as the dot product of the two vectors is the cosine of the
+            // angle between them.
 
             var relativePositionMagnitude = relativePosition.Length();
-            var relativePositionNormalized = relativePosition / relativePositionMagnitude;
+            var relativePositionNormalized = Vector2.Normalize(relativePosition);
             var forceMagnitude = force.Length();
-            var forceNormalized = force / forceMagnitude;
+            var forceNormalized = Vector2.Normalize(force);
 
             var cosineOfAngle = Vector2.Dot(relativePositionNormalized, forceNormalized);
-            var sineOfAngle = Math.Sqrt(1 - cosineOfAngle * cosineOfAngle);
+            // Vector2.Dot sometimes returns values greater than 1, even though
+            // the vectors are of unit length.
+            // This clamp guards against that.
+            var cosineOfAngleSafe = Math.Clamp(cosineOfAngle, -1, 1);
+
+            var angle = Math.Acos(cosineOfAngleSafe);
+            var sineOfAngle = Math.Sin(angle);
 
             var torque = relativePositionMagnitude * forceMagnitude * sineOfAngle;
 

@@ -19,6 +19,7 @@ namespace AutomatedCar
         private readonly double tickInterval = 20;
 
         public MainWindowViewModel ViewModel { get; set; }
+
         DispatcherTimer timer = new DispatcherTimer();
         World world = World.Instance;
 
@@ -37,6 +38,7 @@ namespace AutomatedCar
 
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
+            
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
@@ -83,6 +85,12 @@ namespace AutomatedCar
         }
 
         private void logic(object sender, EventArgs e)
+        {
+            HandleMovement();
+            CourseDisplay.InvalidateVisual();
+        }
+
+        private void HandleMovement()
         {
             keyboardHandler.Tick();
         }

@@ -15,7 +15,7 @@ namespace AutomatedCar.Visualization
 
         public static WorldObjectTransformer Instance { get; } = new WorldObjectTransformer();
 
-        static BitmapImage GetCachedImage(string filename)
+        internal static BitmapImage GetCachedImage(string filename)
         {
             if (!cache.ContainsKey(filename))
             {

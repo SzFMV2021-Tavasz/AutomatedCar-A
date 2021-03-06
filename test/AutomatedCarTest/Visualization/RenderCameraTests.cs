@@ -4,6 +4,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using Xunit;
 
 namespace Test.Visualization
@@ -62,6 +63,7 @@ namespace Test.Visualization
             renderable.Setup(r => r.Y).Returns(y);
             renderable.Setup(r => r.Width).Returns(width);
             renderable.Setup(r => r.Height).Returns(height);
+            renderable.Setup(r => r.Boundary).Returns(GenerateBoundaryFromMoq(renderable.Object));
 
             var result = camera.IsVisibleInViewport(renderable.Object);
             Assert.True(result);
@@ -107,18 +109,23 @@ namespace Test.Visualization
             vis1.Setup(v => v.Y).Returns(50);
             vis1.Setup(v => v.Width).Returns(5);
             vis1.Setup(v => v.Height).Returns(15);
+            vis1.Setup(v => v.Boundary).Returns(GenerateBoundaryFromMoq(vis1.Object));
             visibleObjects.Add(vis1.Object);
+
             vis2 = new Mock<IRenderableWorldObject>();
             vis2.Setup(v => v.X).Returns(100);
             vis2.Setup(v => v.Y).Returns(100);
             vis2.Setup(v => v.Width).Returns(5);
             vis2.Setup(v => v.Height).Returns(15);
+            vis2.Setup(v => v.Boundary).Returns(GenerateBoundaryFromMoq(vis2.Object));
             visibleObjects.Add(vis2.Object);
+
             vis3 = new Mock<IRenderableWorldObject>();
             vis3.Setup(v => v.X).Returns(300);
             vis3.Setup(v => v.Y).Returns(300);
             vis3.Setup(v => v.Width).Returns(5);
             vis3.Setup(v => v.Height).Returns(15);
+            vis3.Setup(v => v.Boundary).Returns(GenerateBoundaryFromMoq(vis3.Object));
             visibleObjects.Add(vis3.Object);
         }
 
@@ -129,7 +136,13 @@ namespace Test.Visualization
             far1.Setup(f => f.Y).Returns(5000);
             far1.Setup(f => f.Width).Returns(5);
             far1.Setup(f => f.Height).Returns(5);
+            far1.Setup(v => v.Boundary).Returns(GenerateBoundaryFromMoq(far1.Object));
             farawayObjects.Add(far1.Object);
+        }
+
+        private Rect GenerateBoundaryFromMoq(IRenderableWorldObject renderable)
+        {
+            return new Rect(renderable.X, renderable.Y, renderable.Width, renderable.Height);
         }
 
         #endregion TestInternal

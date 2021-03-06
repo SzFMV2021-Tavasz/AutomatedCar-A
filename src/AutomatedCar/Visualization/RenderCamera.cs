@@ -1,9 +1,5 @@
 ﻿using AutomatedCar.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace AutomatedCar.Visualization
@@ -14,6 +10,8 @@ namespace AutomatedCar.Visualization
         public double TopY { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
+        public double MiddleX { get; private set; }
+        public double MiddleY { get; private set; }
 
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);
 
@@ -21,6 +19,9 @@ namespace AutomatedCar.Visualization
         {
             LeftX = originX - (Width / 2.0);
             TopY = originY + (Height / 2.0);
+
+            MiddleX = originX;
+            MiddleY = originY;
         }
 
         public List<IRenderableWorldObject> Filter(List<IRenderableWorldObject> renderables)
@@ -39,6 +40,13 @@ namespace AutomatedCar.Visualization
         public bool IsVisibleInViewport(IRenderableWorldObject renderable)
         {
             return ViewportRect.IntersectsWith(renderable.Boundary);
+        }
+
+        public Point TranslateToViewport(double worldX, double worldY)
+        {
+            var x = worldX - LeftX;
+            var y = worldY - TopY;
+            return new Point(x, y);
         }
     }
 }

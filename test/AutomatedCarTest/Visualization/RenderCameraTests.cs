@@ -1,9 +1,7 @@
 ﻿using AutomatedCar.Models;
 using AutomatedCar.Visualization;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using Xunit;
 
@@ -52,6 +50,20 @@ namespace Test.Visualization
         }
 
         [Theory]
+        [InlineData(10, 7, 5, 2)]
+        [InlineData(16, 5, 11, 0)]
+        public void CanTranslateGlobalCoordsToLocals(double x, double y, double expectedViewportX, double expectedViewportY)
+        {
+            camera.LeftX = 5;
+            camera.TopY = 5;
+
+            Point actual = camera.TranslateToViewport(x, y);
+
+            Assert.Equal(expectedViewportX, actual.X);
+            Assert.Equal(expectedViewportY, actual.Y);
+        }
+
+        [Theory]
         [InlineData(5, 5, 10, 10)]
         [InlineData(0, 0, 20, 30)]
         [InlineData(450, 500, 150, 30)]
@@ -84,15 +96,15 @@ namespace Test.Visualization
         private readonly List<IRenderableWorldObject> visibleObjects = new List<IRenderableWorldObject>();
         private readonly List<IRenderableWorldObject> farawayObjects = new List<IRenderableWorldObject>();
 
-        Mock<IRenderableWorldObject> vis1 = new Mock<IRenderableWorldObject>();
-        Mock<IRenderableWorldObject> vis2 = new Mock<IRenderableWorldObject>();
-        Mock<IRenderableWorldObject> vis3 = new Mock<IRenderableWorldObject>();
+        private Mock<IRenderableWorldObject> vis1 = new Mock<IRenderableWorldObject>();
+        private Mock<IRenderableWorldObject> vis2 = new Mock<IRenderableWorldObject>();
+        private Mock<IRenderableWorldObject> vis3 = new Mock<IRenderableWorldObject>();
 
-        Mock<IRenderableWorldObject> far1 = new Mock<IRenderableWorldObject>();
+        private Mock<IRenderableWorldObject> far1 = new Mock<IRenderableWorldObject>();
 
         public RenderCameraTests()
         {
-            camera.Width = 960; 
+            camera.Width = 960;
             camera.Height = 720;
 
             SetupVisibles();

@@ -5,32 +5,21 @@ namespace Test.SystemComponents.SystemDebug
 {
     public class HMIDebugTest
     {
-        private HMIDebug hmi;
-        private bool debugRadar;
-        private bool debugSonic;
-        private bool debugVideo;
-        private bool debugPolys;
+        private HMIDebug hmiDebug;
 
         [SetUp]
         public void SetUp()
         {
-            hmi = new HMIDebug();
-            HMIDebug.DebugActionEventHandler += (s, e) =>
-            {
-                debugRadar = e.DebugRadar;
-                debugSonic = e.DebugSonic;
-                debugVideo = e.DebugVideo;
-                debugPolys = e.DebugPolys;
-            };
+            hmiDebug = new HMIDebug();
         }
 
         [Test]
         public void DebugRadarChangesToTrue()
         {
             bool val = false;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugRadar;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugRadar;
 
-            hmi.OnDebugAction(1);
+            hmiDebug.OnDebugAction(1);
 
             Assert.That(val, Is.True);
         }
@@ -39,10 +28,10 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugRadarChangesToFalse()
         {
             bool val = true;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugRadar;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugRadar;
 
-            hmi.OnDebugAction(1);
-            hmi.OnDebugAction(1);
+            hmiDebug.OnDebugAction(1);
+            hmiDebug.OnDebugAction(1);
 
             Assert.That(val, Is.False);
         }
@@ -51,9 +40,9 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugSonicChangesToTrue()
         {
             bool val = false;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugSonic;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugSonic;
 
-            hmi.OnDebugAction(2);
+            hmiDebug.OnDebugAction(2);
 
             Assert.That(val, Is.True);
         }
@@ -62,10 +51,10 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugSonicChangesToFalse()
         {
             bool val = true;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugSonic;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugSonic;
 
-            hmi.OnDebugAction(2);
-            hmi.OnDebugAction(2);
+            hmiDebug.OnDebugAction(2);
+            hmiDebug.OnDebugAction(2);
 
             Assert.That(val, Is.False);
         }
@@ -74,9 +63,9 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugVideoChangesToTrue()
         {
             bool val = false;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugVideo;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugVideo;
 
-            hmi.OnDebugAction(3);
+            hmiDebug.OnDebugAction(3);
 
             Assert.That(val, Is.True);
         }
@@ -85,10 +74,10 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugVideoChangesToFalse()
         {
             bool val = true;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugVideo;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugVideo;
 
-            hmi.OnDebugAction(3);
-            hmi.OnDebugAction(3);
+            hmiDebug.OnDebugAction(3);
+            hmiDebug.OnDebugAction(3);
 
             Assert.That(val, Is.False);
         }
@@ -97,9 +86,9 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugPolysChangesToTrue()
         {
             bool val = false;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugPolys;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugPolys;
 
-            hmi.OnDebugAction(4);
+            hmiDebug.OnDebugAction(4);
 
             Assert.That(val, Is.True);
         }
@@ -108,10 +97,10 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugPolysChangesToFalse()
         {
             bool val = true;
-            HMIDebug.DebugActionEventHandler += (s, e) => val = debugPolys;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = e.DebugPolys;
 
-            hmi.OnDebugAction(4);
-            hmi.OnDebugAction(4);
+            hmiDebug.OnDebugAction(4);
+            hmiDebug.OnDebugAction(4);
 
             Assert.That(val, Is.False);
         }

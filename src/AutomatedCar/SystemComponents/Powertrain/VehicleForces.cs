@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace AutomatedCar.SystemComponents.Powertrain
 {
-    public class VehicleForces
+    public class VehicleForces : IVehicleForces
     {
         private readonly IVehicleConstants vehicleConstants;
 
@@ -38,7 +38,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         public Vector2 GetTractiveForce(float gasPedal, Vector2 wheelDirection, int gearIdx)
         {
-            if(gearIdx < 0 || vehicleConstants.NumberOfGears <= gearIdx)
+            if (gearIdx < 0 || vehicleConstants.NumberOfGears <= gearIdx)
             {
                 throw new ArgumentException("Gear index is out of bounds.", nameof(gearIdx));
             }

@@ -2,7 +2,7 @@
 
 namespace AutomatedCar.SystemComponents.SystemDebug
 {
-    public class HMI
+    public class HMIDebug
     {
         private DebugActionArgs args = new DebugActionArgs();
 

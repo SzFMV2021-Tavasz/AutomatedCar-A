@@ -3,9 +3,9 @@ using NUnit.Framework;
 
 namespace Test.SystemComponents.SystemDebug
 {
-    public class HMITest
+    public class HMIDebugTest
     {
-        private HMI hmi;
+        private HMIDebug hmi;
         private bool debugRadar;
         private bool debugSonic;
         private bool debugVideo;
@@ -14,8 +14,8 @@ namespace Test.SystemComponents.SystemDebug
         [SetUp]
         public void SetUp()
         {
-            hmi = new HMI();
-            HMI.DebugActionEventHandler += (s, e) =>
+            hmi = new HMIDebug();
+            HMIDebug.DebugActionEventHandler += (s, e) =>
             {
                 debugRadar = e.DebugRadar;
                 debugSonic = e.DebugSonic;
@@ -28,7 +28,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugRadarChangesToTrue()
         {
             bool val = false;
-            HMI.DebugActionEventHandler += (s, e) => val = debugRadar;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugRadar;
 
             hmi.OnDebugAction(1);
 
@@ -39,7 +39,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugRadarChangesToFalse()
         {
             bool val = true;
-            HMI.DebugActionEventHandler += (s, e) => val = debugRadar;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugRadar;
 
             hmi.OnDebugAction(1);
             hmi.OnDebugAction(1);
@@ -51,7 +51,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugSonicChangesToTrue()
         {
             bool val = false;
-            HMI.DebugActionEventHandler += (s, e) => val = debugSonic;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugSonic;
 
             hmi.OnDebugAction(2);
 
@@ -62,7 +62,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugSonicChangesToFalse()
         {
             bool val = true;
-            HMI.DebugActionEventHandler += (s, e) => val = debugSonic;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugSonic;
 
             hmi.OnDebugAction(2);
             hmi.OnDebugAction(2);
@@ -74,7 +74,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugVideoChangesToTrue()
         {
             bool val = false;
-            HMI.DebugActionEventHandler += (s, e) => val = debugVideo;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugVideo;
 
             hmi.OnDebugAction(3);
 
@@ -85,7 +85,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugVideoChangesToFalse()
         {
             bool val = true;
-            HMI.DebugActionEventHandler += (s, e) => val = debugVideo;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugVideo;
 
             hmi.OnDebugAction(3);
             hmi.OnDebugAction(3);
@@ -97,7 +97,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugPolysChangesToTrue()
         {
             bool val = false;
-            HMI.DebugActionEventHandler += (s, e) => val = debugPolys;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugPolys;
 
             hmi.OnDebugAction(4);
 
@@ -108,7 +108,7 @@ namespace Test.SystemComponents.SystemDebug
         public void DebugPolysChangesToFalse()
         {
             bool val = true;
-            HMI.DebugActionEventHandler += (s, e) => val = debugPolys;
+            HMIDebug.DebugActionEventHandler += (s, e) => val = debugPolys;
 
             hmi.OnDebugAction(4);
             hmi.OnDebugAction(4);

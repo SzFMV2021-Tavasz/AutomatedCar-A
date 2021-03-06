@@ -8,6 +8,7 @@ using AutomatedCar.Models;
 using AutomatedCar.ViewModels;
 using Newtonsoft.Json.Linq;
 using AutomatedCar.KeyboardHandling;
+using AutomatedCar.SystemComponents.SystemDebug;
 
 namespace AutomatedCar
 {
@@ -23,6 +24,7 @@ namespace AutomatedCar
         World world = World.Instance;
 
         private KeyboardHandler keyboardHandler;
+        private HMIDebug hmiDebug;
 
         public MainWindow()
         {
@@ -34,6 +36,12 @@ namespace AutomatedCar
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right, (duration) => World.Instance.ControlledCar.X += 5, null));
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up, (duration) => World.Instance.ControlledCar.Y -= 5, null));
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down, (duration) => World.Instance.ControlledCar.Y += 5, null));
+
+            hmiDebug = new HMIDebug();
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.NumPad1, () => hmiDebug.OnDebugAction(1)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.NumPad2, () => hmiDebug.OnDebugAction(2)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.NumPad3, () => hmiDebug.OnDebugAction(3)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.NumPad4, () => hmiDebug.OnDebugAction(4)));
 
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;

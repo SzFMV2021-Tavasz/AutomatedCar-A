@@ -2,8 +2,8 @@
 
 namespace AutomatedCar.ViewModels
 {
-    public class TurnSignalViewModelBase : ViewModelBase {
-
+    public class TurnSignalViewModelBase : ViewModelBase 
+    {
         private bool _isEnabled;
         public TurnSignalViewModelBase()
         {

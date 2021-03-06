@@ -17,6 +17,6 @@
             <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
         </StackPanel>
         <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
-
+        <uc:GasPedal DataContext="{Binding GasPedalViewModel}"/>
     </StackPanel>
 </UserControl>

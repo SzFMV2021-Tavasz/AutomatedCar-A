@@ -104,5 +104,29 @@ namespace Test.SystemComponents.SystemDebug
 
             Assert.That(val, Is.False);
         }
+
+        [Test]
+        public void IncorrectInputParameterDoesNotChangeArgs()
+        {
+            bool val1 = false;
+            bool val2 = false;
+            bool val3 = false;
+            bool val4 = false;
+            HMIDebug.DebugActionEventHandler += (s, e) =>
+            {
+                val1 = e.DebugRadar;
+                val2 = e.DebugSonic;
+                val3 = e.DebugVideo;
+                val4 = e.DebugPolys;
+            };
+
+            hmiDebug.OnDebugAction(0);
+            hmiDebug.OnDebugAction(5);
+
+            Assert.That(val1, Is.False);
+            Assert.That(val2, Is.False);
+            Assert.That(val3, Is.False);
+            Assert.That(val4, Is.False);
+        }
     }
 }

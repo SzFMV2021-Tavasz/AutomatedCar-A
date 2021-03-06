@@ -4,7 +4,7 @@ namespace AutomatedCar.Models
 {
     using ReactiveUI;
 
-    public abstract class RenderableWorldObject : ReactiveObject
+    public abstract class RenderableWorldObject : ReactiveObject, IRenderableWorldObject
     {
         private int _x;
         private int _y;

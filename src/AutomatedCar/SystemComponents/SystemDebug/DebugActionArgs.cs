@@ -2,7 +2,7 @@
 
 namespace AutomatedCar.SystemComponents.SystemDebug
 {
-    class DebugActionArgs : EventArgs
+    public class DebugActionArgs : EventArgs
     {
         public bool DebugRadar { get; set; }
 

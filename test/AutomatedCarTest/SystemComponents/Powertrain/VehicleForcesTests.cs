@@ -22,6 +22,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             constants.Setup(C => C.OverallWheelRadius).Returns(1);
             constants.Setup(C => C.TransmissionEfficiency).Returns(1);
             constants.Setup(C => C.DifferentialRatio).Returns(1);
+            constants.Setup(C => C.BrakingConstant).Returns(80);
 
             constants.Setup(C => C.GetCrankshaftSpeed(It.IsAny<float>()))
                 .Returns((float p) => p * 6000);
@@ -150,6 +151,43 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             Assert.Throws<ArgumentException>(
                 () => forceCalculator.GetTractiveForce(gasPedal, wheelDirection, gearIdx)
             );
+        }
+
+        [Theory]
+        [InlineData(0f, 0.5f)]
+        [InlineData(0f, 1.0f)]
+        [InlineData(0.5f, 0.5f)]
+        public void BrakingForceIsProportionalToBrakePedal(float brakePedal0, float brakePedal1)
+        {
+            var forceCalculator = new VehicleForces(constants.Object);
+            var velocity = new Vector2(0, 28);
+
+            var force0 = forceCalculator.GetBrakingForce(brakePedal0, velocity);
+            var force1 = forceCalculator.GetBrakingForce(brakePedal1, velocity);
+
+            var ratio = force1.Length() / force0.Length();
+            var ratioIsGreaterThanOne = ratio > 1;
+
+            var ratioEqualsOne = Math.Abs(1 - ratio) < float.Epsilon;
+            var brakePedalRatiosAreEqual = Math.Abs(brakePedal1 - brakePedal0) < float.Epsilon;
+
+            // The ratio is either greater than one OR the ratio is one if and
+            // only if the brake pedal ratios are equal.
+            Assert.True(ratioIsGreaterThanOne || ((ratioEqualsOne && brakePedalRatiosAreEqual) || (!ratioEqualsOne && !brakePedalRatiosAreEqual)));
+        }
+
+        [Theory]
+        [MemberData(nameof(dragProportionalTestVectors))]
+        public void BrakingForceIsProportionalToVelocity(Vector2 velocity0, Vector2 velocity1)
+        {
+            var forceCalculator = new VehicleForces(constants.Object);
+            var brakePedal = 1.0f;
+
+            var force0 = forceCalculator.GetBrakingForce(brakePedal, velocity0);
+            var force1 = forceCalculator.GetBrakingForce(brakePedal, velocity1);
+
+            var ratio = force1.Length() / force0.Length();
+            Assert.True(ratio >= 1);
         }
     }
 }

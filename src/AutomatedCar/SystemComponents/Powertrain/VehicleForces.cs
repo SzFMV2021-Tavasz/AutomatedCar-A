@@ -47,6 +47,12 @@ namespace AutomatedCar.SystemComponents.Powertrain
             return CalculateTractiveForce(gasPedal, wheelDirection, gearRatio);
         }
 
+        public Vector2 GetBrakingForce(float brakePedal, Vector2 currentVelocity)
+        {
+            var squareVelocity = currentVelocity * currentVelocity;
+            return brakePedal * vehicleConstants.BrakingConstant * -squareVelocity;
+        }
+
         private Vector2 CalculateTractiveForce(float gasPedal, Vector2 wheelDirection, float gearRatio)
         {
             var engineTorque = vehicleConstants.GetEngineTorque(vehicleConstants.GetCrankshaftSpeed(gasPedal));

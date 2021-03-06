@@ -4,9 +4,9 @@ namespace AutomatedCar.SystemComponents.SystemDebug
 {
     public class HMIDebug
     {
-        private DebugActionArgs args = new DebugActionArgs();
-
         public static event EventHandler<DebugActionArgs> DebugActionEventHandler;
+
+        private DebugActionArgs args = new DebugActionArgs();
 
         public void OnDebugAction(int debugArgId)
         {

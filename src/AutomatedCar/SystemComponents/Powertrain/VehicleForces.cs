@@ -12,11 +12,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
             this.vehicleConstants = vehicleConstants;
         }
 
-        /// <summary>
-        /// Calculates the drag force acting on a particle.
-        /// </summary>
-        /// <param name="velocity">Speed of the particle.</param>
-        /// <returns>Drag force.</returns>
         public Vector2 GetDragForce(Vector2 velocity)
         {
             var relativeVelocity = Vector2.Zero - velocity;
@@ -35,28 +30,25 @@ namespace AutomatedCar.SystemComponents.Powertrain
             return 0.5f * vehicleConstants.AirDensity * velocitySquared * dragArea * forceDir;
         }
 
-        public Vector2 GetTractiveForce(float gasPedal, Vector2 wheelDirection, bool isReverse, int? gearIdx)
+        public Vector2 GetTractiveForceInReverse(float gasPedal, Vector2 wheelDirection)
         {
-            if(!isReverse && gearIdx == null)
-            {
-                throw new ArgumentException($"{nameof(gearIdx)} can't be null when {nameof(isReverse)} is false", nameof(gearIdx));
-            }
+            var gearRatio = -vehicleConstants.ReverseGearRatio;
+            return CalculateTractiveForce(gasPedal, wheelDirection, gearRatio);
+        }
 
-            if(gearIdx != null && gearIdx >= vehicleConstants.NumberOfGears)
+        public Vector2 GetTractiveForce(float gasPedal, Vector2 wheelDirection, int gearIdx)
+        {
+            if(gearIdx < 0 || vehicleConstants.NumberOfGears <= gearIdx)
             {
                 throw new ArgumentException("Gear index is out of bounds.", nameof(gearIdx));
             }
 
-            float gearRatio;
-            if(!isReverse)
-            {
-                gearRatio = vehicleConstants.GearRatios[gearIdx.Value];
-            }
-            else
-            {
-                gearRatio = -vehicleConstants.ReverseGearRatio;
-            }
+            var gearRatio = vehicleConstants.GearRatios[gearIdx];
+            return CalculateTractiveForce(gasPedal, wheelDirection, gearRatio);
+        }
 
+        private Vector2 CalculateTractiveForce(float gasPedal, Vector2 wheelDirection, float gearRatio)
+        {
             var engineTorque = vehicleConstants.GetEngineTorque(vehicleConstants.GetCrankshaftSpeed(gasPedal));
             var differentialRatio = vehicleConstants.DifferentialRatio;
             var transmissionEfficiency = vehicleConstants.TransmissionEfficiency;

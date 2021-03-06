@@ -80,12 +80,11 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         public void TractiveForcePointsInTheDirectionOfTheWheels()
         {
             var forceCalculator = new VehicleForces(constants.Object);
-            var isReverse = false;
             var gear = 1;
             var wheelDirection = new Vector2(0, 1);
             var gasPedal = 1.0f;
 
-            var force = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, isReverse, gear);
+            var force = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, gear);
 
             // NOTE(danielm): dot product of two unit vectors is 1 if the
             // angle between them is 0 degrees.
@@ -100,12 +99,11 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         public void TractiveForceIsProportionalToCurrentGear(int gearIdx0, int gearIdx1)
         {
             var forceCalculator = new VehicleForces(constants.Object);
-            var isReverse = false;
             var wheelDirection = new Vector2(0, 1);
             var gasPedal = 1.0f;
 
-            var force0 = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, isReverse, gearIdx0);
-            var force1 = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, isReverse, gearIdx1);
+            var force0 = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, gearIdx0);
+            var force1 = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, gearIdx1);
 
             var ratio = force1.Length() / force0.Length();
             Assert.True(ratio >= 1);
@@ -115,12 +113,10 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         public void TractiveForcePointsInTheReverseDirectionInReverseGear()
         {
             var forceCalculator = new VehicleForces(constants.Object);
-            var isReverse = true;
             var wheelDirection = new Vector2(0, 1);
             var gasPedal = 1.0f;
-            int? gearIndex = null;
 
-            var force = forceCalculator.GetTractiveForce(gasPedal, wheelDirection, isReverse, gearIndex);
+            var force = forceCalculator.GetTractiveForceInReverse(gasPedal, wheelDirection);
 
             // NOTE(danielm): dot product of two units vectors is -1 if the
             // angle between them is 180deg.
@@ -134,27 +130,25 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         public void GetTractiveForceThrowsWhenGearIndexIsOutOfBounds()
         {
             var forceCalculator = new VehicleForces(constants.Object);
-            var isReverse = false;
             var wheelDirection = new Vector2(0, 1);
             var gasPedal = 1.0f;
             var gearIdx = constants.Object.NumberOfGears;
 
             Assert.Throws<ArgumentException>(
-                () => forceCalculator.GetTractiveForce(gasPedal, wheelDirection, isReverse, gearIdx)
+                () => forceCalculator.GetTractiveForce(gasPedal, wheelDirection, gearIdx)
             );
         }
 
         [Fact]
-        public void GetTractiveForceThrowsInDriveStateWhenGearIndexIsNull()
+        public void GetTractiveForceThrowsWhenGearIndexIsLessThanZero()
         {
             var forceCalculator = new VehicleForces(constants.Object);
-            var isReverse = false;
             var wheelDirection = new Vector2(0, 1);
             var gasPedal = 1.0f;
-            int? gearIdx = null;
+            var gearIdx = -1;
 
             Assert.Throws<ArgumentException>(
-                () => forceCalculator.GetTractiveForce(gasPedal, wheelDirection, isReverse, gearIdx)
+                () => forceCalculator.GetTractiveForce(gasPedal, wheelDirection, gearIdx)
             );
         }
     }

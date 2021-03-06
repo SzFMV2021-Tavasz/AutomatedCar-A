@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutomatedCar.SystemComponents.Debug
+namespace AutomatedCar.SystemComponents.SystemDebug
 {
     class DebugActionArgs : EventArgs
     {

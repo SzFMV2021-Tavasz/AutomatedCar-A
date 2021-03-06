@@ -1,7 +1,6 @@
-﻿using AutomatedCar.ViewModels;
-using ReactiveUI;
+﻿using ReactiveUI;
 
-namespace AutomatedCar.Views
+namespace AutomatedCar.ViewModels
 {
     public class BreakPedalViewModel : ViewModelBase
     {
@@ -10,6 +9,7 @@ namespace AutomatedCar.Views
 
         public BreakPedalViewModel()
         {
+            this.Caption = "break pedal";
         }
 
         public int Value

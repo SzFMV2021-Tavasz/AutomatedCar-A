@@ -8,6 +8,7 @@ namespace AutomatedCar.ViewModels
         private AutomatedCar _controlledCar;
         private RpmGaugeViewModel _rpmGaugeViewModel;
         private SpeedGaugeViewModel _speedGaugeViewModel;
+        private BreakPedalViewModel _breakPedalViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -18,6 +19,9 @@ namespace AutomatedCar.ViewModels
             this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
             this.SpeedGaugeViewModel.Value = 50;
             this.SpeedGaugeViewModel.Caption = $"{this.SpeedGaugeViewModel.Value} km/h";
+
+            this.BreakPedalViewModel = new BreakPedalViewModel();
+            this.BreakPedalViewModel.Value = 75;
         }
 
         public AutomatedCar ControlledCar
@@ -36,6 +40,12 @@ namespace AutomatedCar.ViewModels
         {
             get => this._speedGaugeViewModel;
             set => this.RaiseAndSetIfChanged(ref this._speedGaugeViewModel, value);
+        }
+
+        public BreakPedalViewModel BreakPedalViewModel
+        {
+            get => this._breakPedalViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._breakPedalViewModel, value);
         }
     }
 }

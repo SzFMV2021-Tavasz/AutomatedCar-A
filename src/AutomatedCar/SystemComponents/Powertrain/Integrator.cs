@@ -99,7 +99,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
                     // No force acting on this particle
                     if (F.Length() < float.Epsilon)
                     {
-                        return 0f;
+                        return acc;
                     }
 
                     var relativePosition = centerOfMass - position;
@@ -108,7 +108,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
                     var inertia = m * (distanceFromCenterOfMass * distanceFromCenterOfMass);
 
                     var angularAcceleration = torque / inertia;
-                    return angularAcceleration;
+                    return acc + angularAcceleration;
                 }
             );
 

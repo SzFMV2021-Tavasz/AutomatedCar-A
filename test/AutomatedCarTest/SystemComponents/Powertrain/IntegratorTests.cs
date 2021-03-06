@@ -84,5 +84,19 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
 
             Assert.True(nextTransform.AngularDisplacement > initialTransform.AngularDisplacement);
         }
+
+        [Fact]
+        public void TractiveForceRotatesTheVehicle()
+        {
+            var initialTransform = new VehicleTransform(Vector2.Zero, 0, Vector2.UnitX, 0);
+            var integrator = new Integrator(constants.Object);
+            var deltaTime = 0.01f;
+
+            integrator.Reset(initialTransform, deltaTime);
+            integrator.AccumulateForce(WheelKind.Front, 10 * new Vector2(1, 2));
+            var nextTransform = integrator.NextVehicleTransform;
+
+            Assert.True(nextTransform.AngularDisplacement > initialTransform.AngularDisplacement);
+        }
     }
 }

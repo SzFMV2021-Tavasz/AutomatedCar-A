@@ -12,11 +12,11 @@
              DataContext="{Binding Dashboard}"
              >
     <StackPanel Background="#424242" Orientation="Vertical">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Margin="5" Orientation="Horizontal">
             <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}"/>
             <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
         </StackPanel>
+        <uc:GasPedal Margin="5" DataContext="{Binding GasPedalViewModel}"/>
         <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
-        <uc:GasPedal DataContext="{Binding GasPedalViewModel}"/>
     </StackPanel>
 </UserControl>

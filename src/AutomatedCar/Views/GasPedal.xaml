@@ -16,8 +16,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding Caption}" HorizontalAlignment="Left"/>
-        <ProgressBar Value="{Binding Value}" />
+        <TextBlock Grid.Row="0"  Text="{Binding Caption}" HorizontalAlignment="Left" Foreground="White"/>
+        <ProgressBar Grid.Row="1" MinHeight="20" Value="{Binding Value}" />
 
     </Grid>
 </UserControl>

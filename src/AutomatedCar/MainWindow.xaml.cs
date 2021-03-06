@@ -8,6 +8,7 @@ using AutomatedCar.Models;
 using AutomatedCar.ViewModels;
 using Newtonsoft.Json.Linq;
 using AutomatedCar.KeyboardHandling;
+using AutomatedCar.SystemComponents.SystemDebug;
 
 namespace AutomatedCar
 {
@@ -19,10 +20,12 @@ namespace AutomatedCar
         private readonly double tickInterval = 20;
 
         public MainWindowViewModel ViewModel { get; set; }
+
         DispatcherTimer timer = new DispatcherTimer();
         World world = World.Instance;
 
         private KeyboardHandler keyboardHandler;
+        private HMIDebug hmiDebug;
 
         public MainWindow()
         {
@@ -35,8 +38,15 @@ namespace AutomatedCar
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up, (duration) => World.Instance.ControlledCar.Y -= 5, null));
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down, (duration) => World.Instance.ControlledCar.Y += 5, null));
 
+            hmiDebug = new HMIDebug();
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D1, () => hmiDebug.OnDebugAction(1)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D2, () => hmiDebug.OnDebugAction(2)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D3, () => hmiDebug.OnDebugAction(3)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D4, () => hmiDebug.OnDebugAction(4)));
+
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
+            
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
@@ -83,6 +93,12 @@ namespace AutomatedCar
         }
 
         private void logic(object sender, EventArgs e)
+        {
+            HandleMovement();
+            CourseDisplay.InvalidateVisual();
+        }
+
+        private void HandleMovement()
         {
             keyboardHandler.Tick();
         }

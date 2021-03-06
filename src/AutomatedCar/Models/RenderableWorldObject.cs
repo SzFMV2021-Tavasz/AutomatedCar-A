@@ -3,6 +3,7 @@ using BaseModel.WorldObjects;
 namespace AutomatedCar.Models
 {
     using ReactiveUI;
+    using System.Windows;
 
     public abstract class RenderableWorldObject : ReactiveObject, IRenderableWorldObject
     {
@@ -36,6 +37,8 @@ namespace AutomatedCar.Models
             get => this._y;
             set => this.RaiseAndSetIfChanged(ref this._y, value);
         }
+
+        public Rect Boundary => new Rect(X, Y, Width, Height);
 
         public string Filename { get; set; }
     }

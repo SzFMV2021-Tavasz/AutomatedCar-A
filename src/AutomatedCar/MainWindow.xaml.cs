@@ -102,7 +102,7 @@ namespace AutomatedCar
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.Add, () => dashBoardViewModel.IncreaseACCDesiredSpeed()));
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.Subtract, () => dashBoardViewModel.DecreaseACCDesiredSpeed()));
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.T, () => dashBoardViewModel.SetToNextACCDesiredDistance()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.RightCtrl, () => dashBoardViewModel.ToogleACC()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.RightCtrl, () => dashBoardViewModel.ToggleACC()));
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)

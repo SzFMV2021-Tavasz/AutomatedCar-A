@@ -28,8 +28,4 @@
     <ProjectReference Include="..\..\src\AutomatedCar\AutomatedCar.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
 </Project>

@@ -25,19 +25,24 @@ namespace AutomatedCar.ViewModels
         public double DesiredDistanceInSeconds
         {
             get => this._desiredDistanceInSeconds;
-            set => this.RaiseAndSetIfChanged(ref this._desiredDistanceInSeconds, value);
+            private set => this.RaiseAndSetIfChanged(ref this._desiredDistanceInSeconds, value);
         }
 
         public int DesiredSpeed
         {
             get => this._desiredSpeed;
-            set => this.RaiseAndSetIfChanged(ref this._desiredSpeed, value);
+            private set => this.RaiseAndSetIfChanged(ref this._desiredSpeed, value);
         }
 
         public bool IsTurnedOn
         {
             get => this._isTurnedOn;
-            set => this.RaiseAndSetIfChanged(ref this._isTurnedOn, value);
+            private set => this.RaiseAndSetIfChanged(ref this._isTurnedOn, value);
+        }
+
+        public void Toggle()
+        {
+            this.IsTurnedOn = !this.IsTurnedOn;
         }
 
         public void IncreaseDesiredSpeed()

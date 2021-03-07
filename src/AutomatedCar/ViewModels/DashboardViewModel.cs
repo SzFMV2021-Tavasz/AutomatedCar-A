@@ -36,7 +36,7 @@ namespace AutomatedCar.ViewModels
             this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
 
             this.ACCOptionsViewModel = new ACCOptionsViewModel();
-            this.ACCOptionsViewModel.IsTurnedOn = true;
+            this.ACCOptionsViewModel.Toggle();
         }
 
         public AutomatedCar ControlledCar
@@ -93,7 +93,7 @@ namespace AutomatedCar.ViewModels
             set => this.RaiseAndSetIfChanged(ref this._accOptionsViewModel, value);
         }
 
-        public void ToogleACC() => this.ACCOptionsViewModel.IsTurnedOn = !this.ACCOptionsViewModel.IsTurnedOn;
+        public void ToggleACC() => this.ACCOptionsViewModel.Toggle();
 
         public void IncreaseACCDesiredSpeed() => this.ACCOptionsViewModel.IncreaseDesiredSpeed();
 

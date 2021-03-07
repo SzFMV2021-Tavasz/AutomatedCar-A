@@ -112,6 +112,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
                 }
             );
 
+            // HACK: some angular acceleration that slows down the angular velocity in the absence of torque
+            angularAccelerationSum += 32 * -(currentTransform.AngularVelocity * currentTransform.AngularVelocity);
+
             var steerability = CalculateSteerability(currentTransform.Velocity);
 
             var nextAngularVelocity = currentTransform.AngularVelocity + steerability * deltaTime.Value * angularAccelerationSum;
@@ -120,7 +123,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
             var nextPosition = centerOfMass;
             var nextVelocity = velocitySum / massSum;
 
-            return new VehicleTransform(nextPosition, nextAngularDisplacement, nextVelocity, nextAngularVelocity);
+            // HACK: force heading to point in the direction of movement
+            if(nextVelocity.Length() > float.Epsilon)
+            {
+                nextAngularDisplacement = (float)Math.Atan2(Vector2.Normalize(nextVelocity).Y, Vector2.Normalize(nextVelocity).X);
+            }
+
+            return new VehicleTransform(nextPosition, nextAngularDisplacement, nextVelocity, 0);
         }
 
         private float CalculateTorqueProducedByForceAtPosition(Vector2 relativePosition, Vector2 force)

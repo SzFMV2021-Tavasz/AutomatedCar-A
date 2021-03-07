@@ -17,6 +17,7 @@ namespace AutomatedCar.ViewModels
         public ACCOptionsViewModel()
         {
             this._accDesiredDistanceOptions = new ACCDesiredDistanceOptions();
+            this.DesiredDistanceInSeconds = this._accDesiredDistanceOptions.GetDefault();
         }
 
         public double DesiredDistanceInSeconds
@@ -59,12 +60,12 @@ namespace AutomatedCar.ViewModels
 
         public void SetToNextDesiredDistance()
         {
-
+            this.DesiredDistanceInSeconds = this._accDesiredDistanceOptions.GetNext();
         }
 
         public void SetToPreviousDesiredDistance()
         {
-
+            this.DesiredDistanceInSeconds = this._accDesiredDistanceOptions.GetPrevious();
         }
     }
 }

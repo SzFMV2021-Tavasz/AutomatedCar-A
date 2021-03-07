@@ -14,6 +14,7 @@ namespace AutomatedCar.ViewModels
         private TransmissionViewModel _transmissionViewModel;
         private TurnSignalViewModelBase _leftTurnSignalViewModel;
         private TurnSignalViewModelBase _rightTurnSignalViewModel;
+        private ACCOptionsViewModel _accOptionsViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -33,6 +34,9 @@ namespace AutomatedCar.ViewModels
             this.GasPedalViewModel.Value = 50;
             this.TransmissionViewModel.CurrentGear = Gear.P;
             this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
+
+            this.ACCOptionsViewModel = new ACCOptionsViewModel();
+            this.ACCOptionsViewModel.IsTurnedOn = true;
         }
 
         public AutomatedCar ControlledCar
@@ -81,6 +85,12 @@ namespace AutomatedCar.ViewModels
         {
             get => this._rightTurnSignalViewModel;
             set => this.RaiseAndSetIfChanged(ref this._rightTurnSignalViewModel, value);
+        }
+
+        public ACCOptionsViewModel ACCOptionsViewModel
+        {
+            get => this._accOptionsViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._accOptionsViewModel, value);
         }
     }
 }

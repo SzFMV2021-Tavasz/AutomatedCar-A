@@ -18,6 +18,8 @@ namespace AutomatedCar.ViewModels
         {
             this._accDesiredDistanceOptions = new ACCDesiredDistanceOptions();
             this.DesiredDistanceInSeconds = this._accDesiredDistanceOptions.GetDefault();
+            this.DesiredSpeed = 50;
+            this.IsTurnedOn = false;
         }
 
         public double DesiredDistanceInSeconds

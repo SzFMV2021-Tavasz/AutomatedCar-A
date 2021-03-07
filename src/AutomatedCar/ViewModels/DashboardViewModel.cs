@@ -92,5 +92,14 @@ namespace AutomatedCar.ViewModels
             get => this._accOptionsViewModel;
             set => this.RaiseAndSetIfChanged(ref this._accOptionsViewModel, value);
         }
+
+        public void ToogleACC() => this.ACCOptionsViewModel.IsTurnedOn = !this.ACCOptionsViewModel.IsTurnedOn;
+
+        public void IncreaseACCDesiredSpeed() => this.ACCOptionsViewModel.IncreaseDesiredSpeed();
+
+        public void DecreaseACCDesiredSpeed() => this.ACCOptionsViewModel.DecreaseDesiredSpeed();
+
+        public void SetToNextACCDesiredDistance() => this.ACCOptionsViewModel.SetToNextDesiredDistance();
+        public void SetToPreviousACCDesiredDistance() => this.ACCOptionsViewModel.SetToPreviousDesiredDistance();
     }
 }

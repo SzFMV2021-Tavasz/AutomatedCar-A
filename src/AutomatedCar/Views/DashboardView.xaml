@@ -22,7 +22,7 @@
         </StackPanel>
         <uc:GasPedal Margin="5" DataContext="{Binding GasPedalViewModel}"/>
         <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>  
-        <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
         <uc:ACCOptions DataContext="{Binding ACCOptionsViewModel}"/>
+        <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
     </StackPanel>
 </UserControl>

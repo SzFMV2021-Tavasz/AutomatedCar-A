@@ -13,6 +13,8 @@
         <Style TargetType="TextBlock">
             <Style.Setters>
                 <Setter Property="Padding" Value="5"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="TextAlignment" Value="Center"/>
             </Style.Setters>
         </Style>
     </UserControl.Resources>
@@ -27,7 +29,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="ACC options:"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="Transparent" Text="ACC options:"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding DesiredSpeed}"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DesiredDistanceInSeconds, StringFormat=N2}"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="ACC" Background="{Binding IsTurnedOn, Converter={StaticResource BoolToBackgroundConverter}}"/>

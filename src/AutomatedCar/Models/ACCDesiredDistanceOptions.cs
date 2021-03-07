@@ -15,14 +15,15 @@ namespace AutomatedCar.Models
                 this.DesiredDistanceOptionsInSeconds = desiredDistanceOptions.ToArray();
             }
 
-            this._currentIndex = 0;
+            this._currentIndex = -1;
         }
 
         public double GetDefault() => this.DesiredDistanceOptionsInSeconds[0];
 
         public double GetNext()
         {
-            return 0;
+            this._currentIndex = (this._currentIndex + 1) % this.DesiredDistanceOptionsInSeconds.Count;
+            return this.DesiredDistanceOptionsInSeconds[this._currentIndex];
         }
 
         public double GetPrevious()

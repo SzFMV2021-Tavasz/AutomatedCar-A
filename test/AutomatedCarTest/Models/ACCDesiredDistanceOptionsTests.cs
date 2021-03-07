@@ -25,5 +25,33 @@ namespace Test.Models
             // Assert
             Assert.Equal(1.0, returned, 1);
         }
+
+        [Fact]
+        public void GetNext_ShouldReturnFirstElement_WhenFirstCalled()
+        {
+            // Arrange 
+
+            // Act
+            var returnedFromFirstCall = this._desiredDistanceOptions.GetNext();
+
+            // Assert
+            Assert.Equal(1.0, returnedFromFirstCall, 1);
+        }
+
+        [Fact]
+        public void GetNext_ShouldReturnTheFirst_WhenCalledWhenOnLast()
+        {
+            // Arrange
+
+            // Act
+            this._desiredDistanceOptions.GetNext();
+            this._desiredDistanceOptions.GetNext();
+            this._desiredDistanceOptions.GetNext();
+            this._desiredDistanceOptions.GetNext();
+            var returnedFromCallOnLastIndex = this._desiredDistanceOptions.GetNext();
+
+            // Assert
+            Assert.Equal(1.0, returnedFromCallOnLastIndex, 1);
+        }
     }
 }

@@ -16,6 +16,7 @@
             <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}"/>
             <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
         </StackPanel>
+        <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>
         <StackPanel Orientation="Horizontal">
             <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}" VerticalAlignment="Bottom"/>
             <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" VerticalAlignment="Bottom"/>

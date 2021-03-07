@@ -7,18 +7,18 @@
              xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="105" d:DesignWidth="126" 
+             d:DesignHeight="150" d:DesignWidth="140" 
              d:DataContext="{d:DesignInstance viewmodels:SpeedGaugeViewModel}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="125"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Caption}" Foreground="White" Grid.Row="0" HorizontalAlignment="Center"/>
-        <lvc:AngularGauge Grid.Row="1" Value="{Binding Value}" FromValue="0" ToValue="100"
+        <lvc:AngularGauge Grid.Row="0" Value="{Binding Value}" FromValue="0" ToValue="100"
                           TicksStep="5" Wedge="300" LabelsStep="10000" NeedleFill="White"
                           TicksForeground="White" Foreground="White" 
-                          FontWeight="Regular" FontSize="16"
-                          SectionsInnerRadius=".5" HorizontalAlignment="Center" Width="106" Margin="0,0,0,8" Height="97" VerticalAlignment="Bottom"/>        
+                          FontWeight="Regular" FontSize="0.5"
+                          SectionsInnerRadius=".5" HorizontalAlignment="Left" Width="100" Height="100" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
+        <TextBlock Text="{Binding Caption}" FontSize="8" Foreground="White" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

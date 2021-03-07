@@ -10,14 +10,25 @@ namespace AutomatedCar.SystemComponents.Powertrain
     public class PowertrainComponent : SystemComponent
     {
         private PowertrainComponentPacket powertrainPacket;
-        public PowertrainComponent(IVirtualFunctionBus virtualFunctionBus)
+        private IPriorityChecker priorityChecker;
+        private IVehicleForces vehicleForcers;
+
+        public PowertrainComponent(IVirtualFunctionBus virtualFunctionBus, IPriorityChecker priorityChecker, IVehicleForces vehicleForces)
            : base(virtualFunctionBus)
         {
             this.powertrainPacket = new PowertrainComponentPacket();
             virtualFunctionBus.PowertrainPacket = this.powertrainPacket;
+            this.vehicleForcers = vehicleForces;
+
+            this.priorityChecker = priorityChecker;
+            this.priorityChecker.virtualFunctionBus = virtualFunctionBus;
+            this.priorityChecker.vehicleForces = vehicleForces;
         }
+
         public override void Process()
         {
+            priorityChecker.AccelerationPriorityCheck();
+            priorityChecker.SteeringPriorityCheck();
         }
     }
 }

@@ -21,8 +21,11 @@
             <uc:RightTurnSignal Height="40" Width="100" DataContext="{Binding RightTurnSignalViewModel}"/>
         </StackPanel>
         <uc:GasPedal Margin="5" DataContext="{Binding GasPedalViewModel}"/>
-        <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>  
-        <uc:ACCOptions DataContext="{Binding ACCOptionsViewModel}"/>
+        <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>
+       
+        <uc:ACCOptions Margin="5" DataContext="{Binding ACCOptionsViewModel}"/>
+        <uc:LaneKeepingAndParkingPilot Margin="5" DataContext="{Binding LaneKeepingAndParkingPilotViewModel}"/>      
         <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
+        
     </StackPanel>
 </UserControl>

@@ -86,7 +86,14 @@ namespace AutomatedCar
         private void BindKeysForDashboardFunctions(DashboardViewModel dashBoardViewModel)
         {
             BindACCFeatures(dashBoardViewModel);
+            BindParkingPilotAndLaneKeepingFeatures(dashBoardViewModel);
             BindDebugFeatures();
+        }
+
+        private void BindParkingPilotAndLaneKeepingFeatures(DashboardViewModel dashBoardViewModel)
+        {
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.L, () => dashBoardViewModel.ToggleLaneKeeping()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.P, () => dashBoardViewModel.ToggleParkingPilot()));
         }
 
         private void BindDebugFeatures()

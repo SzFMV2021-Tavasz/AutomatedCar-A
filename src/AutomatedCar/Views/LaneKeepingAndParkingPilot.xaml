@@ -24,7 +24,9 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Text="LKA" Background="{Binding IsLaneKeepingTurnedOn, Converter={StaticResource BoolToBackgroundConverter}}"/>
         <TextBlock Grid.Row="1" Text="LKA Warning" Background="{Binding IsLaneKeepingWarningTurnedOn, Converter={StaticResource BoolToBackgroundConverter}}"/>
         <TextBlock Grid.Row="2" Text="PP" Background="{Binding IsParkingPilotTurnedOn, Converter={StaticResource BoolToBackgroundConverter}}"/>

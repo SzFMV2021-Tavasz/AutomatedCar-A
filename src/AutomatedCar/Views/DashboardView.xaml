@@ -11,9 +11,9 @@
              DataContext="{Binding Dashboard}"
              >
     <StackPanel Background="#424242" Orientation="Vertical">
-        <StackPanel Margin="5" Orientation="Horizontal">
-            <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}"/>
-            <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
+        <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <uc:RpmGauge Margin="5" Height="140" Width="140" VerticalAlignment="Center" DataContext="{Binding RpmGaugeViewModel}"/>
+            <uc:SpeedGauge Margin="5" VerticalAlignment="Center" DataContext="{Binding SpeedGaugeViewModel}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <uc:LeftTurnSignal Height="40" Width="100" DataContext="{Binding LeftTurnSignalViewModel}"/>

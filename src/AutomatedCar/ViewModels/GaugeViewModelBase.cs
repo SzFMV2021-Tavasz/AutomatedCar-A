@@ -4,8 +4,7 @@ namespace AutomatedCar.ViewModels
 {
     public class GaugeViewModelBase : ViewModelBase
     {
-        private double _value;
-        private string _caption;
+        private double _value;       
 
         public GaugeViewModelBase()
         {
@@ -15,12 +14,6 @@ namespace AutomatedCar.ViewModels
         {
             get => this._value;
             set => this.RaiseAndSetIfChanged(ref this._value, value);
-        }
-
-        public string Caption
-        {
-            get => this._caption;
-            set => this.RaiseAndSetIfChanged(ref this._caption, value);
         }
     }
 }

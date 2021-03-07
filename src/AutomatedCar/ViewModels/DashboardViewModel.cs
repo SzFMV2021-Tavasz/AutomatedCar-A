@@ -25,10 +25,8 @@ namespace AutomatedCar.ViewModels
             this.TransmissionViewModel = new TransmissionViewModel();
             this.LeftTurnSignalViewModel = new TurnSignalViewModelBase();
             this.RightTurnSignalViewModel = new TurnSignalViewModelBase();
-            this.RpmGaugeViewModel.Value = 3000;
-            this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
-            this.SpeedGaugeViewModel.Value = 50;
-            this.SpeedGaugeViewModel.Caption = $"{this.SpeedGaugeViewModel.Value} km/h";
+            this.RpmGaugeViewModel.Value = 3000;            
+            this.SpeedGaugeViewModel.Value = 50;            
             this.BreakPedalViewModel = new BreakPedalViewModel();
             this.BreakPedalViewModel.Value = 75;
             this.GasPedalViewModel = new GasPedalViewModel();

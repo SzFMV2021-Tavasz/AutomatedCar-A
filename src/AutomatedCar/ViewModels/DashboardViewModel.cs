@@ -23,10 +23,11 @@ namespace AutomatedCar.ViewModels
             this.RpmGaugeViewModel = new RpmGaugeViewModel();
             this.SpeedGaugeViewModel = new SpeedGaugeViewModel();
             this.TransmissionViewModel = new TransmissionViewModel();
-            this.LeftTurnSignalViewModel = new TurnSignalViewModelBase();
-            this.RightTurnSignalViewModel = new TurnSignalViewModelBase();
-            this.RpmGaugeViewModel.Value = 3000;            
-            this.SpeedGaugeViewModel.Value = 50;            
+            this.LeftTurnSignalViewModel = new LeftTurnSignalViewModel();
+            this.RightTurnSignalViewModel = new RightTurnSignalViewModel();
+            this.SpeedGaugeViewModel.SetValue(50);
+            this.RpmGaugeViewModel.SetValue(3000);
+                     
             this.BreakPedalViewModel = new BreakPedalViewModel();
             this.BreakPedalViewModel.Value = 75;
             this.GasPedalViewModel = new GasPedalViewModel();
@@ -98,6 +99,10 @@ namespace AutomatedCar.ViewModels
             get => this._laneKeepingAndParkingPilotViewModel;
             set => this.RaiseAndSetIfChanged(ref this._laneKeepingAndParkingPilotViewModel, value);
         }
+
+        public void ToggleRightIndicator() => this.RightTurnSignalViewModel.Toggle();
+
+        public void ToggleLeftIndicator() => this.LeftTurnSignalViewModel.Toggle();
 
         public void ToggleACC() => this.ACCOptionsViewModel.Toggle();
 

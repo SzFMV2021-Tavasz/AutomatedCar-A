@@ -2,7 +2,7 @@
 
 namespace AutomatedCar.ViewModels
 {
-    public class GaugeViewModelBase : ViewModelBase
+    public abstract class GaugeViewModelBase : ViewModelBase
     {
         private double _value;       
 
@@ -13,7 +13,9 @@ namespace AutomatedCar.ViewModels
         public double Value
         {
             get => this._value;
-            set => this.RaiseAndSetIfChanged(ref this._value, value);
+            protected set => this.RaiseAndSetIfChanged(ref this._value, value);
         }
+
+        public abstract void SetValue(int value);
     }
 }

@@ -2,9 +2,10 @@
 
 namespace AutomatedCar.ViewModels
 {
-    public class TurnSignalViewModelBase : ViewModelBase 
+    public abstract class TurnSignalViewModelBase : ViewModelBase
     {
         private bool _isEnabled;
+
         public TurnSignalViewModelBase()
         {
         }
@@ -12,7 +13,9 @@ namespace AutomatedCar.ViewModels
         public bool IsEnabled
         {
             get => this._isEnabled;
-            set => this.RaiseAndSetIfChanged(ref this._isEnabled, value);
+            protected set => this.RaiseAndSetIfChanged(ref this._isEnabled, value);
         }
+
+        public virtual void Toggle() => this.IsEnabled = !this.IsEnabled;
     }
 }

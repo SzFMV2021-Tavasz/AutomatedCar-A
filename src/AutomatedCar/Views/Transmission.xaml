@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="120"
              d:DataContext="{d:DesignInstance viewmodels:TransmissionViewModel}">
-    <Grid>
-        <Label Content="{Binding Caption}" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="15" Foreground="White"/>
-    </Grid>
+    <Viewbox>
+        <Label Content="{Binding Caption}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White"/>
+    </Viewbox>
 </UserControl>

@@ -15,11 +15,16 @@
             <uc:RpmGauge Margin="5" Height="140" Width="140" VerticalAlignment="Center" DataContext="{Binding RpmGaugeViewModel}"/>
             <uc:SpeedGauge Margin="5" VerticalAlignment="Center" DataContext="{Binding SpeedGaugeViewModel}" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <uc:LeftTurnSignal Height="40" Width="100" DataContext="{Binding LeftTurnSignalViewModel}"/>
-            <uc:Transmission Height="40" Width="120" DataContext="{Binding TransmissionViewModel}"/>
-            <uc:RightTurnSignal Height="40" Width="100" DataContext="{Binding RightTurnSignalViewModel}"/>
-        </StackPanel>
+        <Grid Height="65">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <uc:LeftTurnSignal Grid.Column="0" DataContext="{Binding LeftTurnSignalViewModel}"/>
+            <uc:Transmission Grid.Column="1" DataContext="{Binding TransmissionViewModel}"/>
+            <uc:RightTurnSignal Grid.Column="2" DataContext="{Binding RightTurnSignalViewModel}"/>
+        </Grid>
         <uc:GasPedal Margin="5" DataContext="{Binding GasPedalViewModel}"/>
         <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>
        

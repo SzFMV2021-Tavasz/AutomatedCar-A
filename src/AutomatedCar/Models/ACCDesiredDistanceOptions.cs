@@ -18,10 +18,7 @@ namespace AutomatedCar.Models
             this._currentIndex = 0;
         }
 
-        public double GetDefault() 
-        {
-            return 0;
-        }
+        public double GetDefault() => this.DesiredDistanceOptionsInSeconds[0];
 
         public double GetNext()
         {

@@ -15,6 +15,7 @@ namespace AutomatedCar.ViewModels
         private TurnSignalViewModelBase _leftTurnSignalViewModel;
         private TurnSignalViewModelBase _rightTurnSignalViewModel;
         private ACCOptionsViewModel _accOptionsViewModel;
+        private LaneKeepingAndParkingPilotViewModel _laneKeepingAndParkingPilotViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -36,7 +37,8 @@ namespace AutomatedCar.ViewModels
             this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
 
             this.ACCOptionsViewModel = new ACCOptionsViewModel();
-            this.ACCOptionsViewModel.Toggle();
+
+            this.LaneKeepingAndParkingPilotViewModel = new LaneKeepingAndParkingPilotViewModel();
         }
 
         public AutomatedCar ControlledCar
@@ -93,6 +95,12 @@ namespace AutomatedCar.ViewModels
             set => this.RaiseAndSetIfChanged(ref this._accOptionsViewModel, value);
         }
 
+        public LaneKeepingAndParkingPilotViewModel LaneKeepingAndParkingPilotViewModel
+        {
+            get => this._laneKeepingAndParkingPilotViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._laneKeepingAndParkingPilotViewModel, value);
+        }
+
         public void ToggleACC() => this.ACCOptionsViewModel.Toggle();
 
         public void IncreaseACCDesiredSpeed() => this.ACCOptionsViewModel.IncreaseDesiredSpeed();
@@ -100,6 +108,13 @@ namespace AutomatedCar.ViewModels
         public void DecreaseACCDesiredSpeed() => this.ACCOptionsViewModel.DecreaseDesiredSpeed();
 
         public void SetToNextACCDesiredDistance() => this.ACCOptionsViewModel.SetToNextDesiredDistance();
+
         public void SetToPreviousACCDesiredDistance() => this.ACCOptionsViewModel.SetToPreviousDesiredDistance();
+
+        public void ToggleParkingPilot() => this.LaneKeepingAndParkingPilotViewModel.ToggleParkingPilot();
+
+        public void ToggleLaneKeeping() => this.LaneKeepingAndParkingPilotViewModel.ToggleLaneKeeping();
+
+        public void DisplayLaneKeepingWarning() => this.LaneKeepingAndParkingPilotViewModel.DisplayLaneKeepingWarning();
     }
 }

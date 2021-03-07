@@ -10,7 +10,6 @@ namespace AutomatedCar.ViewModels
 
         public LaneKeepingAndParkingPilotViewModel()
         {
-
         }
 
         public bool IsLaneKeepingTurnedOn

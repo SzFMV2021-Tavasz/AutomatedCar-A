@@ -53,5 +53,30 @@ namespace Test.Models
             // Assert
             Assert.Equal(1.0, returnedFromCallOnLastIndex, 1);
         }
+
+        [Fact]
+        public void GetPrevious_ShouldReturnTheLast_WhenFirstCalled()
+        {
+            // Arrange 
+
+            // Act
+            var returnedFromFirstCall = this._desiredDistanceOptions.GetPrevious();
+
+            // Assert
+            Assert.Equal(4.0, returnedFromFirstCall, 1);
+        }
+
+        [Fact]
+        public void GetPrevious_ShouldReturnTheLast_WhenCalledWhenOnFirst()
+        {
+            // Arrange
+
+            // Act
+            this._desiredDistanceOptions.GetNext();
+            var returnedFromCallOnFirstIndex = this._desiredDistanceOptions.GetPrevious();
+
+            // Assert
+            Assert.Equal(4.0, returnedFromCallOnFirstIndex, 1);
+        }
     }
 }

@@ -28,7 +28,13 @@ namespace AutomatedCar.Models
 
         public double GetPrevious()
         {
-            return 0;
+            this._currentIndex--;
+            if (this._currentIndex < 0)
+            {
+                this._currentIndex = this.DesiredDistanceOptionsInSeconds.Count - 1;
+            }
+
+            return this.DesiredDistanceOptionsInSeconds[this._currentIndex];
         }
     }
 }

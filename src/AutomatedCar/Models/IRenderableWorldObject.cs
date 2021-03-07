@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace AutomatedCar.Models
+﻿namespace AutomatedCar.Models
 {
     public interface IRenderableWorldObject
     {

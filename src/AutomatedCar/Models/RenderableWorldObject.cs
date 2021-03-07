@@ -3,7 +3,6 @@ using BaseModel.WorldObjects;
 namespace AutomatedCar.Models
 {
     using ReactiveUI;
-    using System.Windows;
 
     public abstract class RenderableWorldObject : ReactiveObject, IRenderableWorldObject
     {

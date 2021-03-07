@@ -25,6 +25,8 @@ namespace AutomatedCar.ViewModels
             this.TransmissionViewModel = new TransmissionViewModel();
             this.LeftTurnSignalViewModel = new LeftTurnSignalViewModel();
             this.RightTurnSignalViewModel = new RightTurnSignalViewModel();
+            this.LeftTurnSignalViewModel.Toggle();
+            this.RightTurnSignalViewModel.Toggle();
             this.SpeedGaugeViewModel.SetValue(50);
             this.RpmGaugeViewModel.SetValue(3000);
                      

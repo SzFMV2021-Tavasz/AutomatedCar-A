@@ -63,7 +63,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         float CrossSectionalArea { get; }
 
         /// <summary>
-        /// Constant used when calculating the braking force; kilograms.
+        /// Constant used when calculating the braking force; kilogram over meters.
         /// </summary>
         float BrakingConstant { get; }
 

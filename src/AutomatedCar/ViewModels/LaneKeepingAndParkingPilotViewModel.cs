@@ -37,6 +37,5 @@ namespace AutomatedCar.ViewModels
         public void DisplayLaneKeepingWarning() => this.IsLaneKeepingWarningTurnedOn = true;
 
         public void TurnOffLaneKeepingWarning() => this.IsLaneKeepingWarningTurnedOn = false;
-
     }
 }

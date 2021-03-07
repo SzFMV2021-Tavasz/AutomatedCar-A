@@ -1,6 +1,7 @@
 namespace AutomatedCar.ViewModels
 {
     using AutomatedCar.Models;
+    using AutomatedCar.Models.Enums;
     using ReactiveUI;
 
     public class DashboardViewModel : ViewModelBase
@@ -9,19 +10,29 @@ namespace AutomatedCar.ViewModels
         private RpmGaugeViewModel _rpmGaugeViewModel;
         private SpeedGaugeViewModel _speedGaugeViewModel;
         private BreakPedalViewModel _breakPedalViewModel;
+        private GasPedalViewModel _gasPedalViewModel;
+        private TransmissionViewModel _transmissionViewModel;
+        private TurnSignalViewModelBase _leftTurnSignalViewModel;
+        private TurnSignalViewModelBase _rightTurnSignalViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
             this.ControlledCar = controlledCar;
             this.RpmGaugeViewModel = new RpmGaugeViewModel();
             this.SpeedGaugeViewModel = new SpeedGaugeViewModel();
+            this.TransmissionViewModel = new TransmissionViewModel();
+            this.LeftTurnSignalViewModel = new TurnSignalViewModelBase();
+            this.RightTurnSignalViewModel = new TurnSignalViewModelBase();
             this.RpmGaugeViewModel.Value = 3000;
             this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
             this.SpeedGaugeViewModel.Value = 50;
             this.SpeedGaugeViewModel.Caption = $"{this.SpeedGaugeViewModel.Value} km/h";
-
             this.BreakPedalViewModel = new BreakPedalViewModel();
             this.BreakPedalViewModel.Value = 75;
+            this.GasPedalViewModel = new GasPedalViewModel();
+            this.GasPedalViewModel.Value = 50;
+            this.TransmissionViewModel.CurrentGear = Gear.P;
+            this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
         }
 
         public AutomatedCar ControlledCar
@@ -46,6 +57,30 @@ namespace AutomatedCar.ViewModels
         {
             get => this._breakPedalViewModel;
             set => this.RaiseAndSetIfChanged(ref this._breakPedalViewModel, value);
+        }
+
+        public GasPedalViewModel GasPedalViewModel
+        {
+            get => this._gasPedalViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._gasPedalViewModel, value);
+        }
+
+        public TransmissionViewModel TransmissionViewModel
+        {
+            get => this._transmissionViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._transmissionViewModel, value);
+        }
+
+        public TurnSignalViewModelBase LeftTurnSignalViewModel
+        {
+            get => this._leftTurnSignalViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._leftTurnSignalViewModel, value);
+        }
+
+        public TurnSignalViewModelBase RightTurnSignalViewModel
+        {
+            get => this._rightTurnSignalViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._rightTurnSignalViewModel, value);
         }
     }
 }

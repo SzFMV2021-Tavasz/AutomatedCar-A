@@ -13,15 +13,15 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding Caption}" Foreground="White" Grid.Row="0" HorizontalAlignment="Center"/>
-        <lvc:AngularGauge Grid.Row="1" Value="{Binding Value}" FromValue="0" ToValue="5000" 
+        <lvc:AngularGauge Grid.Row="0" Value="{Binding Value}" FromValue="0" ToValue="5000"
                           TicksStep="500" Wedge="300" LabelsStep="10000" NeedleFill="White"
                           TicksForeground="White" Foreground="White" 
-                          FontWeight="Regular" FontSize="16"
-                          SectionsInnerRadius=".5">
+                          FontWeight="Regular" FontSize="0.5"
+                          SectionsInnerRadius=".5" Height="133" VerticalAlignment="Top">
             <lvc:AngularGauge.Sections>
                 <lvc:AngularSection FromValue="4500" ToValue="5000" Fill="#FF3939"/>
             </lvc:AngularGauge.Sections>
-        </lvc:AngularGauge>        
+        </lvc:AngularGauge>
+        <TextBlock Text="{Binding Caption}" FontSize="10" Foreground="White" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

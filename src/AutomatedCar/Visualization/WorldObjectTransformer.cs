@@ -1,5 +1,6 @@
 namespace AutomatedCar.Visualization
 {
+    using AutomatedCar.Models;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -25,6 +26,11 @@ namespace AutomatedCar.Visualization
             }
 
             return cache[filename];
+        }
+
+        internal static Rect GetBoundary(IRenderableWorldObject renderable)
+        {
+            return new Rect(renderable.X, renderable.Y, renderable.Width, renderable.Height);
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>

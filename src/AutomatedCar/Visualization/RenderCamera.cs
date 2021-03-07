@@ -39,7 +39,7 @@ namespace AutomatedCar.Visualization
 
         public bool IsVisibleInViewport(IRenderableWorldObject renderable)
         {
-            return ViewportRect.IntersectsWith(renderable.Boundary);
+            return ViewportRect.IntersectsWith(WorldObjectTransformer.GetBoundary(renderable));
         }
 
         public Point TranslateToViewport(double worldX, double worldY)

@@ -10,6 +10,5 @@ namespace AutomatedCar.Models
         int X { get; set; }
         int Y { get; set; }
         int ZIndex { get; set; }
-        Rect Boundary { get; }
     }
 }

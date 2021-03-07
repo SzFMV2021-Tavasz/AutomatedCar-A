@@ -38,8 +38,6 @@ namespace AutomatedCar.Models
             set => this.RaiseAndSetIfChanged(ref this._y, value);
         }
 
-        public Rect Boundary => new Rect(X, Y, Width, Height);
-
         public string Filename { get; set; }
     }
 }

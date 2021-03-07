@@ -1,6 +1,7 @@
 namespace AutomatedCar.ViewModels
 {
     using AutomatedCar.Models;
+    using AutomatedCar.Visualization;
 
     public class CourseDisplayViewModel : ViewModelBase
     {

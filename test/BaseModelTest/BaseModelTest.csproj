@@ -27,7 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\BaseModel\BaseModel.csproj" />
       <ProjectReference Include="..\..\src\BaseModel\BaseModel.csproj" />
     </ItemGroup>
 

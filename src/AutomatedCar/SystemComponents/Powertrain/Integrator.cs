@@ -59,7 +59,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
             var distanceFromCenterOfMass = vehicleConstants.WheelBase / 2;
             var direction = GetDirectionVector(carHeading);
-            var particlePosition = carPosition + multiplier * distanceFromCenterOfMass * direction;
+            var particlePosition = carPosition + (multiplier * distanceFromCenterOfMass * direction);
 
             return particlePosition;
         }
@@ -82,7 +82,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
                 {
                     var (x, v) = P.NextState;
                     var m = P.Mass;
-                    return (acc.PositionSum + m * x, acc.VelocitySum + m * v, acc.MassSum + m);
+                    return (acc.PositionSum + (m * x), acc.VelocitySum + (m * v), acc.MassSum + m);
                 }
             );
 
@@ -117,8 +117,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
             var steerability = CalculateSteerability(currentTransform.Velocity);
 
-            var nextAngularVelocity = currentTransform.AngularVelocity + steerability * deltaTime.Value * angularAccelerationSum;
-            var nextAngularDisplacement = currentTransform.AngularDisplacement + deltaTime.Value * nextAngularVelocity;
+            var nextAngularVelocity = currentTransform.AngularVelocity + (steerability * deltaTime.Value * angularAccelerationSum);
+            var nextAngularDisplacement = currentTransform.AngularDisplacement + (deltaTime.Value * nextAngularVelocity);
 
             var nextPosition = centerOfMass;
             var nextVelocity = velocitySum / massSum;

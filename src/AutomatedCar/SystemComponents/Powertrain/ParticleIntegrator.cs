@@ -35,8 +35,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
             var acceleration = this.forceAccumulator / mass;
 
-            var velocity1 = velocity0 + deltaTime * acceleration;
-            var position1 = position0 + deltaTime * velocity1;
+            var velocity1 = velocity0 + (deltaTime * acceleration);
+            var position1 = position0 + (deltaTime * velocity1);
 
             return (position1, velocity1);
         }

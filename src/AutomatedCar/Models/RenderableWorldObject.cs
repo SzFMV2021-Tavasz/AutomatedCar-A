@@ -30,7 +30,6 @@ namespace AutomatedCar.Models
 
         public int Height { get; set; }
 
-
         public int X
         {
             get => this._x;
@@ -42,6 +41,7 @@ namespace AutomatedCar.Models
             get => this._y;
             set => this.RaiseAndSetIfChanged(ref this._y, value);
         }
+
         public double M11
         {
             get => this._m11;

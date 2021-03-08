@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\WorldObjects\roadsign_priority_stop.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="ReactiveUI.WPF" Version="13.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -14,6 +18,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaseModel\BaseModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\WorldObjects\roadsign_priority_stop.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -105,9 +115,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\WorldObjects\roadsign_parking_right.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\WorldObjects\roadsign_priority_stop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\WorldObjects\roadsign_speed_40.png">

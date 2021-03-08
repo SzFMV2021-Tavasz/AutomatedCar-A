@@ -33,8 +33,7 @@ namespace AutomatedCar.ViewModels
             this.BreakPedalViewModel = new BreakPedalViewModel();
             this.BreakPedalViewModel.Value = 75;
             this.GasPedalViewModel = new GasPedalViewModel();
-            this.GasPedalViewModel.Value = 50;
-            this.TransmissionViewModel.CurrentGear = Gear.D;            
+            this.GasPedalViewModel.Value = 50;                    
 
             this.ACCOptionsViewModel = new ACCOptionsViewModel();
 

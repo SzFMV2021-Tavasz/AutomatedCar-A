@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutomatedCar.SystemComponents.Powertrain
+﻿namespace AutomatedCar.SystemComponents.Powertrain
 {
     class PriorityChecker : IPriorityChecker
     {
         public IVirtualFunctionBus virtualFunctionBus { get; set; }
 
-        public IVehicleForces vehicleForces { get; set; }
-
-        public void AccelerationPriorityCheck()
+        public PacketEnum AccelerationPriorityCheck()
         {
+            return PacketEnum.AEB;
         }
 
-        public void SteeringPriorityCheck()
+        public PacketEnum SteeringPriorityCheck()
         {
+            return PacketEnum.ACC;
         }
     }
 }

@@ -3,11 +3,7 @@
     public interface IPriorityChecker
     {
         IVirtualFunctionBus virtualFunctionBus { get; set; }
-
-        IVehicleForces vehicleForces { get; set; }
-
-        void AccelerationPriorityCheck();
-
-        void SteeringPriorityCheck();
+        PacketEnum AccelerationPriorityCheck();
+        PacketEnum SteeringPriorityCheck();
     }
 }

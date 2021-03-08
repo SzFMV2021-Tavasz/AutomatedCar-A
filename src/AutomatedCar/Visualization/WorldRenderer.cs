@@ -1,9 +1,7 @@
 ﻿using AutomatedCar.Models;
 using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace AutomatedCar.Visualization
@@ -12,6 +10,7 @@ namespace AutomatedCar.Visualization
     {
         public readonly double tickRate = 20;
         private readonly DispatcherTimer renderTimer = new DispatcherTimer();
+        private readonly RenderCamera renderCamera = new RenderCamera();
 
         public World World => World.Instance;
 
@@ -32,14 +31,22 @@ namespace AutomatedCar.Visualization
 
         public WorldRenderer()
         {
-            renderTimer.Interval = TimeSpan.FromMilliseconds(tickRate);
-            renderTimer.Tick += Timer_Tick;
-            renderTimer.Start();
+            Loaded += WorldRenderer_Loaded;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             InvalidateVisual();
+        }
+
+        private void WorldRenderer_Loaded(object sender, RoutedEventArgs e)
+        {
+            renderTimer.Interval = TimeSpan.FromMilliseconds(tickRate);
+            renderTimer.Tick += Timer_Tick;
+            renderTimer.Start();
+
+            renderCamera.Width = ActualWidth;
+            renderCamera.Height = ActualHeight;
         }
     }
 }

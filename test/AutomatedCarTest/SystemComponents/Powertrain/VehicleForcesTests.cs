@@ -189,5 +189,25 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             var ratio = force1.Length() / force0.Length();
             Assert.True(ratio >= 1);
         }
+
+        [Theory]
+        [InlineData(-10, 0)]
+        [InlineData(0, -10)]
+        [InlineData(-10, -10)]
+        public void BrakingForceIsCorrectForVelocityVectorsWithNegativeComponents(float vx, float vy)
+        {
+            var forceCalculator = new VehicleForces(constants.Object);
+            var brakePedal = 1.0f;
+            var velocity = new Vector2(vx, vy);
+
+            var force = forceCalculator.GetBrakingForce(brakePedal, velocity);
+
+            // NOTE(danielm): dot product of two units vectors is -1 if the
+            // angle between them is 180deg.
+            var dot = Vector2.Dot(Vector2.Normalize(force), Vector2.Normalize(velocity));
+            var error = Math.Abs(-1 - dot);
+
+            Assert.True(error < 0.001f);
+        }
     }
 }

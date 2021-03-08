@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shapes;
-
 using System.Windows.Threading;
 using AutomatedCar.Models;
 using AutomatedCar.ViewModels;
@@ -32,13 +31,13 @@ namespace AutomatedCar
             ViewModel = new MainWindowViewModel(world);
             var dashBoardViewModel = new DashboardViewModel(world.ControlledCar);
             ViewModel.Dashboard = dashBoardViewModel;
-
+                       
             InitializeComponent();
-
+           
             hmiDebug = new HMIDebug();
             keyboardHandler = new KeyboardHandler(tickInterval);
             BindKeysForDashboardFunctions(dashBoardViewModel);
-
+           
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Left, (duration) => World.Instance.ControlledCar.X -= 5, null));
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right, (duration) => World.Instance.ControlledCar.X += 5, null));
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up, (duration) => World.Instance.ControlledCar.Y -= 5, null));

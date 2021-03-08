@@ -13,12 +13,18 @@ namespace AutomatedCar.Visualization
         public double MiddleX { get; private set; }
         public double MiddleY { get; private set; }
 
+        public RenderCamera()
+        {
+            this.Height = 720;
+            this.Width = 960;
+        }
+
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);
 
         public void UpdateMiddlePoint(double originX, double originY)
         {
             LeftX = originX - (Width / 2.0);
-            TopY = originY + (Height / 2.0);
+            TopY = originY - (Height / 2.0);
 
             MiddleX = originX;
             MiddleY = originY;

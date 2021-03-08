@@ -1,8 +1,15 @@
 ﻿using AutomatedCar.Models;
 using System;
+using System.Drawing;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Brushes = System.Windows.Media.Brushes;
+using Image = System.Windows.Controls.Image;
+using Pen = System.Windows.Media.Pen;
 
 namespace AutomatedCar.Visualization
 {
@@ -18,15 +25,23 @@ namespace AutomatedCar.Visualization
         {
             if (World == null)
                 return;
-
+            
             foreach (var worldObject in World.WorldObjects)
             {
-                // worldObject.Render(drawingContext);
+                Draw(drawingContext, worldObject);
             }
+        }
 
-            var car = World.ControlledCar;
-            var carImage = WorldObjectTransformer.GetCachedImage(car.Filename);
-            drawingContext.DrawImage(carImage, new Rect(car.X, car.Y, car.Width, car.Height));
+        private void Draw(DrawingContext drawingContext, IRenderableWorldObject worldObject)
+        {
+            var image = WorldObjectTransformer.GetCachedImage(worldObject.Filename);
+            var rect = new Rect(worldObject.X, worldObject.Y, worldObject.Width, worldObject.Height);
+
+            var transformMatrix = new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0);
+            var tb = new TransformedBitmap(image, new MatrixTransform(transformMatrix));
+            rect.Transform(transformMatrix);
+
+            drawingContext.DrawImage(tb, rect);
         }
 
         public WorldRenderer()

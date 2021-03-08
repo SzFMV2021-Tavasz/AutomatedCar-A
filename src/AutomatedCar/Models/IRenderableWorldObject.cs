@@ -8,9 +8,9 @@
         int X { get; set; }
         int Y { get; set; }
         int ZIndex { get; set; }
-        float M11 { get; set; }
-        float M12 { get; set; }
-        float M21 { get; set; }
-        float M22 { get; set; }
+        double M11 { get; set; }
+        double M12 { get; set; }
+        double M21 { get; set; }
+        double M22 { get; set; }
     }
 }

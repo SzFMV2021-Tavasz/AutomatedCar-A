@@ -9,10 +9,10 @@ namespace AutomatedCar.Models
         private int _x;
         private int _y;
 
-        private float _m11;
-        private float _m12;
-        private float _m21;
-        private float _m22;
+        private double _m11 = 1.0;
+        private double _m12 = 0.0;
+        private double _m21 = 0.0;
+        private double _m22 = 1.0;
 
         WorldObject wo = new Tree();
 
@@ -42,25 +42,25 @@ namespace AutomatedCar.Models
             get => this._y;
             set => this.RaiseAndSetIfChanged(ref this._y, value);
         }
-        public float M11
+        public double M11
         {
             get => this._m11;
             set => this.RaiseAndSetIfChanged(ref this._m11, value);
         }
 
-        public float M12
+        public double M12
         {
             get => this._m12;
             set => this.RaiseAndSetIfChanged(ref this._m12, value);
         }
 
-        public float M21
+        public double M21
         {
             get => this._m21;
             set => this.RaiseAndSetIfChanged(ref this._m21, value);
         }
 
-        public float M22
+        public double M22
         {
             get => this._m22;
             set => this.RaiseAndSetIfChanged(ref this._m22, value);

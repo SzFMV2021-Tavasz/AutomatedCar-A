@@ -1,4 +1,4 @@
-﻿namespace AutomatedCar.Models
+﻿namespace BaseModel.Interfaces
 {
     public interface IRenderableWorldObject
     {

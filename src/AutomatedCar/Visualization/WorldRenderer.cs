@@ -29,7 +29,7 @@ namespace AutomatedCar.Visualization
             var car = GetAutomatedCar();
             SetRenderCameraMiddle(car);
 
-            foreach (var worldObject in World.WorldObjects)
+            foreach (var worldObject in World.Renderables)
             {
                 Draw(drawingContext, worldObject);
             }

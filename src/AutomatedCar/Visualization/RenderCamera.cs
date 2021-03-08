@@ -15,8 +15,7 @@ namespace AutomatedCar.Visualization
 
         public RenderCamera()
         {
-            this.Height = 720;
-            this.Width = 960;
+
         }
 
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);

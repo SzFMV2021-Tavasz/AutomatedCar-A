@@ -20,7 +20,6 @@ namespace AutomatedCar.Visualization
             Loaded += WorldRenderer_Loaded;
         }
 
-
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (World == null)
@@ -35,7 +34,6 @@ namespace AutomatedCar.Visualization
             {
                 // worldObject.Render(drawingContext);
             }
-
         }
 
         private void SetRenderCameraMiddle(Models.AutomatedCar car)
@@ -82,6 +80,5 @@ namespace AutomatedCar.Visualization
         {
             return new Point(x + (width / 2), y + (height / 2));
         }
-
     }
 }

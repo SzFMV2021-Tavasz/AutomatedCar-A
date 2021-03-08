@@ -19,7 +19,7 @@ namespace AutomatedCar.Visualization
             if (World == null)
                 return;
 
-            foreach (var worldObject in World.WorldObjects)
+            foreach (var worldObject in World.Renderables)
             {
                 // worldObject.Render(drawingContext);
             }

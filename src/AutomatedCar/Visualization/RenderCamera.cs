@@ -1,4 +1,4 @@
-﻿using AutomatedCar.Models;
+﻿using BaseModel.Interfaces;
 using System.Collections.Generic;
 using System.Windows;
 

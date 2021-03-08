@@ -9,6 +9,11 @@ namespace AutomatedCar.Models
         private int _x;
         private int _y;
 
+        private float _m11;
+        private float _m12;
+        private float _m21;
+        private float _m22;
+
         WorldObject wo = new Tree();
 
         public RenderableWorldObject(int x, int y, string filename)
@@ -25,6 +30,7 @@ namespace AutomatedCar.Models
 
         public int Height { get; set; }
 
+
         public int X
         {
             get => this._x;
@@ -35,6 +41,29 @@ namespace AutomatedCar.Models
         {
             get => this._y;
             set => this.RaiseAndSetIfChanged(ref this._y, value);
+        }
+        public float M11
+        {
+            get => this._m11;
+            set => this.RaiseAndSetIfChanged(ref this._m11, value);
+        }
+
+        public float M12
+        {
+            get => this._m12;
+            set => this.RaiseAndSetIfChanged(ref this._m12, value);
+        }
+
+        public float M21
+        {
+            get => this._m21;
+            set => this.RaiseAndSetIfChanged(ref this._m21, value);
+        }
+
+        public float M22
+        {
+            get => this._m22;
+            set => this.RaiseAndSetIfChanged(ref this._m22, value);
         }
 
         public string Filename { get; set; }

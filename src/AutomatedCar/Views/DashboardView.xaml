@@ -1,8 +1,7 @@
 <UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-         xmlns:models="clr-namespace:AutomatedCar.Models"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"         
          xmlns:viewmodels="clr-namespace:AutomatedCar.ViewModels"
          xmlns:uc="clr-namespace:AutomatedCar.Views"
          mc:Ignorable="d" 
@@ -12,21 +11,26 @@
              DataContext="{Binding Dashboard}"
              >
     <StackPanel Background="#424242" Orientation="Vertical">
-        <StackPanel Margin="5" Orientation="Horizontal">
-            <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}"/>
-            <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" />
+        <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <uc:RpmGauge Margin="5" Height="140" Width="140" VerticalAlignment="Center" DataContext="{Binding RpmGaugeViewModel}"/>
+            <uc:SpeedGauge Margin="5" VerticalAlignment="Center" DataContext="{Binding SpeedGaugeViewModel}" />
         </StackPanel>
-        <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>
-        <StackPanel Orientation="Horizontal">
-            <uc:RpmGauge Height="150" Width="180"  DataContext="{Binding RpmGaugeViewModel}" VerticalAlignment="Bottom"/>
-            <uc:SpeedGauge Height="150" Width="140" DataContext="{Binding SpeedGaugeViewModel}" VerticalAlignment="Bottom"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <uc:LeftTurnSignal Height="40" Width="100" DataContext="{Binding LeftTurnSignalViewModel}"/>
-            <uc:Transmission Height="40" Width="120" DataContext="{Binding TransmissionViewModel}"/>
-            <uc:RightTurnSignal Height="40" Width="100" DataContext="{Binding RightTurnSignalViewModel}"/>
-        </StackPanel>
+        <Grid Height="65">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <uc:LeftTurnSignal Grid.Column="0" DataContext="{Binding LeftTurnSignalViewModel}"/>
+            <uc:Transmission Grid.Column="1" DataContext="{Binding TransmissionViewModel}"/>
+            <uc:RightTurnSignal Grid.Column="2" DataContext="{Binding RightTurnSignalViewModel}"/>
+        </Grid>
         <uc:GasPedal Margin="5" DataContext="{Binding GasPedalViewModel}"/>
+        <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>
+       
+        <uc:ACCOptions Margin="5" DataContext="{Binding ACCOptionsViewModel}"/>
+        <uc:LaneKeepingAndParkingPilot Margin="5" DataContext="{Binding LaneKeepingAndParkingPilotViewModel}"/>      
         <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
+        
     </StackPanel>
 </UserControl>

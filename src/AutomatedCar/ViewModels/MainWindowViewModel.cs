@@ -22,7 +22,7 @@
         public MainWindowViewModel(World world)
         {
             this.CourseDisplay = new CourseDisplayViewModel(world);
-            this.Dashboard = new DashboardViewModel(world.ControlledCar);
+            //this.Dashboard = new DashboardViewModel(world.ControlledCar);
             this.World = world;
         }
 
@@ -35,7 +35,7 @@
         public ViewModelBase Dashboard
         {
             get => this.dashboard;
-            private set => this.RaiseAndSetIfChanged(ref this.dashboard, value);
+            set => this.RaiseAndSetIfChanged(ref this.dashboard, value);
         }
     }
 }

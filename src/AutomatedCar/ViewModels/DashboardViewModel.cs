@@ -14,6 +14,8 @@ namespace AutomatedCar.ViewModels
         private TransmissionViewModel _transmissionViewModel;
         private TurnSignalViewModelBase _leftTurnSignalViewModel;
         private TurnSignalViewModelBase _rightTurnSignalViewModel;
+        private ACCOptionsViewModel _accOptionsViewModel;
+        private LaneKeepingAndParkingPilotViewModel _laneKeepingAndParkingPilotViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -21,18 +23,23 @@ namespace AutomatedCar.ViewModels
             this.RpmGaugeViewModel = new RpmGaugeViewModel();
             this.SpeedGaugeViewModel = new SpeedGaugeViewModel();
             this.TransmissionViewModel = new TransmissionViewModel();
-            this.LeftTurnSignalViewModel = new TurnSignalViewModelBase();
-            this.RightTurnSignalViewModel = new TurnSignalViewModelBase();
-            this.RpmGaugeViewModel.Value = 3000;
-            this.RpmGaugeViewModel.Caption = $"{this.RpmGaugeViewModel.Value} rpm";
-            this.SpeedGaugeViewModel.Value = 50;
-            this.SpeedGaugeViewModel.Caption = $"{this.SpeedGaugeViewModel.Value} km/h";
+            this.LeftTurnSignalViewModel = new LeftTurnSignalViewModel();
+            this.RightTurnSignalViewModel = new RightTurnSignalViewModel();
+            this.LeftTurnSignalViewModel.Toggle();
+            this.RightTurnSignalViewModel.Toggle();
+            this.SpeedGaugeViewModel.SetValue(50);
+            this.RpmGaugeViewModel.SetValue(3000);
+                     
             this.BreakPedalViewModel = new BreakPedalViewModel();
             this.BreakPedalViewModel.Value = 75;
             this.GasPedalViewModel = new GasPedalViewModel();
             this.GasPedalViewModel.Value = 50;
             this.TransmissionViewModel.CurrentGear = Gear.P;
             this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
+
+            this.ACCOptionsViewModel = new ACCOptionsViewModel();
+
+            this.LaneKeepingAndParkingPilotViewModel = new LaneKeepingAndParkingPilotViewModel();
         }
 
         public AutomatedCar ControlledCar
@@ -82,5 +89,37 @@ namespace AutomatedCar.ViewModels
             get => this._rightTurnSignalViewModel;
             set => this.RaiseAndSetIfChanged(ref this._rightTurnSignalViewModel, value);
         }
+
+        public ACCOptionsViewModel ACCOptionsViewModel
+        {
+            get => this._accOptionsViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._accOptionsViewModel, value);
+        }
+
+        public LaneKeepingAndParkingPilotViewModel LaneKeepingAndParkingPilotViewModel
+        {
+            get => this._laneKeepingAndParkingPilotViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._laneKeepingAndParkingPilotViewModel, value);
+        }
+
+        public void ToggleRightIndicator() => this.RightTurnSignalViewModel.Toggle();
+
+        public void ToggleLeftIndicator() => this.LeftTurnSignalViewModel.Toggle();
+
+        public void ToggleACC() => this.ACCOptionsViewModel.Toggle();
+
+        public void IncreaseACCDesiredSpeed() => this.ACCOptionsViewModel.IncreaseDesiredSpeed();
+
+        public void DecreaseACCDesiredSpeed() => this.ACCOptionsViewModel.DecreaseDesiredSpeed();
+
+        public void SetToNextACCDesiredDistance() => this.ACCOptionsViewModel.SetToNextDesiredDistance();
+
+        public void SetToPreviousACCDesiredDistance() => this.ACCOptionsViewModel.SetToPreviousDesiredDistance();
+
+        public void ToggleParkingPilot() => this.LaneKeepingAndParkingPilotViewModel.ToggleParkingPilot();
+
+        public void ToggleLaneKeeping() => this.LaneKeepingAndParkingPilotViewModel.ToggleLaneKeeping();
+
+        public void DisplayLaneKeepingWarning() => this.LaneKeepingAndParkingPilotViewModel.DisplayLaneKeepingWarning();
     }
 }

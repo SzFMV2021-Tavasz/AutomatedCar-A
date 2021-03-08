@@ -48,10 +48,10 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public float GetEngineTorque(float rpm)
         {
             // A real-valued function approximating the torque function:
-            // y = 470 - (x - 4000)**2 / 50000
-            var torque = 470 - (float)Math.Pow(rpm - 4000, 2) / 50000;
-            // torque should be atleast 350 Nm
-            return Math.Min(350, torque);
+            // y = -1/40000 * rpm**2 + 0.225 * rpm
+            var torque = -1 / 40000 * rpm * rpm + 0.225 * rpm;
+            // torque should be atleast 0 Nm
+            return (float)Math.Max(0, torque);
         }
     }
 }

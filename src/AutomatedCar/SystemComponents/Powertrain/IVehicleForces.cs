@@ -7,6 +7,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         Vector2 GetDragForce(Vector2 velocity);
         Vector2 GetTractiveForce(float gasPedal, Vector2 wheelDirection, int gearIdx);
         Vector2 GetTractiveForceInReverse(float gasPedal, Vector2 wheelDirection);
+        Vector2 GetWheelDirectionHackForce(Vector2 wheelDirection, Vector2 velocity);
         Vector2 GetBrakingForce(float brakePedal, Vector2 currentVelocity);
     }
 }

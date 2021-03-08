@@ -5,5 +5,11 @@
         public SpeedGaugeViewModel()
         {
         }
+
+        public override void SetValue(int value)
+        {
+            //TODO validation?
+            this.Value = value;
+        }
     }
 }

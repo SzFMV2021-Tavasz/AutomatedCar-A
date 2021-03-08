@@ -1,15 +1,10 @@
 ﻿using AutomatedCar.Models;
 using System;
-using System.Drawing;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Brushes = System.Windows.Media.Brushes;
-using Image = System.Windows.Controls.Image;
-using Pen = System.Windows.Media.Pen;
+using Point = System.Windows.Point;
 
 namespace AutomatedCar.Visualization
 {
@@ -21,11 +16,19 @@ namespace AutomatedCar.Visualization
 
         public World World => World.Instance;
 
+        public WorldRenderer()
+        {
+            Loaded += WorldRenderer_Loaded;
+        }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (World == null)
                 return;
             
+            var car = GetAutomatedCar();
+            SetRenderCameraMiddle(car);
+
             foreach (var worldObject in World.WorldObjects)
             {
                 Draw(drawingContext, worldObject);
@@ -34,19 +37,35 @@ namespace AutomatedCar.Visualization
 
         private void Draw(DrawingContext drawingContext, IRenderableWorldObject worldObject)
         {
-            var image = WorldObjectTransformer.GetCachedImage(worldObject.Filename);
+            var image = getBitMapImageByName(worldObject.Filename);
             var rect = new Rect(worldObject.X, worldObject.Y, worldObject.Width, worldObject.Height);
 
             var transformMatrix = new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0);
-            var tb = new TransformedBitmap(image, new MatrixTransform(transformMatrix));
+            
             rect.Transform(transformMatrix);
+            var tb = new TransformedBitmap(image, new MatrixTransform(transformMatrix));
+
+            Point objectPointOnCanvas = this.renderCamera.TranslateToViewport(rect.X, rect.Y);
+            rect.X = objectPointOnCanvas.X;
+            rect.Y = objectPointOnCanvas.Y;
 
             drawingContext.DrawImage(tb, rect);
         }
 
-        public WorldRenderer()
+        private void SetRenderCameraMiddle(Models.AutomatedCar car)
         {
-            Loaded += WorldRenderer_Loaded;
+            Point carMiddleReference = getMiddleReference(car.X, car.Y, car.Width, car.Height);
+            this.renderCamera.UpdateMiddlePoint(carMiddleReference.X, carMiddleReference.Y);
+        }
+
+        private BitmapImage getBitMapImageByName(string filename)
+        {
+            return WorldObjectTransformer.GetCachedImage(filename);
+        }
+
+        private AutomatedCar.Models.AutomatedCar GetAutomatedCar()
+        {
+            return World.ControlledCar;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -62,6 +81,11 @@ namespace AutomatedCar.Visualization
 
             renderCamera.Width = ActualWidth;
             renderCamera.Height = ActualHeight;
+        }
+
+        private Point getMiddleReference(Double x, Double y, Double width, Double height)
+        {
+            return new Point(x + (width / 2), y + (height / 2));
         }
     }
 }

@@ -10,18 +10,20 @@
              d:DataContext="{d:DesignInstance viewmodels:RpmGaugeViewModel}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <lvc:AngularGauge Grid.Row="0" Value="{Binding Value}" FromValue="0" ToValue="5000"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <lvc:AngularGauge x:Name="Gauge" Grid.Row="0" Value="{Binding Value}" FromValue="0" ToValue="5000"
                           TicksStep="500" Wedge="300" LabelsStep="10000" NeedleFill="White"
                           TicksForeground="White" Foreground="White" 
                           FontWeight="Regular" FontSize="0.5"
-                          SectionsInnerRadius=".5" Height="133" VerticalAlignment="Top">
+                          SectionsInnerRadius=".5" Width="150" Height="133" VerticalAlignment="Top">
             <lvc:AngularGauge.Sections>
                 <lvc:AngularSection FromValue="4500" ToValue="5000" Fill="#FF3939"/>
             </lvc:AngularGauge.Sections>
         </lvc:AngularGauge>
-        <TextBlock Text="{Binding Caption}" FontSize="10" Foreground="White" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+        <TextBlock Text="{Binding ElementName=Gauge, Path=Value, StringFormat='\{0\} rpm'}" FontSize="10" Foreground="White" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

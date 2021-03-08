@@ -11,14 +11,16 @@
              d:DataContext="{d:DesignInstance viewmodels:SpeedGaugeViewModel}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="125"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <lvc:AngularGauge Grid.Row="0" Value="{Binding Value}" FromValue="0" ToValue="100"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <lvc:AngularGauge x:Name="Gauge" Grid.Row="0" Value="{Binding Value}" FromValue="0" ToValue="100"
                           TicksStep="5" Wedge="300" LabelsStep="10000" NeedleFill="White"
                           TicksForeground="White" Foreground="White" 
                           FontWeight="Regular" FontSize="0.5"
-                          SectionsInnerRadius=".5" HorizontalAlignment="Left" Width="100" Height="100" VerticalAlignment="Bottom" Margin="10,0,0,0"/>
-        <TextBlock Text="{Binding Caption}" FontSize="8" Foreground="White" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                          SectionsInnerRadius=".5" HorizontalAlignment="Left" Width="150" Height="120" VerticalAlignment="Bottom" />
+        <TextBlock Text="{Binding ElementName=Gauge, Path=Value, StringFormat='\{0\} km/h'}" FontSize="10" Foreground="White" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
     </Grid>
 </UserControl>

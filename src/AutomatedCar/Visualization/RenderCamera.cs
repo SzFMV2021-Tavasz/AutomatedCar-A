@@ -13,11 +13,6 @@ namespace AutomatedCar.Visualization
         public double MiddleX { get; private set; }
         public double MiddleY { get; private set; }
 
-        public RenderCamera()
-        {
-
-        }
-
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);
 
         public void UpdateMiddlePoint(double originX, double originY)

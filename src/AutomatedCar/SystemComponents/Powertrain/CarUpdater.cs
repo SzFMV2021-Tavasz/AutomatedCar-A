@@ -43,6 +43,19 @@ namespace AutomatedCar.SystemComponents.Powertrain
             this.carPos = new Vector2(World.Instance.ControlledCar.X, World.Instance.ControlledCar.Y);
             currentTransform = new VehicleTransform(carPos, World.Instance.ControlledCar.CarHeading, World.Instance.ControlledCar.Velocity, World.Instance.ControlledCar.AngularVelocity);
         }
+        private void SetCurrentWheelDirection()
+        {
+            currentWheelDirection.X = (float)Math.Cos(currentDirection);
+            currentWheelDirection.Y = (float)Math.Sin(currentDirection);
+        }
+        private void SetCurrentDirection()
+        {
+            currentDirection = currentTransform.AngularDisplacement + currentSteering;
+        }
+        private void CalculateSteeringAngle()
+        {
+            PacketEnum priority = priorityChecker.SteeringPriorityCheck();
+        }
         public void UpdateWorldObject()
         {
             World.Instance.ControlledCar.X = (int)currentTransform.Position.X;
@@ -63,6 +76,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public void Calculate()
         {
             Integrator.Reset(currentTransform, deltaTime);
+            CalculateSteeringAngle();
+            SetCurrentDirection();
+            SetCurrentWheelDirection();
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)
             {

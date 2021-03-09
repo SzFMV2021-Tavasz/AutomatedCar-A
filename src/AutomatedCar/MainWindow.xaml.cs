@@ -9,6 +9,7 @@ using AutomatedCar.ViewModels;
 using Newtonsoft.Json.Linq;
 using AutomatedCar.KeyboardHandling;
 using AutomatedCar.SystemComponents.SystemDebug;
+using System.IO;
 
 namespace AutomatedCar
 {
@@ -52,8 +53,12 @@ namespace AutomatedCar
             MainDockPanel.Focus();
 
 
-            world.Width = 2000;
-            world.Height = 1000;
+            //world.Width = 2000;
+            //world.Height = 1000;
+            var path = $"{Directory.GetCurrentDirectory()}/Assets";
+            var worldPath = $"{path}/test_world.json";
+            var polygonsPath = $"{path}/worldobject_polygons.json";
+            world.LoadFromJSON(worldPath, polygonsPath);
 
             var circle = new Circle(400, 200, "circle.png", 20);
             circle.Width = 40;

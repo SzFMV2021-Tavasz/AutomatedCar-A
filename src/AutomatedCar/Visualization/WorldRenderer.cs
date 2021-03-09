@@ -23,14 +23,16 @@ namespace AutomatedCar.Visualization
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (World == null)
+            {
                 return;
+            }
 
             var car = GetAutomatedCar();
 
             SetRenderCameraMiddle(car);
             Render_Car(drawingContext, car);
 
-            foreach (var worldObject in World.WorldObjects)
+            foreach (var worldObject in World.Renderables)
             {
                 // worldObject.Render(drawingContext);
             }

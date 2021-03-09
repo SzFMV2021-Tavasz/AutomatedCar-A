@@ -1,13 +1,11 @@
 namespace AutomatedCar.Visualization
 {
-    using AutomatedCar.Models;
+    using BaseModel.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Reflection;
     using System.Windows;
     using System.Windows.Data;
-    using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
     public class WorldObjectTransformer : IValueConverter

@@ -88,7 +88,7 @@ namespace AutomatedCar
             BindACCFeatures(dashBoardViewModel);
             BindParkingPilotAndLaneKeepingFeatures(dashBoardViewModel);
             BindDebugFeatures();
-            BindCarControl(dashBoardViewModel);
+            BindCarControls(dashBoardViewModel);
         }
 
         private void BindParkingPilotAndLaneKeepingFeatures(DashboardViewModel dashBoardViewModel)
@@ -113,7 +113,7 @@ namespace AutomatedCar
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.RightCtrl, () => dashBoardViewModel.ToggleACC()));
         }
 
-        private void BindCarControl(DashboardViewModel dashBoardViewModel)
+        private void BindCarControls(DashboardViewModel dashBoardViewModel)
         {
             keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up,
                 (duration) => dashBoardViewModel.GasPedalViewModel.Value = (int)Math.Min(dashBoardViewModel.GasPedalViewModel.Value + (duration * 100), 100),

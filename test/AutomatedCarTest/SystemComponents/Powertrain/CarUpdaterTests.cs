@@ -43,13 +43,13 @@ namespace Test.SystemComponents.Powertrain
             PowertrainComponentPacket packet = new PowertrainComponentPacket();
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
             Vector2 desiredVelocity = new Vector2(4, 3);
-            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(new Vector2(4, 4), 34, desiredVelocity, 15.1f));
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(new Vector2(4, 4), 34.3f, desiredVelocity, 15.1f));
             
             CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, packet);
             carUpdater.SetCurrentTransform();
             carUpdater.UpdatePacket();
 
-            Assert.True(packet.CarHeadingAngle == 15.1);
+            Assert.True(packet.CarHeadingAngle == 34.3f);
             Assert.True(packet.Speed == desiredVelocity.Length());
             Assert.True(packet.X == 4);
             Assert.True(packet.Y == 4);

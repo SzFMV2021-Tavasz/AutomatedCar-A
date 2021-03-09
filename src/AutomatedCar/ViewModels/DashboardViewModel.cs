@@ -15,6 +15,8 @@ namespace AutomatedCar.ViewModels
         private TurnSignalViewModelBase _rightTurnSignalViewModel;
         private ACCOptionsViewModel _accOptionsViewModel;
         private LaneKeepingAndParkingPilotViewModel _laneKeepingAndParkingPilotViewModel;
+        private LastSignViewModel _lastSignViewModel;
+        private CarInfoViewModel _carInfoViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -35,6 +37,20 @@ namespace AutomatedCar.ViewModels
             this.RpmGaugeViewModel.SetValue(3000);                     
             this.BreakPedalViewModel.Value = 75;
             this.GasPedalViewModel.Value = 50;
+
+            this.TransmissionViewModel.CurrentGear = Gear.P;
+            this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
+
+            this.ACCOptionsViewModel = new ACCOptionsViewModel();
+            this.LaneKeepingAndParkingPilotViewModel = new LaneKeepingAndParkingPilotViewModel();
+            this.LastSignViewModel = new LastSignViewModel();
+            this.LastSignViewModel.ResourcePath = "/Assets/WorldObjects/roadsign_priority_stop.png";
+
+            this.CarInfoViewModel = new CarInfoViewModel();
+            this.CarInfoViewModel.SpeedLimit = 60;
+            this.CarInfoViewModel.SteeringWheelAngle = 25;
+            this.CarInfoViewModel.X = 350;
+            this.CarInfoViewModel.Y = 500;
         }
 
         public AutomatedCar ControlledCar
@@ -95,6 +111,18 @@ namespace AutomatedCar.ViewModels
         {
             get => this._laneKeepingAndParkingPilotViewModel;
             set => this.RaiseAndSetIfChanged(ref this._laneKeepingAndParkingPilotViewModel, value);
+        }
+
+        public LastSignViewModel LastSignViewModel
+        {
+            get => this._lastSignViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._lastSignViewModel, value);
+        }
+
+        public CarInfoViewModel CarInfoViewModel
+        {
+            get => this._carInfoViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._carInfoViewModel, value);
         }
 
         public void ToggleRightIndicator() => this.RightTurnSignalViewModel.Toggle();

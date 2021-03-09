@@ -96,5 +96,24 @@ namespace Test.SystemComponents.Powertrain
             mockIntegrator.Verify(m => m.Reset(vehicleTransform, 1 / 30), Times.Once);
         }
 
+        [Fact]
+        public void CalculateInvokesStaticForceCalculatingMethods()
+        {
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            Vector2 velocity = Vector2.Zero;
+            Vector2 wheelDirection = Vector2.Zero;
+            VehicleTransform vehicleTransform = new VehicleTransform(new Vector2(4, 4), 34.3f, Vector2.Zero, 15.1f);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
+
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            carUpdater.SetCurrentTransform();
+            carUpdater.Calculate();
+
+            mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetDragForce(velocity)), Times.Once);
+            mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Back, mockedVehicleForces.Object.GetDragForce(velocity)), Times.Once);
+            mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetWheelDirectionHackForce(wheelDirection, velocity)), Times.Once);
+            mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Back, mockedVehicleForces.Object.GetWheelDirectionHackForce(wheelDirection, velocity)), Times.Once);
+        }
+
     }
 }

@@ -17,6 +17,8 @@ namespace Test.SystemComponents.Powertrain
     {
         private IVirtualFunctionBus vfb = new VirtualFunctionBus();
         private Mock<IIntegrator> mockIntegrator = new Mock<IIntegrator>();
+        private Mock<IPriorityChecker> mockPrioChecker = new Mock<IPriorityChecker>();
+        private Mock<IVehicleForces> mockedVehicleForces = new Mock<IVehicleForces>();
 
         [Fact]
         public void CarUpdaterUpdatesTheControlledCarProperties()
@@ -61,9 +63,8 @@ namespace Test.SystemComponents.Powertrain
         public void CalculateInvokesForceCalculatingMethodsAccordingToPacketPriority(PacketEnum highestPriorityPacket)
         {
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
-            Mock<IPriorityChecker> mockPrioChecker = new Mock<IPriorityChecker>();
             mockPrioChecker.Setup(m => m.AccelerationPriorityCheck()).Returns(highestPriorityPacket);
-            Mock<IVehicleForces> mockedVehicleForces = new Mock<IVehicleForces>();
+            
             Vector2 currentVelocity = Vector2.Zero;
             Vector2 currentWheelDirection = Vector2.Zero;
 
@@ -80,5 +81,20 @@ namespace Test.SystemComponents.Powertrain
                 mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetTractiveForce(100, currentWheelDirection, 1)), Times.Once);
             }
         }
+
+        [Fact]
+        public void CalculateResetsIntegrator()
+        {
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            VehicleTransform vehicleTransform = new VehicleTransform(new Vector2(4, 4), 34.3f, Vector2.Zero, 15.1f);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
+
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            carUpdater.SetCurrentTransform();
+            carUpdater.Calculate();
+
+            mockIntegrator.Verify(m => m.Reset(vehicleTransform, 1 / 30), Times.Once);
+        }
+
     }
 }

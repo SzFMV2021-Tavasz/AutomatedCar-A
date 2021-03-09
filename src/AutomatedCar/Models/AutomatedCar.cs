@@ -2,6 +2,7 @@ namespace AutomatedCar.Models
 {
     using SystemComponents;
     using System.Windows.Shapes;
+    using System.Numerics;
 
     public class AutomatedCar : Car
     {
@@ -13,6 +14,13 @@ namespace AutomatedCar.Models
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.dummySensor = new DummySensor(this.virtualFunctionBus);
+
+            CarHeading = 0;
+            AngularVelocity = 0;
+            CurrentSteering = 0;
+            Velocity = Vector2.Zero;
+            RPM = 0;
+
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }
@@ -30,5 +38,10 @@ namespace AutomatedCar.Models
         }
 
         public Polyline Geometry { get; set; }
+        public float CarHeading { get; set; }
+        public float AngularVelocity { get; set; }
+        public Vector2 Velocity { get; set; }
+        public float CurrentSteering { get; set; }
+        public int RPM { get; set; }
     }
 }

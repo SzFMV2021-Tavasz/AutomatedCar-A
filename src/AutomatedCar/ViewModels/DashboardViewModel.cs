@@ -18,6 +18,7 @@ namespace AutomatedCar.ViewModels
         private LaneKeepingAndParkingPilotViewModel _laneKeepingAndParkingPilotViewModel;
         private LastSignViewModel _lastSignViewModel;
         private CarInfoViewModel _carInfoViewModel;
+        private SteeringWheelViewModel _steeringWheelViewModel;
 
         public DashboardViewModel(AutomatedCar controlledCar)
         {
@@ -47,6 +48,8 @@ namespace AutomatedCar.ViewModels
             this.CarInfoViewModel.SteeringWheelAngle = 25;
             this.CarInfoViewModel.X = 350;
             this.CarInfoViewModel.Y = 500;
+
+            this.SteeringWheelViewModel = new SteeringWheelViewModel();
         }
 
         public AutomatedCar ControlledCar
@@ -119,6 +122,12 @@ namespace AutomatedCar.ViewModels
         {
             get => this._carInfoViewModel;
             set => this.RaiseAndSetIfChanged(ref this._carInfoViewModel, value);
+        }
+
+        public SteeringWheelViewModel SteeringWheelViewModel
+        {
+            get => this._steeringWheelViewModel;
+            set => this.RaiseAndSetIfChanged(ref this._steeringWheelViewModel, value);
         }
 
         public void ToggleRightIndicator() => this.RightTurnSignalViewModel.Toggle();

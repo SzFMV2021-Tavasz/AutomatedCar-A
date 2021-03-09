@@ -59,7 +59,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
         public void SetCurrentTransform()
         {
-            
+            currentTransform = Integrator.NextVehicleTransform;
         }
     }
 }

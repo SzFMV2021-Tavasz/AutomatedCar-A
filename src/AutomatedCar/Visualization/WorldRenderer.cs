@@ -46,24 +46,32 @@ namespace AutomatedCar.Visualization
         {
             DrawingGroup drawingGroup = new DrawingGroup();
 
-            drawingGroup.Transform = new MatrixTransform(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0);
-
             if (worldObject.Filename == null)
             {
                 worldObject.Filename = Enum.GetName((worldObject as WorldObject).ObjectType).ToLower() + ".png";
             }
-            
+
             BitmapImage bm = getBitMapImageByName(worldObject.Filename);
             worldObject.Width = (int)bm.Width;
-            worldObject.Height = (int) bm.Height;
+            worldObject.Height = (int)bm.Height;
+
+            var relativePos = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+
+            var angle = Math.Acos(worldObject.M11);
+
+            drawingGroup.Transform = new RotateTransform(
+                angle,
+                relativePos.X + worldObject.Width / 2,
+                    relativePos.Y + worldObject.Height / 2
+            );
 
             drawingGroup.Children.Add(
                 new ImageDrawing(
                     bm,
-                    new Rect(this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y), new Size(worldObject.Width, worldObject.Height)
+                    new Rect(relativePos, new Size(worldObject.Width, worldObject.Height)
                     ))
             );
-            
+
             drawingContext.DrawDrawing(drawingGroup);
         }
 

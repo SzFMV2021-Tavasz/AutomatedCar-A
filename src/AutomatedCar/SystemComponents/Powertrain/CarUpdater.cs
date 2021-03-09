@@ -92,6 +92,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
             else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)
             {
             }
+
+            Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetDragForce(currentTransform.Velocity));
+            Integrator.AccumulateForce(WheelKind.Back, VehicleForces.GetDragForce(currentTransform.Velocity));
+            Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetWheelDirectionHackForce(currentWheelDirection, currentTransform.Velocity));
+            Integrator.AccumulateForce(WheelKind.Back, VehicleForces.GetWheelDirectionHackForce(currentWheelDirection, currentTransform.Velocity));
         }
         public void SetCurrentTransform()
         {

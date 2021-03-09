@@ -55,7 +55,10 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
         public void UpdatePacket()
         {
-            
+            powertrainComponentPacket.X = (int)currentTransform.Position.X;
+            powertrainComponentPacket.Y = (int)currentTransform.Position.Y;
+            powertrainComponentPacket.Speed = (int)currentTransform.Velocity.Length();
+            powertrainComponentPacket.CarHeadingAngle = currentTransform.AngularDisplacement;
         }
         public void Calculate()
         {

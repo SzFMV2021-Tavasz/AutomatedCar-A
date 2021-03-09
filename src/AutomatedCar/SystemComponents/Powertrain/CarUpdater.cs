@@ -30,9 +30,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
             this.Integrator = integrator;
             this.powertrainComponentPacket = powertrainPacket;
 
-            currentSteering = World.Instance.ControlledCar.CurrentSteering;
+            currentSteering = 0;
             currentWheelDirection = new Vector2((float)Math.Cos(currentDirection), (float)Math.Sin(currentDirection));
-            currentDirection = World.Instance.ControlledCar.CarHeading;
+            currentDirection = 0;
             priorityChecker = new PriorityChecker();
             priorityChecker.virtualFunctionBus = this.VirtualFunctionBus;
             CreateCurrentTransform();
@@ -40,8 +40,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         private void CreateCurrentTransform()
         {
-            this.carPos = new Vector2(World.Instance.ControlledCar.X, World.Instance.ControlledCar.Y);
-            currentTransform = new VehicleTransform(carPos, World.Instance.ControlledCar.CarHeading, World.Instance.ControlledCar.Velocity, World.Instance.ControlledCar.AngularVelocity);
+            this.carPos = Vector2.Zero;
+            currentTransform = new VehicleTransform(carPos, 0, Vector2.Zero, 0);
         }
         private void SetCurrentWheelDirection()
         {

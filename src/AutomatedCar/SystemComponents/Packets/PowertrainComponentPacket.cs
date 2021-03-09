@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutomatedCar.SystemComponents.Packets
 {
-    class PowertrainComponentPacket : ReactiveObject, IReadOnlyPowertrainComponentPacket
+    public class PowertrainComponentPacket : ReactiveObject, IReadOnlyPowertrainComponentPacket
     {
         private int x;
         private int y;

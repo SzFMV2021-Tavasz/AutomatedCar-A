@@ -58,14 +58,12 @@ namespace AutomatedCar.Visualization
 
             foreach (var worldObject in World.Renderables)
             {
-                // worldObject.Render(drawingContext);
-               
+                // worldObject.Render(drawingContext);              
             }
         }
 
         private void RenderPolygons(DrawingContext drawingContext, List<WorldObject> renderingWolrdObjects)
         {
-
             if (drawPolygons)
             {
                 foreach (var item in renderingWolrdObjects)
@@ -73,7 +71,6 @@ namespace AutomatedCar.Visualization
                     drawPolylineByFlagAndWorldObject(drawingContext, item);
                 }
             }
-
         }
 
         private void SetRenderCameraMiddle(Models.AutomatedCar car)
@@ -100,9 +97,7 @@ namespace AutomatedCar.Visualization
 
                 StreamGeometry carPoly = getPolyByPointList(carPolyList);
                 drawingContext.DrawGeometry(null, PolyPen, carPoly);
-
             }
-
         }
 
         private StreamGeometry getPolyByPointList(List<Point> poliList)
@@ -168,21 +163,18 @@ namespace AutomatedCar.Visualization
         {
             List<BaseModel.Polygon> poligons = worldObject.Polygons;
 
-
-                foreach (var poligon in poligons)
+            foreach (var poligon in poligons)
+            {
+                List<Point> displayPoints = new List<Point>();
+                foreach (var points in poligon.Points)
                 {
-                    List<Point> displayPoints = new List<Point>();
-                    foreach (var points in poligon.Points)
-                    {
-                        //TODO itt lehet van neki forgatása
-                        displayPoints.Add(renderCamera.TranslateToViewport(points.Item1 + worldObject.X,points.Item2 + worldObject.Y));
-                    }
-
-                    StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
-                    drawingContext.DrawGeometry(null, PolyPen, drawingGeometry);
-
+                    //TODO itt lehet van neki forgatása
+                    displayPoints.Add(renderCamera.TranslateToViewport(points.Item1 + worldObject.X,points.Item2 + worldObject.Y));
                 }
-                    
+
+                StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
+                drawingContext.DrawGeometry(null, PolyPen, drawingGeometry);
+            }                 
         }
     }
 }

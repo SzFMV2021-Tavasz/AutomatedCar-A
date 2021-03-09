@@ -18,7 +18,7 @@ namespace AutomatedCar.Visualization
         public void UpdateMiddlePoint(double originX, double originY)
         {
             LeftX = originX - (Width / 2.0);
-            TopY = originY + (Height / 2.0);
+            TopY = originY - (Height / 2.0);
 
             MiddleX = originX;
             MiddleY = originY;

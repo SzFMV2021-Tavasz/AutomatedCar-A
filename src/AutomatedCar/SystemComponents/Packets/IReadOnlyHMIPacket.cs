@@ -5,7 +5,7 @@ namespace AutomatedCar.SystemComponents.Packets
     public interface IReadOnlyHMIPacket
     {
         int GasPedal { get; }
-        int BrakePedal { get; }
+        int BreakPedal { get; }
         double SteeringWheelAngle { get; }
         Gear Gear { get; }
     }

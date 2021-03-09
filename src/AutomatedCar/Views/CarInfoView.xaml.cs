@@ -1,13 +1,12 @@
 ﻿using System.Windows.Controls;
-
 namespace AutomatedCar.Views
 {
     /// <summary>
-    /// Interaction logic for ControlledCarInfos.xaml
+    /// Interaction logic for CarInfoView.xaml
     /// </summary>
-    public partial class ControlledCarInfos : UserControl
+    public partial class CarInfoView : UserControl
     {
-        public ControlledCarInfos()
+        public CarInfoView()
         {
             InitializeComponent();
         }

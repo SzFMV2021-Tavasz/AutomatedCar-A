@@ -27,10 +27,20 @@
         </Grid>
         <uc:GasPedal Margin="5" DataContext="{Binding GasPedalViewModel}"/>
         <uc:BreakPedal Margin="5" DataContext="{Binding BreakPedalViewModel}"/>
-       
-        <uc:ACCOptions Margin="5" DataContext="{Binding ACCOptionsViewModel}"/>
-        <uc:LaneKeepingAndParkingPilot Margin="5" DataContext="{Binding LaneKeepingAndParkingPilotViewModel}"/>      
-        <uc:ControlledCarInfos DataContext="{Binding ControlledCar}"/>
-        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <uc:ACCOptions Grid.Row="0" Grid.Column="0" Margin="5" DataContext="{Binding ACCOptionsViewModel}"/>
+            <uc:LaneKeepingAndParkingPilot Grid.Row="1" Grid.Column="0" Margin="5" DataContext="{Binding LaneKeepingAndParkingPilotViewModel}"/>
+            <uc:LastSignView Width="Auto" Grid.Column="1" Grid.RowSpan="2" HorizontalContentAlignment="Center" VerticalAlignment="Center" DataContext="{Binding LastSignViewModel}"/>
+        </Grid>
+        <uc:CarInfoView Margin="5" DataContext="{Binding CarInfoViewModel}"/>
+
     </StackPanel>
 </UserControl>

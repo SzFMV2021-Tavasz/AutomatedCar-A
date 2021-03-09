@@ -4,6 +4,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BaseModel.WorldObjects
 {
@@ -104,6 +105,30 @@ namespace BaseModel.WorldObjects
         public string Filename { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
+
+        public float M11
+        {
+            get => Transformation_m11;
+            set => Transformation_m11 = value;
+        }
+
+        public float M12
+        {
+            get => Transformation_m12;
+            set => Transformation_m12 = value;
+        }
+
+        public float M21
+        {
+            get => Transformation_m21;
+            set => Transformation_m21 = value;
+        }
+
+        public float M22
+        {
+            get => Transformation_m22;
+            set => Transformation_m22 = value;
+        }
 
         public enum Type
         {

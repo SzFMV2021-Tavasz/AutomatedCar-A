@@ -4,6 +4,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using BaseModel.Interfaces;
+using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
 
 namespace AutomatedCar.Visualization
@@ -24,32 +26,45 @@ namespace AutomatedCar.Visualization
         protected override void OnRender(DrawingContext drawingContext)
         {
             if (World == null)
+            {
                 return;
-            
+            }
+
             var car = GetAutomatedCar();
             SetRenderCameraMiddle(car);
 
-            foreach (var worldObject in World.Renderables)
+            var objectsInRange = renderCamera.Filter(World.Renderables);
+            foreach (var worldObject in objectsInRange)
             {
                 Draw(drawingContext, worldObject);
             }
+
+            Draw(drawingContext, car);
         }
 
         private void Draw(DrawingContext drawingContext, IRenderableWorldObject worldObject)
         {
-            var image = getBitMapImageByName(worldObject.Filename);
-            var rect = new Rect(worldObject.X, worldObject.Y, worldObject.Width, worldObject.Height);
+            DrawingGroup drawingGroup = new DrawingGroup();
 
-            var transformMatrix = new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0);
+            drawingGroup.Transform = new MatrixTransform(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0);
+
+            if (worldObject.Filename == null)
+            {
+                worldObject.Filename = Enum.GetName((worldObject as WorldObject).ObjectType).ToLower() + ".png";
+            }
             
-            rect.Transform(transformMatrix);
-            var tb = new TransformedBitmap(image, new MatrixTransform(transformMatrix));
+            BitmapImage bm = getBitMapImageByName(worldObject.Filename);
+            worldObject.Width = (int)bm.Width;
+            worldObject.Height = (int) bm.Height;
 
-            Point objectPointOnCanvas = this.renderCamera.TranslateToViewport(rect.X, rect.Y);
-            rect.X = objectPointOnCanvas.X;
-            rect.Y = objectPointOnCanvas.Y;
-
-            drawingContext.DrawImage(tb, rect);
+            drawingGroup.Children.Add(
+                new ImageDrawing(
+                    bm,
+                    new Rect(this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y), new Size(worldObject.Width, worldObject.Height)
+                    ))
+            );
+            
+            drawingContext.DrawDrawing(drawingGroup);
         }
 
         private void SetRenderCameraMiddle(Models.AutomatedCar car)

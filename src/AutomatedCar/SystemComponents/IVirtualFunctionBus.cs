@@ -14,9 +14,9 @@ namespace AutomatedCar.SystemComponents
         IReadOnlyDummyPacket DummyPacket { get; set; }
         IReadOnlyPowertrainComponentPacket PowertrainPacket { get; set; }
         IReadOnlyACCPacket ACCPacket { get; set; }
-        IReadOnlyACCPacket AEBPacket { get; set; }
-        IReadOnlyACCPacket HMIPacket { get; set; }
-        IReadOnlyACCPacket LKAPacket { get; set; }
+        IReadOnlyAEBPacket AEBPacket { get; set; }
+        IReadOnlyHMIPacket HMIPacket { get; set; }
+        IReadOnlyLKAPacket LKAPacket { get; set; }
         IReadOnlyPPPacket PPPacket { get; set; }
     }
 }

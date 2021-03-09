@@ -61,9 +61,20 @@ namespace AutomatedCar.SystemComponents.Powertrain
             powertrainComponentPacket.CarHeadingAngle = currentTransform.AngularDisplacement;
         }
         public void Calculate()
-        {
-           
-
+        {  
+            PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
+            if (priority == PacketEnum.AEB)
+            {
+                Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
+            }
+            else if (priority == PacketEnum.HMI)
+            {
+                Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce((100), currentTransform.Velocity));
+                Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce((100), currentWheelDirection, 1));
+            }
+            else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)
+            {
+            }
         }
         public void SetCurrentTransform()
         {

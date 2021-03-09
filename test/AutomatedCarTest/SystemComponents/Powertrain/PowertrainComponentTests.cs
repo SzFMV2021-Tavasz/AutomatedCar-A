@@ -12,21 +12,22 @@ namespace Test.SystemComponents.Powertrain
 {
     public class PowertrainComponentTests
     {
+        Mock<IVirtualFunctionBus> mockBus = new Mock<IVirtualFunctionBus>();
+        Mock<IPriorityChecker> mockedPriorityChecker = new Mock<IPriorityChecker>();
+
+        IVirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+
         [Fact]
         public  void PowertrainAutomaticallyGetsRegisteredToVFB()
         {
-            Mock<IVirtualFunctionBus> mockBus = new Mock<IVirtualFunctionBus>();
             PowertrainComponent ptr = new PowertrainComponent(mockBus.Object);
-
             mockBus.Verify(m => m.RegisterComponent(ptr), Times.Once);
         }
 
         [Fact]
         public void VFBGetsPowertrainPacketAfterCreatingPowertrainComponent()
         {
-            VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
             PowertrainComponent powertrain = new PowertrainComponent(virtualFunctionBus);
-
             Assert.True(virtualFunctionBus.PowertrainPacket != null);
         }
     }

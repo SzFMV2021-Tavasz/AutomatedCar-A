@@ -39,8 +39,8 @@ namespace Test.Visualization
         }
 
         [Theory]
-        [InlineData(0, 0, -480, 360)]
-        [InlineData(1500, 1000, 1020, 1360)]
+        [InlineData(0, 0, -480, -360)]
+        [InlineData(1500, 1000, 1020, 640)]
         public void UpdatingOriginOffsetsTopLeftCoordinates(double originX, double originY, double expectedTopLeftX, double expectedTopLeftY)
         {
             camera.UpdateMiddlePoint(originX, originY);

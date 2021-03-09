@@ -14,5 +14,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
         void Calculate();
         void UpdateWorldObject();
         void UpdatePacket();
+        void SetCurrentTransform();
     }
 }

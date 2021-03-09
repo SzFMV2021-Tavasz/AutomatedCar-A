@@ -1,9 +1,11 @@
 ﻿namespace AutomatedCar.Models
 {
     using BaseModel.Interfaces;
+    using BaseModel.WorldObjects;
     using ReactiveUI;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Windows.Shapes;
 
     public class World : ReactiveObject
     {
@@ -16,6 +18,9 @@
 
         public List<IRenderableWorldObject> Renderables { get; private set; }
 
+        private List<Polygon> Polygons;
+
+
         public AutomatedCar ControlledCar
         {
             get => this._controlledCar;
@@ -25,6 +30,8 @@
         public int Width => _world.Width;
 
         public int Height => _world.Height;
+
+
 
         public void AddObject(RenderableWorldObject worldObject)
         {

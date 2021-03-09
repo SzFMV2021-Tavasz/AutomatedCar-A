@@ -61,7 +61,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
             powertrainComponentPacket.CarHeadingAngle = currentTransform.AngularDisplacement;
         }
         public void Calculate()
-        {  
+        {
+            Integrator.Reset(currentTransform, deltaTime);
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)
             {

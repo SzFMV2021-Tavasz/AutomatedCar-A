@@ -52,18 +52,17 @@ namespace AutomatedCar.Visualization
                 return;
             }
 
+            var objectsInRange = renderCamera.Filter(World.Renderables);
             var car = GetAutomatedCar();
             SetRenderCameraMiddle(car);
-            RenderPolygons(drawingContext, visibleWorldObjects.ConvertAll( wo => (WorldObject)wo));
-            Render_Car(drawingContext, car);
-
-            var objectsInRange = renderCamera.Filter(World.Renderables);
+            
             foreach (var worldObject in objectsInRange)
             {
                 Draw(drawingContext, worldObject);
             }
 
-            Draw(drawingContext, car);
+            RenderPolygons(drawingContext, objectsInRange.ConvertAll(wo => (WorldObject)wo));
+            Render_Car(drawingContext, car);
         }
 
         private void Draw(DrawingContext drawingContext, IRenderableWorldObject worldObject)

@@ -10,12 +10,16 @@ namespace Test.SystemComponents.Powertrain
     {
         IPriorityChecker PriorityChecker = new PriorityChecker();
         IVirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+        Mock<IReadOnlyHMIPacket> mockedHMI = new Mock<IReadOnlyHMIPacket>();
+        Mock<IReadOnlyPPPacket> mockedPP = new Mock<IReadOnlyPPPacket>();
+        Mock<IReadOnlyLKAPacket> mockedLKA = new Mock<IReadOnlyLKAPacket>();
 
         [Fact]
         public void SteeringWheelPriorityCheckingHMIPacket()
         {
-            Mock<IReadOnlyHMIPacket> mockedHMI = new Mock<IReadOnlyHMIPacket>();
+            virtualFunctionBus.LKAPacket = mockedLKA.Object;
             virtualFunctionBus.HMIPacket = mockedHMI.Object;
+            virtualFunctionBus.PPPacket = mockedPP.Object;
             PriorityChecker.virtualFunctionBus = virtualFunctionBus;
 
             Assert.True(PriorityChecker.SteeringPriorityCheck() == PacketEnum.HMI);
@@ -24,7 +28,6 @@ namespace Test.SystemComponents.Powertrain
         [Fact]
         public void SteeringWheelPriorityCheckingLKAPacket()
         {
-            Mock<IReadOnlyLKAPacket> mockedLKA = new Mock<IReadOnlyLKAPacket>();
             virtualFunctionBus.LKAPacket = mockedLKA.Object;
             PriorityChecker.virtualFunctionBus = virtualFunctionBus;
 
@@ -34,8 +37,8 @@ namespace Test.SystemComponents.Powertrain
         [Fact]
         public void SteeringWheelPriorityCheckingPPPacket()
         {
-            Mock<IReadOnlyPPPacket> mockedPP = new Mock<IReadOnlyPPPacket>();
             virtualFunctionBus.PPPacket = mockedPP.Object;
+            PriorityChecker.virtualFunctionBus = virtualFunctionBus;
 
             Assert.True(PriorityChecker.SteeringPriorityCheck() == PacketEnum.PP);
         }

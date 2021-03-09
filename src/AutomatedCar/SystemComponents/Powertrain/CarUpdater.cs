@@ -45,8 +45,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
         public void UpdateWorldObject()
         {
-           
-            
+            World.Instance.ControlledCar.X = (int)currentTransform.Position.X;
+            World.Instance.ControlledCar.Y = (int)currentTransform.Position.Y;
+            World.Instance.ControlledCar.CarHeading = currentTransform.AngularDisplacement;
+            World.Instance.ControlledCar.AngularVelocity = currentTransform.AngularVelocity;
+            World.Instance.ControlledCar.CurrentSteering = currentSteering;
+            World.Instance.ControlledCar.Velocity = currentTransform.Velocity;
+            World.Instance.ControlledCar.Speed = (int)currentTransform.Velocity.Length();
         }
         public void UpdatePacket()
         {

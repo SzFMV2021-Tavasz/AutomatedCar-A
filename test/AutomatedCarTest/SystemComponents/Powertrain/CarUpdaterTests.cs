@@ -1,4 +1,5 @@
 ﻿using AutomatedCar.Models;
+using AutomatedCar.Models.Enums;
 using AutomatedCar.SystemComponents;
 using AutomatedCar.SystemComponents.Packets;
 using AutomatedCar.SystemComponents.Powertrain;
@@ -64,21 +65,29 @@ namespace Test.SystemComponents.Powertrain
         {
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
             mockPrioChecker.Setup(m => m.AccelerationPriorityCheck()).Returns(highestPriorityPacket);
-            
-            Vector2 currentVelocity = Vector2.Zero;
-            Vector2 currentWheelDirection = Vector2.Zero;
+
+            Vector2 currentVelocity = new Vector2(2, 3);
+            Vector2 currentWheelDirection = new Vector2(1, 0);
+            VehicleTransform vehicleTransform = new VehicleTransform(new Vector2(4, 4), 0, currentVelocity, 15.1f);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
+            mockedVehicleForces.Setup(m => m.GetBrakingForce(1f, currentVelocity)).Returns(new Vector2(2, 5));
+            mockedVehicleForces.Setup(m => m.GetBrakingForce(100, currentVelocity)).Returns(new Vector2(2, 5));
+            mockedVehicleForces.Setup(m => m.GetTractiveForce(100, currentWheelDirection, 2)).Returns(new Vector2(1, 1));
 
             CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            carUpdater.transmission = new Transmission() { Gear = Gear.D, InsideGear = 2 };
+            carUpdater.priorityChecker = mockPrioChecker.Object;
+            carUpdater.SetCurrentTransform();
             carUpdater.Calculate();
 
             if (highestPriorityPacket == PacketEnum.AEB)
             {
-                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(100, currentVelocity)), Times.Once);
+                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(1f, currentVelocity)), Times.Once);
             }
             else if (highestPriorityPacket == PacketEnum.HMI)
             {
                 mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(100, currentVelocity)), Times.Once);
-                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetTractiveForce(100, currentWheelDirection, 1)), Times.Once);
+                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetTractiveForce(100, currentWheelDirection, 2)), Times.Once);
             }
         }
 

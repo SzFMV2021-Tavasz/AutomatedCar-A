@@ -6,7 +6,7 @@ namespace Test.SystemComponents.Packets
 {
     public class HMIPacketTest
     {
-        private HMIPacket hmiPacket;
+        private IReadOnlyHMIPacket hmiPacket;
 
         [SetUp]
         public void SetUp()

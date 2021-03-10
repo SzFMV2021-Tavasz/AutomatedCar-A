@@ -26,17 +26,14 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         public void SetInsideGear(int speed)
         {
-            if (Gear == Gear.D)
+            switch(Gear)
             {
-                InsideGear = DriveSpeedGearMapping.First(m => m.minSpeed <= speed && speed < m.maxSpeed).gear;
-            }
-            if (Gear == Gear.P && Gear == Gear.N)
-            {
-                InsideGear = 0;
-            }
-            if (Gear == Gear.R)
-            {
-                InsideGear = 1;
+                case Gear.D:
+                    InsideGear = DriveSpeedGearMapping.First(m => m.minSpeed <= speed && speed < m.maxSpeed).gear;
+                    break;
+                default:
+                    InsideGear = 0;
+                    break;
             }
         }
     }

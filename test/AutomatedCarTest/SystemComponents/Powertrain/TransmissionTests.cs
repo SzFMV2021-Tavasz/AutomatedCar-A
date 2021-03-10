@@ -1,4 +1,5 @@
-﻿using AutomatedCar.SystemComponents.Powertrain;
+﻿using AutomatedCar.Models.Enums;
+using AutomatedCar.SystemComponents.Powertrain;
 using System.Linq;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace Test.SystemComponents.Powertrain
         public void TransmissionSwitchesToCorrectGearInDriveMode()
         {
             var transmission = new Transmission();
-            transmission.Gear = AutomatedCar.Models.Enums.Gear.D;
+            transmission.Gear = Gear.D;
 
             for(int speed = 0; speed < 100; speed++)
             {
@@ -18,8 +19,24 @@ namespace Test.SystemComponents.Powertrain
                 transmission.SetInsideGear(speed);
 
                 Assert.Equal(correctGear, transmission.InsideGear);
-                Assert.Equal(AutomatedCar.Models.Enums.Gear.D, transmission.Gear);
+                Assert.Equal(Gear.D, transmission.Gear);
             }
+        }
+
+        [Theory]
+        [InlineData(Gear.N)]
+        [InlineData(Gear.P)]
+        [InlineData(Gear.R)]
+        public void NonDriveModesSetInternalGearToZero(Gear gear)
+        {
+            var transmission = new Transmission();
+            transmission.Gear = gear;
+            var reallyHighSpeed = 1000;
+
+            transmission.SetInsideGear(reallyHighSpeed);
+
+            Assert.Equal(0, transmission.InsideGear);
+            Assert.Equal(gear, transmission.Gear);
         }
     }
 }

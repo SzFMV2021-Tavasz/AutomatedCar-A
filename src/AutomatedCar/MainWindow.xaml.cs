@@ -1,14 +1,14 @@
-﻿using System;
+﻿using AutomatedCar.KeyboardHandling;
+using AutomatedCar.Models;
+using AutomatedCar.SystemComponents.SystemDebug;
+using AutomatedCar.ViewModels;
+using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using AutomatedCar.Models;
-using AutomatedCar.ViewModels;
-using Newtonsoft.Json.Linq;
-using AutomatedCar.KeyboardHandling;
-using AutomatedCar.SystemComponents.SystemDebug;
-using System.IO;
 
 namespace AutomatedCar
 {
@@ -38,15 +38,10 @@ namespace AutomatedCar
             hmiDebug = new HMIDebug();
             keyboardHandler = new KeyboardHandler(tickInterval);
             BindKeysForDashboardFunctions(dashBoardViewModel);
-           
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Left, (duration) => World.Instance.ControlledCar.X -= 5, null));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right, (duration) => World.Instance.ControlledCar.X += 5, null));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up, (duration) => World.Instance.ControlledCar.Y -= 5, null));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down, (duration) => World.Instance.ControlledCar.Y += 5, null));
 
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
-
+            timer.Tick += dashBoardViewModel.HandlePackets;
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
@@ -119,18 +114,10 @@ namespace AutomatedCar
 
         private void BindCarControls(DashboardViewModel dashBoardViewModel)
         {
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up,
-                (duration) => dashBoardViewModel.GasPedalViewModel.Value = (int)Math.Min(dashBoardViewModel.GasPedalViewModel.Value + (duration * 100), 100),
-                (duration) => dashBoardViewModel.GasPedalViewModel.Value = (int)Math.Max(dashBoardViewModel.GasPedalViewModel.Value - (duration * 100), 0)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down,
-                (duration) => dashBoardViewModel.BreakPedalViewModel.Value = (int)Math.Min(dashBoardViewModel.BreakPedalViewModel.Value + (duration * 200), 100),
-                (duration) => dashBoardViewModel.BreakPedalViewModel.Value = (int)Math.Max(dashBoardViewModel.BreakPedalViewModel.Value - (duration * 200), 0)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Left,
-                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Max(dashBoardViewModel.SteeringWheelViewModel.Value - (duration * 100), -100),
-                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Min(dashBoardViewModel.SteeringWheelViewModel.Value + (duration * 100), 0)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right,
-                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Min(dashBoardViewModel.SteeringWheelViewModel.Value + (duration * 100), 100),
-                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Max(dashBoardViewModel.SteeringWheelViewModel.Value - (duration * 100), 0)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.W, (duration) => dashBoardViewModel.MoveGasPedalDown(duration), (duration) => dashBoardViewModel.MoveGasPedalUp(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.S, (duration) => dashBoardViewModel.MoveBrakePedalDown(duration), (duration) => dashBoardViewModel.MoveBrakePedalUp(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.A, (duration) => dashBoardViewModel.SteerLeft(duration), (duration) => dashBoardViewModel.SteerRightToIdle(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.D, (duration) => dashBoardViewModel.SteerRight(duration), (duration) => dashBoardViewModel.SteerLeftToIdle(duration)));
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)

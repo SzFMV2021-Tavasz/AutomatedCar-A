@@ -12,21 +12,41 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public Gear Gear { get; set; }
         public int InsideGear { get; set; }
 
-        public void SetInsideGear(int rpm)
+        public void SetInsideGear(int speed)
         {
             if (Gear == Gear.D)
             {
-                if(rpm > 2500 && InsideGear < 5)
+                if (speed < 10)
                 {
-                    InsideGear++;
+                    InsideGear = 0;
                 }
-                else if (rpm < 1600 && InsideGear > 1)
+                else if (speed >= 10 && speed < 15)
                 {
-                    InsideGear--;
+                    InsideGear = 1;
                 }
-                else if (InsideGear == 0)
+                else if (speed >= 15 && speed < 20)
                 {
-                    InsideGear++;
+                    InsideGear = 2;
+                }
+                else if (speed >= 20 && speed < 30)
+                {
+                    InsideGear = 3;
+                }
+                else if (speed >= 30 && speed < 40)
+                {
+                    InsideGear = 4;
+                }
+                else if (speed >= 40 && speed < 52)
+                {
+                    InsideGear = 5;
+                }
+                else if (speed >= 52 && speed < 70)
+                {
+                    InsideGear = 6;
+                }
+                else if (speed >= 70)
+                {
+                    InsideGear = 7;
                 }
             }
             if (Gear == Gear.P && Gear == Gear.N)

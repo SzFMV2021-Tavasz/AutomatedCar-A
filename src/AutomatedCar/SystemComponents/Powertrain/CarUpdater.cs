@@ -57,6 +57,10 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private void CalculateSteeringAngle()
         {
             PacketEnum priority = priorityChecker.SteeringPriorityCheck();
+            if (priority == PacketEnum.HMI)
+            {
+                currentSteering = (float)((VirtualFunctionBus.HMIPacket.SteeringWheelAngle * 0.6)*(Math.PI / 180));
+            }
         }
         public void UpdateWorldObject()
         {

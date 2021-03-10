@@ -4,6 +4,7 @@ using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -21,8 +22,8 @@ namespace AutomatedCar.Visualization
         private readonly DispatcherTimer renderTimer = new DispatcherTimer();
         private readonly RenderCamera renderCamera = new RenderCamera();
 
-        private readonly Pen PolyPen = new Pen(Brushes.White, 2);
-        private readonly Pen PolyPenHighLight = new Pen(Brushes.Red, 2);
+        private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
+        private readonly Pen PolyPenHighLight = new Pen(Brushes.OrangeRed, 2);
 
         private Boolean drawPolygons = true;
         private Boolean drawDebugCamera = false;
@@ -75,17 +76,19 @@ namespace AutomatedCar.Visualization
             }
 
             BitmapImage bm = getBitMapImageByName(worldObject.Filename);
-            worldObject.Width = (int)bm.Width;
-            worldObject.Height = (int)bm.Height;
+            worldObject.Width = (int)bm.PixelWidth;
+            worldObject.Height = (int)bm.PixelHeight;
 
             var relativePos = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
 
-            var angle = Math.Acos(worldObject.M11);
-
+            var x = new Vector(1, 0);
+            Vector rotated = Vector.Multiply(x, new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0));
+            double angleBetween = Vector.AngleBetween(x, rotated);
+            
             drawingGroup.Transform = new RotateTransform(
-                angle,
-                relativePos.X + worldObject.Width / 2,
-                    relativePos.Y + worldObject.Height / 2
+                angleBetween,
+                relativePos.X,
+                relativePos.Y 
             );
 
             drawingGroup.Children.Add(
@@ -117,12 +120,27 @@ namespace AutomatedCar.Visualization
 
         private void Render_Car(DrawingContext drawingContext, Models.AutomatedCar car)
         {
-            var carImage = getBitMapImageByName(car.Filename);
+            DrawingGroup drawingGroup = new DrawingGroup();
 
-            Point carPointOnCanvas = this.renderCamera.TranslateToViewport(car.X , car.Y );
+            BitmapImage bm = getBitMapImageByName(car.Filename);
+            car.Width = (int)bm.PixelWidth;
+            car.Height = (int)bm.PixelHeight;
 
-            drawingContext.DrawImage(carImage, new Rect(carPointOnCanvas.X, carPointOnCanvas.Y, car.Width, car.Height));
+            var relativePos = this.renderCamera.TranslateToViewport(car.X, car.Y);
 
+            var x = new Vector(1, 0);
+            Vector rotated = Vector.Multiply(x, new Matrix(car.M11, car.M12, car.M21, car.M22, 0, 0));
+            double angleBetween = Vector.AngleBetween(x, rotated);
+
+
+            drawingGroup.Children.Add(
+                new ImageDrawing(
+                    bm,
+                    new Rect(relativePos, new Size(car.Width, car.Height)
+                    ))
+            );
+
+            
             if (drawPolygons)
             {
                 List<Point> carPolyList = new List<Point>();
@@ -132,8 +150,20 @@ namespace AutomatedCar.Visualization
                 }
 
                 StreamGeometry carPoly = getPolyByPointList(carPolyList);
-                drawingContext.DrawGeometry(null, PolyPen, carPoly);
+                GeometryDrawing geometryDrawing = new GeometryDrawing(null, PolyPen, carPoly); 
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                    );
             }
+
+            drawingGroup.Transform = new RotateTransform(
+                angleBetween,
+                relativePos.X,
+                relativePos.Y
+            );
+
+            drawingContext.DrawDrawing(drawingGroup);
         }
 
         private StreamGeometry getPolyByPointList(List<Point> poliList)
@@ -145,21 +175,9 @@ namespace AutomatedCar.Visualization
                 PointCollection points = new PointCollection();
 
                 poliList.ForEach(point => points.Add(point));
+                //points.Add(poliList[0]);
 
                 geometryContext.PolyLineTo(points, true, true);
-            }
-
-            return streamGeometry;
-        }
-
-        private StreamGeometry getPolyByPointList(PointCollection poliCollection)
-        {
-            StreamGeometry streamGeometry = new StreamGeometry();
-            using (StreamGeometryContext geometryContext = streamGeometry.Open())
-            {
-                geometryContext.BeginFigure(poliCollection[0], true, true);
-                                           
-                geometryContext.PolyLineTo(poliCollection, true, true);
             }
 
             return streamGeometry;
@@ -209,6 +227,19 @@ namespace AutomatedCar.Visualization
                 }
 
                 StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
+
+                var x = new Vector(1, 0);
+                Vector rotated = Vector.Multiply(x, new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0));
+                double angleBetween = Vector.AngleBetween(x, rotated);
+
+                var relativePos = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+
+                drawingGeometry.Transform = new RotateTransform(
+                    angleBetween,
+                    relativePos.X,
+                    relativePos.Y
+                );
+
                 drawingContext.DrawGeometry(null, PolyPen, drawingGeometry);
             }                 
         }

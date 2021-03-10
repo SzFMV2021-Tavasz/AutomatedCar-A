@@ -1,6 +1,6 @@
 ﻿namespace AutomatedCar.SystemComponents.Powertrain
 {
-    class PriorityChecker : IPriorityChecker
+    public class PriorityChecker : IPriorityChecker
     {
         public IVirtualFunctionBus virtualFunctionBus { get; set; }
 
@@ -11,7 +11,21 @@
 
         public PacketEnum SteeringPriorityCheck()
         {
-            return PacketEnum.ACC;
+            if (virtualFunctionBus.HMIPacket != null)
+            {
+                return PacketEnum.HMI;
+            }
+            else
+            {
+                if (virtualFunctionBus.LKAPacket != null)
+                {
+                    return PacketEnum.LKA;
+                }
+                else
+                {
+                    return PacketEnum.PP;
+                }
+            }
         }
     }
 }

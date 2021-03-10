@@ -15,7 +15,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
         IVehicleConstants VehicleConstants;
         IIntegrator Integrator;
 
-
         public PowertrainComponent(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IVehicleConstants vehicleConstants,IIntegrator integrator)
            : base(virtualFunctionBus)
         {

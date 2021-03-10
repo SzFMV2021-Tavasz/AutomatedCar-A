@@ -18,12 +18,15 @@ namespace AutomatedCar.Visualization
 
         public void UpdateMiddlePoint(double originX, double originY)
         {
-            if (originX >= 0 && originY >= 0)
+            if (originX >= 0)
             {
                 LeftX = originX - (Width / 2.0);
-                TopY = originY - (Height / 2.0);
-
                 MiddleX = originX;
+            }
+
+            if (originY >= 0)
+            {
+                TopY = originY - (Height / 2.0);
                 MiddleY = originY;
             }
         }

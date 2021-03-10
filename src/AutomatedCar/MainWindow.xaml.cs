@@ -90,6 +90,12 @@ namespace AutomatedCar
             video.Points.Add(new Point(108, -120));
             controlledCar.Video = video;
 
+            var sonic = new Polyline();
+            sonic.Points.Add(new Point(6, 20));
+            sonic.Points.Add(new Point(-144, -159));
+            sonic.Points.Add(new Point(-144, 199));
+            controlledCar.UltraSonic = sonic;
+
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();

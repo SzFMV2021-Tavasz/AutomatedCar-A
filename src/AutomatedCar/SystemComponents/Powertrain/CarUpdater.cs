@@ -16,9 +16,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public IVehicleForces VehicleForces { get; }
         public IIntegrator Integrator { get; }
         public ITransmission transmission { get; set; }
+        public IPriorityChecker priorityChecker { get; set; }
 
         private PowertrainComponentPacket powertrainComponentPacket;
-        private IPriorityChecker priorityChecker;
         private VehicleTransform currentTransform;
         private Vector2 carPos;
         private float currentSteering;

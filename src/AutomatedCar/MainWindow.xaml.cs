@@ -96,7 +96,7 @@ namespace AutomatedCar
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.M, () => dashBoardViewModel.ToggleRightIndicator()));
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.N, () => dashBoardViewModel.ToggleLeftIndicator()));
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.G, () => dashBoardViewModel.ShiftUp()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.F, () => dashBoardViewModel.ShiftUp()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.F, () => dashBoardViewModel.ShiftDown()));
         }
 
         private void BindParkingPilotAndLaneKeepingFeatures(DashboardViewModel dashBoardViewModel)

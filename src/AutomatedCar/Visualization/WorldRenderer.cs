@@ -187,7 +187,7 @@ namespace AutomatedCar.Visualization
             StreamGeometry streamGeometry = new StreamGeometry();
             using (StreamGeometryContext geometryContext = streamGeometry.Open())
             {
-                geometryContext.BeginFigure(poliList[0], true, true);
+                geometryContext.BeginFigure(poliList[0], true, false);
                 PointCollection points = new PointCollection();
 
                 poliList.ForEach(point => points.Add(point));
@@ -246,30 +246,33 @@ namespace AutomatedCar.Visualization
                 center = new Point(relativePos.X - refPoint.X, relativePos.Y - refPoint.Y);
             }
 
-            foreach (var poligon in poligons)
+            if (poligons != null)
             {
-                List<Point> displayPoints = new List<Point>();
-                foreach (var points in poligon.Points)
+                foreach (var poligon in poligons)
                 {
-                    //TODO itt lehet van neki forgatása
-                    displayPoints.Add(new Point(points.Item1 + center.X, points.Item2 + center.Y));
+                    List<Point> displayPoints = new List<Point>();
+                    foreach (var points in poligon.Points)
+                    {
+                        //TODO itt lehet van neki forgatása
+                        displayPoints.Add(new Point(points.Item1 + center.X, points.Item2 + center.Y));
+                    }
+
+                    StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
+
+                    var x = new Vector(1, 0);
+                    Vector rotated = Vector.Multiply(x, new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0));
+                    double angleBetween = Vector.AngleBetween(x, rotated);
+
+
+                    drawingGeometry.Transform = new RotateTransform(
+                        angleBetween,
+                        relativePos.X,
+                        relativePos.Y
+                    );
+
+                    drawingContext.DrawGeometry(null, PolyPen, drawingGeometry);
                 }
-
-                StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
-
-                var x = new Vector(1, 0);
-                Vector rotated = Vector.Multiply(x, new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0));
-                double angleBetween = Vector.AngleBetween(x, rotated);
-
-
-                drawingGeometry.Transform = new RotateTransform(
-                    angleBetween,
-                    relativePos.X,
-                    relativePos.Y
-                );
-
-                drawingContext.DrawGeometry(null, PolyPen, drawingGeometry);
-            }                 
+            }
         }
     }
 }

@@ -200,12 +200,18 @@ namespace AutomatedCar.ViewModels
 
         public void SteerRightToIdle(double duration)
         {
-            this.SteeringWheelViewModel.Value = (int)Math.Min(this.SteeringWheelViewModel.Value + (duration * 100), 0);
+            if (this.SteeringWheelViewModel.Value < 0)
+            {
+                this.SteeringWheelViewModel.Value = (int)Math.Min(this.SteeringWheelViewModel.Value + (duration * 100), 0);
+            }
         }
 
         public void SteerLeftToIdle(double duration)
         {
-            this.SteeringWheelViewModel.Value = (int)Math.Max(this.SteeringWheelViewModel.Value - (duration * 100), 0);
+            if (this.SteeringWheelViewModel.Value > 0)
+            {
+                this.SteeringWheelViewModel.Value = (int)Math.Max(this.SteeringWheelViewModel.Value - (duration * 100), 0);
+            }
         }
 
         public void HandlePackets(object sender, EventArgs e)

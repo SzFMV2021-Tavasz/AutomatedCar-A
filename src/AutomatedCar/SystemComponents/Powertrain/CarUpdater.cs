@@ -1,4 +1,5 @@
 ﻿using AutomatedCar.Models;
+using AutomatedCar.Models.Enums;
 using AutomatedCar.SystemComponents.Packets;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
     {
         public IVirtualFunctionBus VirtualFunctionBus { get; }
         public IVehicleForces VehicleForces { get; }
-        public IIntegrator Integrator { get;}
+        public IIntegrator Integrator { get; }
+        public ITransmission transmission { get; set; }
 
         private PowertrainComponentPacket powertrainComponentPacket;
         private IPriorityChecker priorityChecker;

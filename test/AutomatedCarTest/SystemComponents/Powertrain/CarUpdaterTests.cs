@@ -63,10 +63,31 @@ namespace Test.SystemComponents.Powertrain
             carUpdater.SetCurrentTransform();
             carUpdater.UpdatePacket();
 
-            Assert.Equal(desiredSteeringWheel, packet.SteeringWheel);
+            Assert.Equal(desiredSteeringWheel, packet.SteeringWheelAngleDegrees);
             Assert.Equal(desiredSpeedKmh, packet.Speed);
             Assert.Equal(desiredPositionUnits.X, packet.X);
             Assert.Equal(desiredPositionUnits.Y, packet.Y);
+        }
+
+        [Fact]
+        public void CarUpdatesWritesSteeringWheelAngleInDegrees()
+        {
+            var steeringWheelMaxRotationDegrees = 60;
+            var inputSteeringWheel = 30;
+            var outputSteeringWheelAngleDegrees = (inputSteeringWheel * steeringWheelMaxRotationDegrees) / 100.0;
+            var packet = new PowertrainComponentPacket();
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0));
+            vfb.HMIPacket = new HMIPacket(0, 0, inputSteeringWheel, Gear.D);
+
+            var vehicleConstants = new VehicleConstants();
+            var vehicleForces = new VehicleForces(vehicleConstants);
+            CarUpdater carUpdater = new CarUpdater(vfb, vehicleForces, mockIntegrator.Object, packet, vehicleConstants);
+            carUpdater.Calculate();
+            carUpdater.SetCurrentTransform();
+            carUpdater.UpdatePacket();
+
+            Assert.Equal(outputSteeringWheelAngleDegrees, packet.SteeringWheelAngleDegrees);
         }
 
         [Fact]

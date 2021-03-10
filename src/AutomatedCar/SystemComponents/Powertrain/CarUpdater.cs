@@ -64,7 +64,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             PacketEnum priority = priorityChecker.SteeringPriorityCheck();
             if (priority == PacketEnum.HMI)
             {
-                currentSteering = (float)((VirtualFunctionBus.HMIPacket.SteeringWheelAngle * 0.6)*(Math.PI / 180));
+                currentSteering = (float)(VirtualFunctionBus.HMIPacket.SteeringWheelAngle * 0.6).DegreesToRadians();
             }
         }
         public void UpdateWorldObject()
@@ -87,7 +87,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             powertrainComponentPacket.X = (int)(worldTransform.Position.X);
             powertrainComponentPacket.Y = (int)(worldTransform.Position.Y);
             powertrainComponentPacket.Speed = (int)(worldTransform.Velocity.Length() * 3.6);
-            powertrainComponentPacket.SteeringWheel = VirtualFunctionBus.HMIPacket.SteeringWheelAngle;
+            powertrainComponentPacket.SteeringWheelAngleDegrees = currentSteering.RadiansToDegrees();
             powertrainComponentPacket.Rpm = (int)Math.Max(1000,VehicleConstants.GetCrankshaftSpeed(VirtualFunctionBus.HMIPacket.GasPedal / 100f));
         }
 

@@ -39,7 +39,7 @@ namespace AutomatedCar.SystemComponents.Packets
             set => this.RaiseAndSetIfChanged(ref this.rpm, value);
         }
 
-        public double SteeringWheel
+        public double SteeringWheelAngleDegrees
         {
             get => this.carHeadingAngle;
             set => this.RaiseAndSetIfChanged(ref this.carHeadingAngle, value);

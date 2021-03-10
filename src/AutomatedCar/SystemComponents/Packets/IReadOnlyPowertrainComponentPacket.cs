@@ -12,6 +12,6 @@ namespace AutomatedCar.SystemComponents.Packets
         int Y { get; }
         int Speed { get; }
         int Rpm { get; }
-        double SteeringWheel { get; }
+        double SteeringWheelAngleDegrees { get; }
     }
 }

@@ -22,7 +22,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         private PowertrainComponentPacket powertrainComponentPacket;
         private VehicleTransform currentTransform;
-        private Vector2 carPos;
         private float currentSteering;
         private Vector2 currentWheelDirection;
         private float currentDirection;
@@ -48,8 +47,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         private void CreateCurrentTransform()
         {
-            this.carPos = Vector2.Zero;
-            currentTransform = new VehicleTransform(carPos, 0, Vector2.Zero, 0);
+            currentTransform = new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0);
         }
         private void SetCurrentWheelDirection()
         {
@@ -97,7 +95,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             SetCurrentDirection();
             SetCurrentWheelDirection();
             Integrator.Reset(currentTransform, deltaTime);
-           // transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
+            transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
             transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)

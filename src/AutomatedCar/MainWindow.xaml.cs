@@ -88,6 +88,15 @@ namespace AutomatedCar
             BindParkingPilotAndLaneKeepingFeatures(dashBoardViewModel);
             BindDebugFeatures();
             BindCarControls(dashBoardViewModel);
+            BindShiftingAndSignaling(dashBoardViewModel);
+        }
+
+        private void BindShiftingAndSignaling(DashboardViewModel dashBoardViewModel)
+        {
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.M, () => dashBoardViewModel.ToggleRightIndicator()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.N, () => dashBoardViewModel.ToggleLeftIndicator()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.G, () => dashBoardViewModel.ShiftUp()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(Key.F, () => dashBoardViewModel.ShiftUp()));
         }
 
         private void BindParkingPilotAndLaneKeepingFeatures(DashboardViewModel dashBoardViewModel)

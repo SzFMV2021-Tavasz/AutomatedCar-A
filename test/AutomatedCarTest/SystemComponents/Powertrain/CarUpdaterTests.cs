@@ -29,7 +29,7 @@ namespace Test.SystemComponents.Powertrain
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(new Vector2(4, 4), 34, desiredVelocity, 15.1f));
 
-            CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, null);
+            CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, null, new VehicleConstants());
             carUpdater.SetCurrentTransform();
             carUpdater.UpdateWorldObject();
 
@@ -48,12 +48,13 @@ namespace Test.SystemComponents.Powertrain
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
             Vector2 desiredVelocity = new Vector2(4, 3);
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(new Vector2(4, 4), 34.3f, desiredVelocity, 15.1f));
+            vfb.HMIPacket = new HMIPacket(0, 0, 0, Gear.D);
 
-            CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, packet);
+            CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, packet, new VehicleConstants());
             carUpdater.SetCurrentTransform();
             carUpdater.UpdatePacket();
 
-            Assert.True(packet.CarHeadingAngle == 34.3f);
+            Assert.True(packet.CarHeadingAngle == 0);
             Assert.True(packet.Speed == desiredVelocity.Length() * 3.6);
             Assert.True(packet.X == 4);
             Assert.True(packet.Y == 4);
@@ -72,7 +73,7 @@ namespace Test.SystemComponents.Powertrain
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
             mockedVehicleForces.Setup(m => m.GetBrakingForce(1f, currentVelocity)).Returns(new Vector2(2, 5));
 
-            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null, null);
             carUpdater.transmission = transmission;
             carUpdater.priorityChecker = mockPrioChecker.Object;
             carUpdater.SetCurrentTransform();
@@ -90,7 +91,7 @@ namespace Test.SystemComponents.Powertrain
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
             vfb.HMIPacket = new HMIPacket(0, 0, 0, Gear.D);
 
-            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null, null);
             carUpdater.transmission = transmission;
             carUpdater.SetCurrentTransform();
             carUpdater.Calculate();
@@ -110,7 +111,7 @@ namespace Test.SystemComponents.Powertrain
             mockedVehicleForces.Setup(m => m.GetDragForce(velocity)).Returns(new Vector2(2, 5));
             mockedVehicleForces.Setup(m => m.GetWheelDirectionHackForce(wheelDirection, velocity)).Returns(new Vector2(1, 1));
 
-            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null, null);
             carUpdater.transmission = transmission;
             carUpdater.SetCurrentTransform();
             carUpdater.UpdateWorldObject();

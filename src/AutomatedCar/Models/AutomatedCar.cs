@@ -3,18 +3,27 @@ namespace AutomatedCar.Models
     using SystemComponents;
     using System.Windows.Shapes;
     using System.Numerics;
+    using global::AutomatedCar.SystemComponents.Powertrain;
 
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
         private DummySensor dummySensor;
+        private PowertrainComponent powertrain;
+        IVehicleForces VehicleForces;
+        IVehicleConstants VehicleConstants;
+        IIntegrator Integrator;
 
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.dummySensor = new DummySensor(this.virtualFunctionBus);
+            this.VehicleConstants = new VehicleConstants();
+            this.VehicleForces = new VehicleForces(VehicleConstants);
+            this.Integrator = new Integrator(VehicleConstants);
 
+            this.powertrain = new PowertrainComponent(this.virtualFunctionBus, VehicleForces, VehicleConstants, Integrator);
             CarHeading = 0;
             AngularVelocity = 0;
             CurrentSteering = 0;

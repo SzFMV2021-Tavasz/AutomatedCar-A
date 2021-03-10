@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
+using AutomatedCar.SystemComponents.SystemDebug;
 
 namespace AutomatedCar.Visualization
 {
@@ -45,7 +46,9 @@ namespace AutomatedCar.Visualization
 
         public WorldRenderer()
         {
-            Loaded += WorldRenderer_Loaded;
+            Loaded += WorldRenderer_Loaded;   
+            HMIDebug.DebugActionEventHandler += Debug_EventCacher;
+
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -222,6 +225,14 @@ namespace AutomatedCar.Visualization
 
             renderCamera.Width = ActualWidth;
             renderCamera.Height = ActualHeight;
+        }
+
+        private void Debug_EventCacher(object sender,DebugActionArgs args)
+        {
+            drawDebugCamera = args.DebugVideo;
+            drawDebugRadar = args.DebugRadar;
+            drawDebugSonic = args.DebugSonic;
+            drawPolygons = args.DebugPolys;
         }
 
         private Point getMiddleReference(Double x, Double y, Double width, Double height)

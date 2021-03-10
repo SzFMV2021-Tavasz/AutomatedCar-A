@@ -114,10 +114,10 @@ namespace AutomatedCar
 
         private void BindCarControls(DashboardViewModel dashBoardViewModel)
         {
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up, (duration) => dashBoardViewModel.MoveGasPedalDown(duration), (duration) => dashBoardViewModel.MoveGasPedalUp(duration)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down, (duration) => dashBoardViewModel.MoveBrakePedalDown(duration), (duration) => dashBoardViewModel.MoveBrakePedalUp(duration)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Left, (duration) => dashBoardViewModel.SteerLeft(duration), (duration) => dashBoardViewModel.SteerRightToIdle(duration)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right, (duration) => dashBoardViewModel.SteerRight(duration), (duration) => dashBoardViewModel.SteerLeftToIdle(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.W, (duration) => dashBoardViewModel.MoveGasPedalDown(duration), (duration) => dashBoardViewModel.MoveGasPedalUp(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.S, (duration) => dashBoardViewModel.MoveBrakePedalDown(duration), (duration) => dashBoardViewModel.MoveBrakePedalUp(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.A, (duration) => dashBoardViewModel.SteerLeft(duration), (duration) => dashBoardViewModel.SteerRightToIdle(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.D, (duration) => dashBoardViewModel.SteerRight(duration), (duration) => dashBoardViewModel.SteerLeftToIdle(duration)));
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)

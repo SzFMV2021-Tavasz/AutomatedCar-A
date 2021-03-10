@@ -24,7 +24,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private float currentSteering;
         private Vector2 currentWheelDirection;
         private float currentDirection;
-        private float deltaTime = 1 / 20;
+        private float deltaTime = 0.05f;
         public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket)
         {
             this.VirtualFunctionBus = virtualFunctionBus;
@@ -70,13 +70,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
             World.Instance.ControlledCar.AngularVelocity = currentTransform.AngularVelocity;
             World.Instance.ControlledCar.CurrentSteering = currentSteering;
             World.Instance.ControlledCar.Velocity = currentTransform.Velocity;
-            World.Instance.ControlledCar.Speed = (int)currentTransform.Velocity.Length();
+            World.Instance.ControlledCar.Speed = (int)(currentTransform.Velocity.Length()*3.6);
         }
         public void UpdatePacket()
         {
             powertrainComponentPacket.X = (int)currentTransform.Position.X;
             powertrainComponentPacket.Y = (int)currentTransform.Position.Y;
-            powertrainComponentPacket.Speed = (int)currentTransform.Velocity.Length();
+            powertrainComponentPacket.Speed = (int)(currentTransform.Velocity.Length() * 3.6);
             powertrainComponentPacket.CarHeadingAngle = currentTransform.AngularDisplacement;
         }
         public void Calculate()
@@ -94,12 +94,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
             {
                 if (transmission.Gear != Gear.R)
                 {
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100, currentTransform.Velocity));
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100, currentWheelDirection, transmission.InsideGear));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection, transmission.InsideGear));
                 }
                 else
                 {
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForceInReverse(100, currentWheelDirection));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForceInReverse(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection));
                 }
                 
             }

@@ -102,7 +102,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
                     {
                         Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection, transmission.InsideGear));
                     }
-                    }
+                }
                 else
                 {
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));

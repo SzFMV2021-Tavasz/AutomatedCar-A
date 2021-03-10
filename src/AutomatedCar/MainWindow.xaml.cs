@@ -69,6 +69,7 @@ namespace AutomatedCar
             var controlledCar = new Models.AutomatedCar(50, 50, "car_1_white.png");
             controlledCar.Width = 108;
             controlledCar.Height = 240;
+            controlledCar.IsHighLighted = true;
 
             // read the world object polygons, get the one for the car in a primitive way
             // this is just a sample, the proecssing shold be much more general

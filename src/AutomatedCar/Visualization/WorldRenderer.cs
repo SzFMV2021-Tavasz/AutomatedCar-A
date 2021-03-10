@@ -26,7 +26,7 @@ namespace AutomatedCar.Visualization
         private readonly RenderCamera renderCamera = new RenderCamera();
 
         private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
-        private readonly Pen PolyPenHighLight = new Pen(Brushes.OrangeRed, 2);
+        private readonly Pen PolyPenHighLight = new Pen(Brushes.Yellow, 5);
 
         private Boolean drawPolygons = true;
         private Boolean drawDebugCamera = false;

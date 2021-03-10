@@ -26,10 +26,11 @@ namespace AutomatedCar.Visualization
         private readonly RenderCamera renderCamera = new RenderCamera();
 
         private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
+        private readonly Pen VideoPen = new Pen(Brushes.Black, 2);
         private readonly Pen PolyPenHighLight = new Pen(Brushes.Yellow, 5);
 
         private Boolean drawPolygons = true;
-        private Boolean drawDebugCamera = false;
+        private Boolean drawDebugVideo = true;
         private Boolean drawDebugRadar = false;
         private Boolean drawDebugSonic = false;
 
@@ -147,7 +148,35 @@ namespace AutomatedCar.Visualization
         private void RenderCar(DrawingContext drawingContext, Models.AutomatedCar car)
         {
             DrawingGroup drawingGroup = RenderImage(car);
-            
+
+            if (drawDebugVideo)
+            {
+                List<Point> carPolyList = new List<Point>();
+
+                foreach (var item in car.Video.Points)
+                {
+                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                }
+
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.Aqua, VideoPen, carPoly);
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                );
+            }
+
+            if (drawDebugRadar)
+            {
+
+            }
+
+            if (drawDebugSonic)
+            {
+
+            }
+
             if (drawPolygons)
             {
                 List<Point> carPolyList = new List<Point>();
@@ -157,7 +186,7 @@ namespace AutomatedCar.Visualization
                     carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
                 }
 
-                StreamGeometry carPoly = getPolyByPointList(carPolyList);
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, false);
 
                 GeometryDrawing geometryDrawing = new GeometryDrawing(null, car.IsHighLighted ? PolyPenHighLight : PolyPen, carPoly); 
 
@@ -171,13 +200,13 @@ namespace AutomatedCar.Visualization
             drawingContext.DrawDrawing(drawingGroup);
         }
 
-        private StreamGeometry getPolyByPointList(List<Point> poliList)
+        private StreamGeometry getPolyByPointList(List<Point> poliList, bool isClosed)
         {
             StreamGeometry streamGeometry = new StreamGeometry();
 
             using (StreamGeometryContext geometryContext = streamGeometry.Open())
             {
-                geometryContext.BeginFigure(poliList[0], true, false);
+                geometryContext.BeginFigure(poliList[0], true, isClosed);
                 
                 PointCollection points = new PointCollection();
 
@@ -229,7 +258,7 @@ namespace AutomatedCar.Visualization
 
         private void Debug_EventCacher(object sender,DebugActionArgs args)
         {
-            drawDebugCamera = args.DebugVideo;
+            drawDebugVideo = args.DebugVideo;
             drawDebugRadar = args.DebugRadar;
             drawDebugSonic = args.DebugSonic;
             drawPolygons = args.DebugPolys;

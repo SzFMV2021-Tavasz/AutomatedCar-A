@@ -84,6 +84,12 @@ namespace AutomatedCar
             // add polyline to the car
             controlledCar.Geometry = geom;
 
+            var video = new Polyline();
+            video.Points.Add(new Point(54,120));
+            video.Points.Add(new Point(0,-120));
+            video.Points.Add(new Point(108, -120));
+            controlledCar.Video = video;
+
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();

@@ -30,5 +30,9 @@ namespace AutomatedCar.Models
         }
 
         public Polyline Geometry { get; set; }
+
+        public Polyline Video { get; set; }
+        public Polyline Radar { get; set; }
+        public Polyline UltraSonic { get; set; }
     }
 }

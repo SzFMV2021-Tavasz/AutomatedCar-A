@@ -35,8 +35,7 @@ namespace AutomatedCar.Visualization
 
             foreach (var renderable in renderables)
             {
-                if (IsVisibleInViewport(renderable))
-                    visible.Add(renderable);
+                visible.Add(renderable);
             }
 
             return visible;

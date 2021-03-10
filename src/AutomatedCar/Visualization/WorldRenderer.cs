@@ -196,7 +196,7 @@ namespace AutomatedCar.Visualization
 
                 StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
 
-                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightGreen, VideoPen, carPoly);
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightGreen, SensorPen, carPoly);
 
                 drawingGroup.Children.Add(
                     geometryDrawing

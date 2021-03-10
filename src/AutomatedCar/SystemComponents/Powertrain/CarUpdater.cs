@@ -17,6 +17,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public IIntegrator Integrator { get; }
         public ITransmission transmission { get; set; }
         public IPriorityChecker priorityChecker { get; set; }
+        public IVehicleConstants VehicleConstants { get; }
 
         private PowertrainComponentPacket powertrainComponentPacket;
         private VehicleTransform currentTransform;
@@ -25,12 +26,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private Vector2 currentWheelDirection;
         private float currentDirection;
         private float deltaTime = 0.05f;
-        public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket)
+        public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket, IVehicleConstants vehicleConstants)
         {
             this.VirtualFunctionBus = virtualFunctionBus;
             this.VehicleForces = vehicleForces;
             this.Integrator = integrator;
             this.powertrainComponentPacket = powertrainPacket;
+            this.VehicleConstants = vehicleConstants;
 
             currentSteering = 0;
             currentWheelDirection = new Vector2((float)Math.Cos(currentDirection), (float)Math.Sin(currentDirection));
@@ -79,6 +81,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             powertrainComponentPacket.Y = (int)(currentTransform.Position.Y);
             powertrainComponentPacket.Speed = (int)(currentTransform.Velocity.Length() * 3.6);
             powertrainComponentPacket.CarHeadingAngle = VirtualFunctionBus.HMIPacket.SteeringWheelAngle;
+            powertrainComponentPacket.Rpm = (int)Math.Max(1000,VehicleConstants.GetCrankshaftSpeed(VirtualFunctionBus.HMIPacket.GasPedal / 100f));
         }
         public void Calculate()
         {

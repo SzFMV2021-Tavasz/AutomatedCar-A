@@ -106,7 +106,7 @@ namespace AutomatedCar.Visualization
                     foreach (var points in poligon.Points)
                         displayPoints.Add(new Point(points.Item1 + center.X, points.Item2 + center.Y));
 
-                    StreamGeometry streamGeometry = getPolyByPointList(displayPoints);
+                    StreamGeometry streamGeometry = getPolyByPointList(displayPoints, false);
                     GeometryDrawing drawingGeometry = new GeometryDrawing(null, renderable.IsHighLighted ? PolyPenHighLight : PolyPen, streamGeometry);
 
                     drawingGroup.Children.Add(drawingGeometry);

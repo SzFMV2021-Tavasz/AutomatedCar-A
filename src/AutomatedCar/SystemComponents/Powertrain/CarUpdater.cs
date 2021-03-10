@@ -94,8 +94,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
             {
                 if (transmission.Gear != Gear.R)
                 {
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce((100), currentTransform.Velocity));
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce((100), currentWheelDirection, transmission.InsideGear));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100, currentTransform.Velocity));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100, currentWheelDirection, transmission.InsideGear));
                 }
                 else
                 {

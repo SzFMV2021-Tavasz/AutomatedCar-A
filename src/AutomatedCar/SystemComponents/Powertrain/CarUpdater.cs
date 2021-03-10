@@ -65,8 +65,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
         public void UpdateWorldObject()
         {
-            World.Instance.ControlledCar.X = (int)currentTransform.Position.X;
-            World.Instance.ControlledCar.Y = (int)currentTransform.Position.Y;
+            World.Instance.ControlledCar.X = (int)(currentTransform.Position.X);
+            World.Instance.ControlledCar.Y = (int)(currentTransform.Position.Y);
             World.Instance.ControlledCar.CarHeading = currentTransform.AngularDisplacement;
             World.Instance.ControlledCar.AngularVelocity = currentTransform.AngularVelocity;
             World.Instance.ControlledCar.CurrentSteering = currentSteering;
@@ -75,10 +75,10 @@ namespace AutomatedCar.SystemComponents.Powertrain
         }
         public void UpdatePacket()
         {
-            powertrainComponentPacket.X = (int)currentTransform.Position.X;
-            powertrainComponentPacket.Y = (int)currentTransform.Position.Y;
+            powertrainComponentPacket.X = (int)(currentTransform.Position.X);
+            powertrainComponentPacket.Y = (int)(currentTransform.Position.Y);
             powertrainComponentPacket.Speed = (int)(currentTransform.Velocity.Length() * 3.6);
-            powertrainComponentPacket.CarHeadingAngle = currentTransform.AngularDisplacement;
+            powertrainComponentPacket.CarHeadingAngle = VirtualFunctionBus.HMIPacket.SteeringWheelAngle;
         }
         public void Calculate()
         {

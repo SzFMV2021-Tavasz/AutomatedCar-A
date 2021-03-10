@@ -168,6 +168,46 @@ namespace AutomatedCar.ViewModels
 
         public void ShiftDown() => this.TransmissionViewModel.ShiftDown();
 
+        public void MoveGasPedalDown(double duration)
+        {
+            this.GasPedalViewModel.Value = (int)Math.Min(this.GasPedalViewModel.Value + (duration * 100), 100);
+        }
+
+        public void MoveGasPedalUp(double duration)
+        {
+            this.GasPedalViewModel.Value = (int)Math.Max(this.GasPedalViewModel.Value - (duration * 100), 0);
+        }
+
+        public void MoveBrakePedalDown(double duration)
+        {
+            this.BreakPedalViewModel.Value = (int)Math.Min(this.BreakPedalViewModel.Value + (duration * 200), 100);
+        }
+
+        public void MoveBrakePedalUp(double duration)
+        {
+            this.BreakPedalViewModel.Value = (int)Math.Max(this.BreakPedalViewModel.Value - (duration * 200), 0);
+        }
+
+        public void SteerLeft(double duration)
+        {
+            this.SteeringWheelViewModel.Value = (int)Math.Max(this.SteeringWheelViewModel.Value - (duration * 100), -100);
+        }
+
+        public void SteerRight(double duration)
+        {
+            this.SteeringWheelViewModel.Value = (int)Math.Min(this.SteeringWheelViewModel.Value + (duration * 100), 100);
+        }
+
+        public void SteerRightToIdle(double duration)
+        {
+            this.SteeringWheelViewModel.Value = (int)Math.Min(this.SteeringWheelViewModel.Value + (duration * 100), 0);
+        }
+
+        public void SteerLeftToIdle(double duration)
+        {
+            this.SteeringWheelViewModel.Value = (int)Math.Max(this.SteeringWheelViewModel.Value - (duration * 100), 0);
+        }
+
         public void HandlePackets(object sender, EventArgs e)
         {
             if (this.ControlledCar != null)

@@ -36,6 +36,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             currentWheelDirection = new Vector2((float)Math.Cos(currentDirection), (float)Math.Sin(currentDirection));
             currentDirection = 0;
             priorityChecker = new PriorityChecker();
+            transmission = new Transmission() {Gear = Gear.D};
             priorityChecker.virtualFunctionBus = this.VirtualFunctionBus;
             CreateCurrentTransform();
         }
@@ -85,7 +86,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             CalculateSteeringAngle();
             SetCurrentDirection();
             SetCurrentWheelDirection();
-            transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
+           // transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
             transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)

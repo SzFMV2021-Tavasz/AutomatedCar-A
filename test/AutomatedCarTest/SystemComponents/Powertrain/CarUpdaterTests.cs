@@ -20,6 +20,7 @@ namespace Test.SystemComponents.Powertrain
         private Mock<IIntegrator> mockIntegrator = new Mock<IIntegrator>();
         private Mock<IPriorityChecker> mockPrioChecker = new Mock<IPriorityChecker>();
         private Mock<IVehicleForces> mockedVehicleForces = new Mock<IVehicleForces>();
+        private ITransmission transmission = new Transmission();
 
         [Fact]
         public void CarUpdaterUpdatesTheControlledCarProperties()
@@ -37,7 +38,7 @@ namespace Test.SystemComponents.Powertrain
             Assert.True(World.Instance.ControlledCar.Velocity == desiredVelocity);
             Assert.True(World.Instance.ControlledCar.AngularVelocity == 15.1f);
             Assert.True(World.Instance.ControlledCar.CarHeading == 34);
-            Assert.True(World.Instance.ControlledCar.Speed == desiredVelocity.Length());
+            Assert.True(World.Instance.ControlledCar.Speed == desiredVelocity.Length() * 3.6);
         }
 
         [Fact]
@@ -53,42 +54,32 @@ namespace Test.SystemComponents.Powertrain
             carUpdater.UpdatePacket();
 
             Assert.True(packet.CarHeadingAngle == 34.3f);
-            Assert.True(packet.Speed == desiredVelocity.Length());
+            Assert.True(packet.Speed == desiredVelocity.Length() * 3.6);
             Assert.True(packet.X == 4);
             Assert.True(packet.Y == 4);
         }
 
-        [Theory]
-        [InlineData(PacketEnum.AEB)]
-        [InlineData(PacketEnum.HMI)]
-        public void CalculateInvokesForceCalculatingMethodsAccordingToPacketPriority(PacketEnum highestPriorityPacket)
+        [Fact]
+        public void CalculateInvokesForceCalculatingMethodsAccordingToPacketPriority()
         {
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
-            mockPrioChecker.Setup(m => m.AccelerationPriorityCheck()).Returns(highestPriorityPacket);
+            mockPrioChecker.Setup(m => m.AccelerationPriorityCheck()).Returns(PacketEnum.AEB);
+            vfb.HMIPacket = new HMIPacket(0, 0, 0, Gear.D);
 
             Vector2 currentVelocity = new Vector2(2, 3);
             Vector2 currentWheelDirection = new Vector2(1, 0);
             VehicleTransform vehicleTransform = new VehicleTransform(new Vector2(4, 4), 0, currentVelocity, 15.1f);
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
             mockedVehicleForces.Setup(m => m.GetBrakingForce(1f, currentVelocity)).Returns(new Vector2(2, 5));
-            mockedVehicleForces.Setup(m => m.GetBrakingForce(100, currentVelocity)).Returns(new Vector2(2, 5));
-            mockedVehicleForces.Setup(m => m.GetTractiveForce(100, currentWheelDirection, 2)).Returns(new Vector2(1, 1));
 
             CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
-            carUpdater.transmission = new Transmission() { Gear = Gear.D, InsideGear = 2 };
+            carUpdater.transmission = transmission;
             carUpdater.priorityChecker = mockPrioChecker.Object;
             carUpdater.SetCurrentTransform();
             carUpdater.Calculate();
 
-            if (highestPriorityPacket == PacketEnum.AEB)
-            {
-                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(1f, currentVelocity)), Times.Once);
-            }
-            else if (highestPriorityPacket == PacketEnum.HMI)
-            {
-                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(100, currentVelocity)), Times.Once);
-                mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetTractiveForce(100, currentWheelDirection, 2)), Times.Once);
-            }
+            mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(1f, currentVelocity)), Times.Once);
+            
         }
 
         [Fact]
@@ -97,18 +88,21 @@ namespace Test.SystemComponents.Powertrain
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
             VehicleTransform vehicleTransform = new VehicleTransform(new Vector2(4, 4), 34.3f, Vector2.Zero, 15.1f);
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(vehicleTransform);
+            vfb.HMIPacket = new HMIPacket(0, 0, 0, Gear.D);
 
             CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            carUpdater.transmission = transmission;
             carUpdater.SetCurrentTransform();
             carUpdater.Calculate();
 
-            mockIntegrator.Verify(m => m.Reset(vehicleTransform, 1 / 30), Times.Once);
+            mockIntegrator.Verify(m => m.Reset(vehicleTransform, 0.05f), Times.Once);
         }
 
         [Fact]
         public void CalculateInvokesStaticForceCalculatingMethods()
         {
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            vfb.HMIPacket = new HMIPacket(0, 0, 0, Gear.D);
             Vector2 velocity = new Vector2(2, 3);
             Vector2 wheelDirection = new Vector2(1, 0);
             VehicleTransform vehicleTransform = new VehicleTransform(new Vector2(4, 4), 0, velocity, 15.1f);
@@ -117,6 +111,7 @@ namespace Test.SystemComponents.Powertrain
             mockedVehicleForces.Setup(m => m.GetWheelDirectionHackForce(wheelDirection, velocity)).Returns(new Vector2(1, 1));
 
             CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null);
+            carUpdater.transmission = transmission;
             carUpdater.SetCurrentTransform();
             carUpdater.UpdateWorldObject();
             carUpdater.Calculate();

@@ -13,7 +13,6 @@ namespace Test.SystemComponents.Powertrain
     public class PowertrainComponentTests
     {
         Mock<IVirtualFunctionBus> mockBus = new Mock<IVirtualFunctionBus>();
-        Mock<IPriorityChecker> mockedPriorityChecker = new Mock<IPriorityChecker>();
 
         IVirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 

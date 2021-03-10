@@ -1,5 +1,5 @@
-﻿using AutomatedCar.Models;
-using AutomatedCar.Visualization;
+﻿using AutomatedCar.Visualization;
+using BaseModel.Interfaces;
 using Moq;
 using System.Collections.Generic;
 using System.Windows;

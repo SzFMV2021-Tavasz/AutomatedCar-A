@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BaseModel.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Runtime.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BaseModel.WorldObjects
 {
-    public abstract class WorldObject
+    public abstract class WorldObject : IRenderableWorldObject
     {
         /// <summary>
         /// After inheriting from this object, you are expected to call validate() to ensure
@@ -31,7 +30,7 @@ namespace BaseModel.WorldObjects
         }
 
         /// <summary>
-        /// If a type is not found in the dictionary, then it is interpreted as the object 
+        /// If a type is not found in the dictionary, then it is interpreted as the object
         /// not being able to collide with other objects possessing this trait.
         /// </summary>
         public Dictionary<Type, List<Polygon>> PolygonDictionary { private get; set; }
@@ -50,7 +49,8 @@ namespace BaseModel.WorldObjects
                 try
                 {
                     return PolygonDictionary[this._objectType];
-                } catch (KeyNotFoundException)
+                }
+                catch (KeyNotFoundException)
                 {
                     return null;
                 }
@@ -62,17 +62,22 @@ namespace BaseModel.WorldObjects
 
         [JsonProperty("x")]
         public int X { get; set; }
+
         [JsonProperty("y")]
         public int Y { get; set; }
+
         [JsonIgnore]
         public int ZIndex { get; set; }
 
         [JsonProperty("m11")]
         public float Transformation_m11;
+
         [JsonProperty("m12")]
         public float Transformation_m12;
+
         [JsonProperty("m21")]
         public float Transformation_m21;
+
         [JsonProperty("m22")]
         public float Transformation_m22;
 
@@ -96,6 +101,34 @@ namespace BaseModel.WorldObjects
         [JsonProperty("type")]
         [JsonConverter(typeof(StringEnumConverter))]
         public Type ObjectType => _objectType;
+
+        public string Filename { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
+
+        public float M11
+        {
+            get => Transformation_m11;
+            set => Transformation_m11 = value;
+        }
+
+        public float M12
+        {
+            get => Transformation_m12;
+            set => Transformation_m12 = value;
+        }
+
+        public float M21
+        {
+            get => Transformation_m21;
+            set => Transformation_m21 = value;
+        }
+
+        public float M22
+        {
+            get => Transformation_m22;
+            set => Transformation_m22 = value;
+        }
 
         public enum Type
         {
@@ -135,7 +168,7 @@ namespace BaseModel.WorldObjects
             TREE,
             WOMAN,
         }
-        
+
         [Flags]
         public enum Tag
         {

@@ -8,6 +8,7 @@ using AutomatedCar.ViewModels;
 using Newtonsoft.Json.Linq;
 using AutomatedCar.KeyboardHandling;
 using AutomatedCar.SystemComponents.SystemDebug;
+using System.IO;
 
 namespace AutomatedCar
 {
@@ -51,8 +52,12 @@ namespace AutomatedCar
             MainDockPanel.Focus();
 
 
-            world.Width = 2000;
-            world.Height = 1000;
+            //world.Width = 2000;
+            //world.Height = 1000;
+            var path = $"{Directory.GetCurrentDirectory()}/Assets";
+            var worldPath = $"{path}/test_world.json";
+            var polygonsPath = $"{path}/worldobject_polygons.json";
+            world.LoadFromJSON(worldPath, polygonsPath);
 
             var circle = new Circle(400, 200, "circle.png", 20);
             circle.Width = 40;
@@ -87,6 +92,7 @@ namespace AutomatedCar
             BindACCFeatures(dashBoardViewModel);
             BindParkingPilotAndLaneKeepingFeatures(dashBoardViewModel);
             BindDebugFeatures();
+            BindCarControls(dashBoardViewModel);
         }
 
         private void BindParkingPilotAndLaneKeepingFeatures(DashboardViewModel dashBoardViewModel)
@@ -109,6 +115,22 @@ namespace AutomatedCar
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.Subtract, () => dashBoardViewModel.DecreaseACCDesiredSpeed()));
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.T, () => dashBoardViewModel.SetToNextACCDesiredDistance()));
             keyboardHandler.PressableKeys.Add(new PressableKey(Key.RightCtrl, () => dashBoardViewModel.ToggleACC()));
+        }
+
+        private void BindCarControls(DashboardViewModel dashBoardViewModel)
+        {
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Up,
+                (duration) => dashBoardViewModel.GasPedalViewModel.Value = (int)Math.Min(dashBoardViewModel.GasPedalViewModel.Value + (duration * 100), 100),
+                (duration) => dashBoardViewModel.GasPedalViewModel.Value = (int)Math.Max(dashBoardViewModel.GasPedalViewModel.Value - (duration * 100), 0)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Down,
+                (duration) => dashBoardViewModel.BreakPedalViewModel.Value = (int)Math.Min(dashBoardViewModel.BreakPedalViewModel.Value + (duration * 200), 100),
+                (duration) => dashBoardViewModel.BreakPedalViewModel.Value = (int)Math.Max(dashBoardViewModel.BreakPedalViewModel.Value - (duration * 200), 0)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Left,
+                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Max(dashBoardViewModel.SteeringWheelViewModel.Value - (duration * 100), -100),
+                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Min(dashBoardViewModel.SteeringWheelViewModel.Value + (duration * 100), 0)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.Right,
+                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Min(dashBoardViewModel.SteeringWheelViewModel.Value + (duration * 100), 100),
+                (duration) => dashBoardViewModel.SteeringWheelViewModel.Value = (int)Math.Max(dashBoardViewModel.SteeringWheelViewModel.Value - (duration * 100), 0)));
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)

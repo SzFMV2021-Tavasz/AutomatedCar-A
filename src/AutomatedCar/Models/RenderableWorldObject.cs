@@ -68,5 +68,6 @@ namespace AutomatedCar.Models
         }
 
         public string Filename { get; set; }
+        public bool IsHighLighted { get; set; }
     }
 }

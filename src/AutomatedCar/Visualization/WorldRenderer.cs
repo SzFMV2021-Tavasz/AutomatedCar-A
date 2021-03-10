@@ -106,7 +106,7 @@ namespace AutomatedCar.Visualization
                         displayPoints.Add(new Point(points.Item1 + center.X, points.Item2 + center.Y));
 
                     StreamGeometry streamGeometry = getPolyByPointList(displayPoints);
-                    GeometryDrawing drawingGeometry = new GeometryDrawing(null, PolyPen, streamGeometry);
+                    GeometryDrawing drawingGeometry = new GeometryDrawing(null, renderable.IsHighLighted ? PolyPenHighLight : PolyPen, streamGeometry);
 
                     drawingGroup.Children.Add(drawingGeometry);
                 }
@@ -159,7 +159,7 @@ namespace AutomatedCar.Visualization
 
                 StreamGeometry carPoly = getPolyByPointList(carPolyList);
 
-                GeometryDrawing geometryDrawing = new GeometryDrawing(null, PolyPen, carPoly); 
+                GeometryDrawing geometryDrawing = new GeometryDrawing(null, car.IsHighLighted ? PolyPenHighLight : PolyPen, carPoly); 
 
                 drawingGroup.Children.Add(
                     geometryDrawing

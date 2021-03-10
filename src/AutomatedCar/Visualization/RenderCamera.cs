@@ -26,7 +26,6 @@ namespace AutomatedCar.Visualization
                 MiddleX = originX;
                 MiddleY = originY;
             }
-            
         }
 
         public List<IRenderableWorldObject> Filter(List<IRenderableWorldObject> renderables)

@@ -49,7 +49,6 @@ namespace AutomatedCar.Visualization
         {
             Loaded += WorldRenderer_Loaded;   
             HMIDebug.DebugActionEventHandler += Debug_EventCacher;
-
         }
 
         protected override void OnRender(DrawingContext drawingContext)

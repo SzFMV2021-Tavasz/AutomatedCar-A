@@ -85,6 +85,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
             CalculateSteeringAngle();
             SetCurrentDirection();
             SetCurrentWheelDirection();
+            transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
+            transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)
             {
@@ -92,16 +94,21 @@ namespace AutomatedCar.SystemComponents.Powertrain
             }
             else if (priority == PacketEnum.HMI)
             {
+                
                 if (transmission.Gear != Gear.R)
                 {
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection, transmission.InsideGear));
-                }
+                    if (transmission.Gear == Gear.D)
+                    {
+                        Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection, transmission.InsideGear));
+                    }
+                    }
                 else
                 {
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForceInReverse(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection));
                 }
+                
                 
             }
             else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)

@@ -80,7 +80,6 @@ namespace Test.SystemComponents.Powertrain
             carUpdater.Calculate();
 
             mockIntegrator.Verify(m => m.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetBrakingForce(1f, currentVelocity)), Times.Once);
-            
         }
 
         [Fact]
@@ -122,6 +121,5 @@ namespace Test.SystemComponents.Powertrain
             mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetWheelDirectionHackForce(wheelDirection, velocity)), Times.Once);
             mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Back, mockedVehicleForces.Object.GetWheelDirectionHackForce(wheelDirection, velocity)), Times.Once);
         }
-
     }
 }

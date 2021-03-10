@@ -98,7 +98,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
             }
             else if (priority == PacketEnum.HMI)
             {
-                
                 if (transmission.Gear != Gear.R)
                 {
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
@@ -112,13 +111,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
                     Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForceInReverse(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection));
                 }
-                
-                
+                 
             }
             else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)
             {
             }
-
             Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetDragForce(currentTransform.Velocity));
             Integrator.AccumulateForce(WheelKind.Back, VehicleForces.GetDragForce(currentTransform.Velocity));
             Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetWheelDirectionHackForce(currentWheelDirection, currentTransform.Velocity));

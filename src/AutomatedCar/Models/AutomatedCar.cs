@@ -29,7 +29,6 @@ namespace AutomatedCar.Models
             CurrentSteering = 0;
             Velocity = Vector2.Zero;
             RPM = 0;
-
         }
 
         public VirtualFunctionBus VirtualFunctionBus { get => this.virtualFunctionBus; }

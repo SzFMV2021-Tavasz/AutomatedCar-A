@@ -30,21 +30,16 @@ namespace AutomatedCar
         public MainWindow()
         {
             ViewModel = new MainWindowViewModel(world);
-            
-                       
+                      
             InitializeComponent();
            
             hmiDebug = new HMIDebug();
-            keyboardHandler = new KeyboardHandler(tickInterval);
-          
-
+            keyboardHandler = new KeyboardHandler(tickInterval);          
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
-            
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
-
 
             //world.Width = 2000;
             //world.Height = 1000;

@@ -12,6 +12,5 @@ namespace AutomatedCar.SystemComponents.Powertrain
         Gear Gear { get; set; }
         int InsideGear { get; set; }
         void SetInsideGear(int rpm);
-    
     }
 }

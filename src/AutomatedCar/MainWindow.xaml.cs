@@ -1,16 +1,14 @@
-﻿using System;
+﻿using AutomatedCar.KeyboardHandling;
+using AutomatedCar.Models;
+using AutomatedCar.SystemComponents.SystemDebug;
+using AutomatedCar.ViewModels;
+using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using AutomatedCar.Models;
-using AutomatedCar.ViewModels;
-using Newtonsoft.Json.Linq;
-using AutomatedCar.KeyboardHandling;
-using AutomatedCar.SystemComponents.SystemDebug;
-using System.IO;
-using AutomatedCar.SystemComponents.Packets;
-using AutomatedCar.SystemComponents;
 
 namespace AutomatedCar
 {
@@ -48,7 +46,7 @@ namespace AutomatedCar
 
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
-
+            timer.Tick += dashBoardViewModel.HandlePackets;
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
@@ -147,38 +145,12 @@ namespace AutomatedCar
         private void logic(object sender, EventArgs e)
         {
             HandleMovement();
-            HandlePackets();
             CourseDisplay.InvalidateVisual();
         }
 
         private void HandleMovement()
         {
             keyboardHandler.Tick();
-        }
-
-        private void HandlePackets()
-        {
-            VirtualFunctionBus bus = world.ControlledCar.VirtualFunctionBus;
-            if (bus != null)
-            {
-                DashboardViewModel dashboard = ViewModel.Dashboard as DashboardViewModel;
-                if (dashboard != null)
-                {
-                    bus.HMIPacket = new HMIPacket(
-                    dashboard.GasPedalViewModel.Value,
-                    dashboard.BreakPedalViewModel.Value,
-                    dashboard.SteeringWheelViewModel.Value,
-                    dashboard.TransmissionViewModel.CurrentGear);
-                    if (bus.PowertrainPacket != null)
-                    {
-                        dashboard.CarInfoViewModel.X = bus.PowertrainPacket.X;
-                        dashboard.CarInfoViewModel.Y = bus.PowertrainPacket.Y;
-                        dashboard.SpeedGaugeViewModel.SetValue(bus.PowertrainPacket.Speed);
-                        dashboard.RpmGaugeViewModel.SetValue(bus.PowertrainPacket.Rpm);
-                        dashboard.CarInfoViewModel.SteeringWheelAngle = (int)bus.PowertrainPacket.CarHeadingAngle;
-                    }
-                }
-            }
         }
 
     }

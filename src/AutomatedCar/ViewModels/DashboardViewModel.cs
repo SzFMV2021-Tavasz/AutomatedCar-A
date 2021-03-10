@@ -1,7 +1,10 @@
 namespace AutomatedCar.ViewModels
 {
-    using AutomatedCar.Models;    
+    using AutomatedCar.Models;
+    using AutomatedCar.SystemComponents;
+    using AutomatedCar.SystemComponents.Packets;
     using ReactiveUI;
+    using System;
 
     public class DashboardViewModel : ViewModelBase
     {
@@ -164,5 +167,25 @@ namespace AutomatedCar.ViewModels
         public void ShiftUp() => this.TransmissionViewModel.ShiftUp();
 
         public void ShiftDown() => this.TransmissionViewModel.ShiftDown();
+
+        public void HandlePackets(object sender, EventArgs e)
+        {
+            if (this.ControlledCar != null)
+            {
+                VirtualFunctionBus bus = ControlledCar.VirtualFunctionBus;
+                if (bus != null)
+                {
+                    bus.HMIPacket = new HMIPacket(this.GasPedalViewModel.Value, this.BreakPedalViewModel.Value, this.SteeringWheelViewModel.Value, this.TransmissionViewModel.CurrentGear);
+                    if (bus.PowertrainPacket != null)
+                    {
+                        this.CarInfoViewModel.X = bus.PowertrainPacket.X;
+                        this.CarInfoViewModel.Y = bus.PowertrainPacket.Y;
+                        this.SpeedGaugeViewModel.SetValue(bus.PowertrainPacket.Speed);
+                        this.RpmGaugeViewModel.SetValue(bus.PowertrainPacket.Rpm);
+                        this.CarInfoViewModel.SteeringWheelAngle = (int)bus.PowertrainPacket.CarHeadingAngle;
+                    }
+                }
+            }
+        }
     }
 }

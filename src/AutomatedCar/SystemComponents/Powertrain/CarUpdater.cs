@@ -88,8 +88,16 @@ namespace AutomatedCar.SystemComponents.Powertrain
             }
             else if (priority == PacketEnum.HMI)
             {
-                Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce((100), currentTransform.Velocity));
-                Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce((100), currentWheelDirection, 1));
+                if (transmission.Gear != Gear.R)
+                {
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce((100), currentTransform.Velocity));
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce((100), currentWheelDirection, transmission.InsideGear));
+                }
+                else
+                {
+                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForceInReverse(100, currentWheelDirection));
+                }
+                
             }
             else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)
             {

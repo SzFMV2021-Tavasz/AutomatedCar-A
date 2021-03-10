@@ -24,7 +24,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private float currentSteering;
         private Vector2 currentWheelDirection;
         private float currentDirection;
-        private float deltaTime = 1 / 30;
+        private float deltaTime = 1 / 20;
         public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket)
         {
             this.VirtualFunctionBus = virtualFunctionBus;

@@ -187,7 +187,20 @@ namespace AutomatedCar.Visualization
 
             if (drawDebugSonic)
             {
+                List<Point> carPolyList = new List<Point>();
 
+                foreach (var item in car.UltraSonic.Points)
+                {
+                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                }
+
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightGreen, VideoPen, carPoly);
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                );
             }
 
             if (drawPolygons)

@@ -26,11 +26,11 @@ namespace AutomatedCar.Visualization
         private readonly RenderCamera renderCamera = new RenderCamera();
 
         private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
-        private readonly Pen VideoPen = new Pen(Brushes.Black, 2);
+        private readonly Pen SensorPen = new Pen(Brushes.Black, 1);
         private readonly Pen PolyPenHighLight = new Pen(Brushes.Yellow, 5);
 
-        private Boolean drawPolygons = true;
-        private Boolean drawDebugVideo = true;
+        private Boolean drawPolygons = false;
+        private Boolean drawDebugVideo = false;
         private Boolean drawDebugRadar = false;
         private Boolean drawDebugSonic = false;
 
@@ -149,7 +149,7 @@ namespace AutomatedCar.Visualization
         {
             DrawingGroup drawingGroup = RenderImage(car);
 
-            if (drawDebugVideo)
+            if (drawDebugVideo && car.Video != null)
             {
                 List<Point> carPolyList = new List<Point>();
 
@@ -160,16 +160,29 @@ namespace AutomatedCar.Visualization
 
                 StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
 
-                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.Aqua, VideoPen, carPoly);
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.DodgerBlue, SensorPen, carPoly);
 
                 drawingGroup.Children.Add(
                     geometryDrawing
                 );
             }
 
-            if (drawDebugRadar)
+            if (drawDebugRadar && car.Radar != null)
             {
+                List<Point> carPolyList = new List<Point>();
 
+                foreach (var item in car.Radar.Points)
+                {
+                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                }
+
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightPink, SensorPen, carPoly);
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                );
             }
 
             if (drawDebugSonic)

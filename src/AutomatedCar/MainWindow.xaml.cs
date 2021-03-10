@@ -90,6 +90,12 @@ namespace AutomatedCar
             video.Points.Add(new Point(108, -120));
             controlledCar.Video = video;
 
+            var radar = new Polyline();
+            radar.Points.Add(new Point(54, 120));
+            radar.Points.Add(new Point(0, -300));
+            radar.Points.Add(new Point(108, -300));
+            controlledCar.Radar = radar;
+
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();

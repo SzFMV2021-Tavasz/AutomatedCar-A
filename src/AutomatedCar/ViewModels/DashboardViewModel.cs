@@ -1,6 +1,6 @@
 namespace AutomatedCar.ViewModels
 {
-    using AutomatedCar.Models;    
+    using AutomatedCar.Models;
     using ReactiveUI;
 
     public class DashboardViewModel : ViewModelBase
@@ -36,18 +36,17 @@ namespace AutomatedCar.ViewModels
             this.RightTurnSignalViewModel.Toggle();
             this.SpeedGaugeViewModel.SetValue(50);
 
-            this.RpmGaugeViewModel.SetValue(3000);                     
+            this.RpmGaugeViewModel.SetValue(3000);
             this.BreakPedalViewModel.Value = 75;
             this.GasPedalViewModel.Value = 50;
 
             this.RpmGaugeViewModel.SetValue(3000);
-                     
+
             this.BreakPedalViewModel = new BreakPedalViewModel();
             this.GasPedalViewModel = new GasPedalViewModel();
 
-            // removing on request by @mrknowitall1
-            //this.TransmissionViewModel.CurrentGear = Gear.P;
-            //this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
+            this.TransmissionViewModel.CurrentGear = Gear.P;
+            this.TransmissionViewModel.Caption = $"Gear: {this.TransmissionViewModel.CurrentGear}";
 
             this.ACCOptionsViewModel = new ACCOptionsViewModel();
             this.LaneKeepingAndParkingPilotViewModel = new LaneKeepingAndParkingPilotViewModel();

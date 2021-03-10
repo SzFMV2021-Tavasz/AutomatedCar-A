@@ -4,12 +4,14 @@ using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
@@ -79,12 +81,26 @@ namespace AutomatedCar.Visualization
             worldObject.Width = (int)bm.PixelWidth;
             worldObject.Height = (int)bm.PixelHeight;
 
-            var relativePos = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+            var relativePos = renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+            
+            Dictionary<string, Point> referencePoints = new Dictionary<string, Point>();
+            XDocument xdoc = XDocument.Load($"{Directory.GetCurrentDirectory()}/Assets/reference_points.xml");
+            xdoc.Root.Descendants("Image").ToList().ForEach(x => referencePoints.Add(x.Attribute("name").Value.ToString(), new Point(int.Parse(x.Element("Refpoint").Attribute("x").Value), int.Parse(x.Element("Refpoint").Attribute("y").Value))));
+
+            var center = new Point(relativePos.X, relativePos.Y);
+
+            if (referencePoints.ContainsKey(worldObject.Filename))
+            {
+                var refPoint = referencePoints[worldObject.Filename];
+                center = new Point(relativePos.X - refPoint.X, relativePos.Y - refPoint.Y);
+            }
+
+            // FORGATÁS
 
             var x = new Vector(1, 0);
             Vector rotated = Vector.Multiply(x, new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0));
             double angleBetween = Vector.AngleBetween(x, rotated);
-            
+
             drawingGroup.Transform = new RotateTransform(
                 angleBetween,
                 relativePos.X,
@@ -94,7 +110,7 @@ namespace AutomatedCar.Visualization
             drawingGroup.Children.Add(
                 new ImageDrawing(
                     bm,
-                    new Rect(relativePos, new Size(worldObject.Width, worldObject.Height)
+                    new Rect(center, new Size(worldObject.Width, worldObject.Height)
                     ))
             );
 
@@ -175,7 +191,6 @@ namespace AutomatedCar.Visualization
                 PointCollection points = new PointCollection();
 
                 poliList.ForEach(point => points.Add(point));
-                //points.Add(poliList[0]);
 
                 geometryContext.PolyLineTo(points, true, true);
             }
@@ -217,13 +232,27 @@ namespace AutomatedCar.Visualization
         {
             List<BaseModel.Polygon> poligons = worldObject.Polygons;
 
+            var relativePos = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+
+            Dictionary<string, Point> referencePoints = new Dictionary<string, Point>();
+            XDocument xdoc = XDocument.Load($"{Directory.GetCurrentDirectory()}/Assets/reference_points.xml");
+            xdoc.Root.Descendants("Image").ToList().ForEach(x => referencePoints.Add(x.Attribute("name").Value.ToString(), new Point(int.Parse(x.Element("Refpoint").Attribute("x").Value), int.Parse(x.Element("Refpoint").Attribute("y").Value))));
+
+            var center = new Point(relativePos.X, relativePos.Y);
+
+            if (referencePoints.ContainsKey(worldObject.Filename))
+            {
+                var refPoint = referencePoints[worldObject.Filename];
+                center = new Point(relativePos.X - refPoint.X, relativePos.Y - refPoint.Y);
+            }
+
             foreach (var poligon in poligons)
             {
                 List<Point> displayPoints = new List<Point>();
                 foreach (var points in poligon.Points)
                 {
                     //TODO itt lehet van neki forgatása
-                    displayPoints.Add(renderCamera.TranslateToViewport(points.Item1 + worldObject.X,points.Item2 + worldObject.Y));
+                    displayPoints.Add(new Point(points.Item1 + center.X, points.Item2 + center.Y));
                 }
 
                 StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
@@ -232,7 +261,6 @@ namespace AutomatedCar.Visualization
                 Vector rotated = Vector.Multiply(x, new Matrix(worldObject.M11, worldObject.M12, worldObject.M21, worldObject.M22, 0, 0));
                 double angleBetween = Vector.AngleBetween(x, rotated);
 
-                var relativePos = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
 
                 drawingGeometry.Transform = new RotateTransform(
                     angleBetween,

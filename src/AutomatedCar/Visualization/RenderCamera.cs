@@ -1,4 +1,5 @@
-﻿using BaseModel.Interfaces;
+﻿using System;
+using BaseModel.Interfaces;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -17,11 +18,17 @@ namespace AutomatedCar.Visualization
 
         public void UpdateMiddlePoint(double originX, double originY)
         {
-            LeftX = originX - (Width / 2.0);
-            TopY = originY - (Height / 2.0);
+            if (originX >= 0)
+            {
+                LeftX = originX - (Width / 2.0);
+                MiddleX = originX;
+            }
 
-            MiddleX = originX;
-            MiddleY = originY;
+            if (originY >= 0)
+            {
+                TopY = originY - (Height / 2.0);
+                MiddleY = originY;
+            }
         }
 
         public List<IRenderableWorldObject> Filter(List<IRenderableWorldObject> renderables)
@@ -30,8 +37,7 @@ namespace AutomatedCar.Visualization
 
             foreach (var renderable in renderables)
             {
-                if (IsVisibleInViewport(renderable))
-                    visible.Add(renderable);
+                visible.Add(renderable);
             }
 
             return visible;

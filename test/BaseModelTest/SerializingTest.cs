@@ -12,6 +12,7 @@ namespace BaseModelTest
     public class Tests
     {
         private static readonly string POLYGON_JSON_PATH = "SerializingDummies\\worldobject_polygons.json";
+        private static readonly string REFERENCE_POINT_JSON_PATH = "SerializingDummies\\reference_points.json";
         
         [SetUp]
         public void Setup()
@@ -158,7 +159,6 @@ namespace BaseModelTest
         public void Test_SomeKnownPolygonsOfTestWorld(
             string fileToLoad,
             WorldObject.Type type,
-            
             int expectedP0X0, int expectedP0Y0, int expectedP0X1, int expectedP0Y1
         )
         {
@@ -168,6 +168,15 @@ namespace BaseModelTest
             
             Assert.AreEqual(new Tuple<int, int>(expectedP0X1, expectedP0Y1), obj.Polygons[0].Points[1]);
             Assert.AreEqual(new Tuple<int, int>(expectedP0X0, expectedP0Y0), obj.Polygons[0].Points[0]);
+        }
+
+        [TestCase(WorldObject.Type.ROAD_2LANE_45RIGHT, 351, 371)]
+        [TestCase(WorldObject.Type.ROAD_2LANE_6LEFT, 17, 367)]
+        public void Test_SomeKnownReferencePointsOfTestWorld(WorldObject.Type type, int expectedX, int expectedY)
+        {
+            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH);
+            WorldObject obj = world.GetObjectsByType(type).First();
+            Assert.AreEqual(new Tuple<int, int>(expectedX, expectedY), obj.ReferencePoint);
         }
 
         [Test]

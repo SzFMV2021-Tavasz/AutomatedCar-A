@@ -28,7 +28,6 @@ namespace BaseModel.WorldObjects
         {
             ValidateType(this._objectType, AllowedTypes);
         }
-
         
         /// <summary>
         /// If a type is not found in the dictionary, then it is interpreted as the object

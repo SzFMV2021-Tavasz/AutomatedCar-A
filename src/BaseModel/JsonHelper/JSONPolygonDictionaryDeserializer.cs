@@ -80,7 +80,5 @@ namespace BaseModel
         {
             return new(int.Parse(j_point[0].ToString()), int.Parse(j_point[1].ToString()));
         }
-
-        
     }
 }

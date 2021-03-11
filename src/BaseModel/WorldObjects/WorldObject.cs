@@ -29,12 +29,15 @@ namespace BaseModel.WorldObjects
             ValidateType(this._objectType, AllowedTypes);
         }
 
+        
         /// <summary>
         /// If a type is not found in the dictionary, then it is interpreted as the object
         /// not being able to collide with other objects possessing this trait.
         /// </summary>
+        [JsonIgnore]
         public Dictionary<Type, List<Polygon>> PolygonDictionary { private get; set; }
         
+        [JsonIgnore]
         public Dictionary<Type, Tuple<int, int>> ReferencePointDictionary { private get; set; }
 
         [JsonIgnore]

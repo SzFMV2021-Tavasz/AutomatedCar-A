@@ -29,6 +29,7 @@ namespace BaseModel
         private Dictionary<WorldObject.Type, List<Polygon>> _polygonDictionary;
         private Dictionary<WorldObject.Type, Tuple<int, int>> _referencePointDictionary;
 
+        [JsonIgnore]
         public Dictionary<WorldObject.Type, List<Polygon>> PolygonDictionary
         {
             private get => _polygonDictionary;
@@ -39,6 +40,7 @@ namespace BaseModel
             }
         }
 
+        [JsonIgnore]
         public Dictionary<WorldObject.Type, Tuple<int, int>> ReferencePointDictionary
         {
             get => _referencePointDictionary;

@@ -170,11 +170,11 @@ namespace BaseModelTest
             Assert.AreEqual(new Tuple<int, int>(expectedP0X0, expectedP0Y0), obj.Polygons[0].Points[0]);
         }
 
-        [TestCase(WorldObject.Type.ROAD_2LANE_45RIGHT, 351, 371)]
+        [TestCase(WorldObject.Type.ROAD_2LANE_90RIGHT, 349, 525)]
         [TestCase(WorldObject.Type.ROAD_2LANE_6LEFT, 17, 367)]
         public void Test_SomeKnownReferencePointsOfTestWorld(WorldObject.Type type, int expectedX, int expectedY)
         {
-            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
+            World world = World.FromJSON("SerializingDummies\\test_world_1kmx1km.json", POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
             WorldObject obj = world.GetObjectsByType(type).First();
             Assert.AreEqual(new Tuple<int, int>(expectedX, expectedY), obj.ReferencePoint);
         }

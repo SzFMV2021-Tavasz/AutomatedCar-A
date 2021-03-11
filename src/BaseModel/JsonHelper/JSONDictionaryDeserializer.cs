@@ -29,7 +29,7 @@ namespace BaseModel.JsonHelper
             {
                 string jsonFileContent = File.ReadAllText(polygonsPath);
                 T_TOPLEVEL_JSON_TYPE j_full = JsonConvert.DeserializeObject<T_TOPLEVEL_JSON_TYPE>(jsonFileContent);
-                return ParseJson(j_full);
+                return ParseJson(j_full, Path.GetFullPath(polygonsPath));
             }
             catch (NullReferenceException e)
             {
@@ -37,6 +37,6 @@ namespace BaseModel.JsonHelper
             }
         }
 
-        protected abstract Dictionary<WorldObject.Type, T_MAPPING> ParseJson(T_TOPLEVEL_JSON_TYPE jFull);
+        protected abstract Dictionary<WorldObject.Type, T_MAPPING> ParseJson(T_TOPLEVEL_JSON_TYPE jFull, string jsonAbsolutePath);
     }
 }

@@ -24,7 +24,7 @@ namespace BaseModel
             {"circle", Polygon.Type_t.CIRCLE},
         };
         
-        protected override Dictionary<WorldObject.Type, List<Polygon>> ParseJson(JObject j_full)
+        protected override Dictionary<WorldObject.Type, List<Polygon>> ParseJson(JObject j_full, string jsonAbsolutePath)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace BaseModel
             }
             catch (NullReferenceException e)
             {
-                throw new JSONReadingException("Failed to parse JSON.", e);
+                throw new JSONReadingException("Failed to parse JSON: " + jsonAbsolutePath, e);
             }
         }
 

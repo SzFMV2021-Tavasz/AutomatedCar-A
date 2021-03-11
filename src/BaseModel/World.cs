@@ -114,5 +114,10 @@ namespace BaseModel
         {
             return objects.Where(o => (o.Tags & tag) == 0).ToArray();
         }
+
+        public WorldObject[] GetObjectsInAreaTriangle(Triangle triangle)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

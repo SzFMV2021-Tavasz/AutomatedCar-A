@@ -30,22 +30,16 @@ namespace AutomatedCar
         public MainWindow()
         {
             ViewModel = new MainWindowViewModel(world);
-            var dashBoardViewModel = new DashboardViewModel(world.ControlledCar);
-            ViewModel.Dashboard = dashBoardViewModel;
-                       
+                      
             InitializeComponent();
            
             hmiDebug = new HMIDebug();
-            keyboardHandler = new KeyboardHandler(tickInterval);
-            BindKeysForDashboardFunctions(dashBoardViewModel);
-
+            keyboardHandler = new KeyboardHandler(tickInterval);          
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
-            timer.Tick += dashBoardViewModel.HandlePackets;
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
-
 
             //world.Width = 2000;
             //world.Height = 1000;
@@ -99,6 +93,10 @@ namespace AutomatedCar
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();
+            var dashBoardViewModel = new DashboardViewModel(world.ControlledCar);
+            ViewModel.Dashboard = dashBoardViewModel;
+            BindKeysForDashboardFunctions(dashBoardViewModel);
+            timer.Tick += dashBoardViewModel.HandlePackets;
         }
 
         private void BindKeysForDashboardFunctions(DashboardViewModel dashBoardViewModel)

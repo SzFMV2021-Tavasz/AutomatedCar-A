@@ -170,5 +170,26 @@ namespace Test.SystemComponents.Powertrain
             Assert.Equal(nextPositionUnits.X, World.Instance.ControlledCar.X);
             Assert.Equal(nextPositionUnits.Y, World.Instance.ControlledCar.Y);
         }
+
+        [Theory]
+        [InlineData(0f, 3f * Math.PI / 2f)]
+        [InlineData(Math.PI / 2f, 0f)]
+        [InlineData(Math.PI, Math.PI / 2f)]
+        [InlineData(2 * Math.PI, 3f * Math.PI / 2f)]
+        public void CarAngleIsOffsetBy90Degrees(float internalAngle, float expectedAngle)
+        {
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            var nextPosition = new Vector2(0, 0);
+            var nextVelocity = Vector2.Zero;
+            var wheelDirection = Vector2.UnitX;
+            var nextVehicleTransform = new VehicleTransform(nextPosition, internalAngle, nextVelocity, 0);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(nextVehicleTransform);
+
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null, null);
+            carUpdater.SetCurrentTransform();
+            carUpdater.UpdateWorldObject();
+
+            Assert.Equal(expectedAngle, World.Instance.ControlledCar.CarHeading);
+        }
     }
 }

@@ -23,26 +23,22 @@ namespace Test.SystemComponents.Powertrain
         private ITransmission transmission = new Transmission();
 
         [Fact]
-        public void CarUpdaterUpdatesTheControlledCarProperties()
+        public void VelocityAngularVelocityAndSpeedAreUpdatedInAutomatedCar()
         {
             var desiredVelocity = new Vector2(4, 3);
             var desiredSpeedKmh = desiredVelocity.Length() * 3.6f;
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
-            var desiredHeading = 34;
+            var desiredHeading = (float)(Math.PI / 2);
             var desiredAngularVelocity = 15.1f;
             var desiredPositionMeters = new Vector2(192, 192);
             mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(desiredPositionMeters, desiredHeading, desiredVelocity, desiredAngularVelocity));
 
             CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, null, new VehicleConstants());
-            var desiredPositionUnits = desiredPositionMeters / carUpdater.UnitsPerMeters;
             carUpdater.SetCurrentTransform();
             carUpdater.UpdateWorldObject();
 
-            Assert.Equal(desiredPositionUnits.X, World.Instance.ControlledCar.X);
-            Assert.Equal(desiredPositionUnits.Y, World.Instance.ControlledCar.Y);
             Assert.Equal(desiredVelocity, World.Instance.ControlledCar.Velocity);
             Assert.Equal(desiredAngularVelocity, World.Instance.ControlledCar.AngularVelocity);
-            Assert.Equal(desiredHeading, World.Instance.ControlledCar.CarHeading);
             Assert.Equal(desiredSpeedKmh, World.Instance.ControlledCar.Speed);
         }
 
@@ -189,7 +185,10 @@ namespace Test.SystemComponents.Powertrain
             carUpdater.SetCurrentTransform();
             carUpdater.UpdateWorldObject();
 
-            Assert.Equal(expectedAngle, World.Instance.ControlledCar.CarHeading);
+            var maxError = 0.005f;
+            var error = Math.Abs(expectedAngle - World.Instance.ControlledCar.CarHeading);
+
+            Assert.True(error < maxError);
         }
     }
 }

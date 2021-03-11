@@ -135,7 +135,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private VehicleTransform ConvertTransformToWorldSpace(VehicleTransform original)
         {
             var worldPosition = original.Position / 48f;
-            return original with { Position = worldPosition };
+            var worldHeading = (float)(original.AngularDisplacement - Math.PI / 2).NormalizeRadians();
+            return original with { Position = worldPosition, AngularDisplacement = worldHeading };
         }
     }
 }

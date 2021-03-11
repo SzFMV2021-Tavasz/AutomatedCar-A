@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace AutomatedCar.SystemComponents.Powertrain
 {
-    public static class VectorExtensions
+    public static class MathExtensions
     {
         public static Vector2 MakeUnitVectorFromRadians(this float radians)
         {
@@ -24,6 +24,23 @@ namespace AutomatedCar.SystemComponents.Powertrain
         {
             X = (float)Math.Cos(radians);
             Y = (float)Math.Sin(radians);
+        }
+
+        public static double NormalizeRadians(this double radians)
+        {
+            var ret = radians;
+
+            while (ret < 0)
+            {
+                ret += 2 * Math.PI;
+            }
+
+            while (ret > 2 * Math.PI)
+            {
+                ret -= 2 * Math.PI;
+            }
+
+            return ret;
         }
     }
 }

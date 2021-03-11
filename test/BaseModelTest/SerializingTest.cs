@@ -91,7 +91,7 @@ namespace BaseModelTest
             WorldObject.Type expectedType,
             int expectedX, int expectedY)
         {
-            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH);
+            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
             WorldObject knownObject = world.GetObjectsWithTags(tags).First();
             WorldObject_AssertEqual_XYType(knownObject, expectedX, expectedY, expectedType);
         }
@@ -108,7 +108,7 @@ namespace BaseModelTest
             WorldObject.Type expectedType,
             int expectedX, int expectedY)
         {
-            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH);
+            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
             WorldObject knownObject = world.GetObjectsWithoutTags(tagsWithout).First();
             WorldObject_AssertEqual_XYType(knownObject, expectedX, expectedY, expectedType);
         }
@@ -162,7 +162,7 @@ namespace BaseModelTest
             int expectedP0X0, int expectedP0Y0, int expectedP0X1, int expectedP0Y1
         )
         {
-            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH);
+            World world = World.FromJSON(fileToLoad, POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
             
             WorldObject obj = world.GetObjectsByType(type).First();
             
@@ -174,7 +174,7 @@ namespace BaseModelTest
         [TestCase(WorldObject.Type.ROAD_2LANE_6LEFT, 17, 367)]
         public void Test_SomeKnownReferencePointsOfTestWorld(WorldObject.Type type, int expectedX, int expectedY)
         {
-            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH);
+            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
             WorldObject obj = world.GetObjectsByType(type).First();
             Assert.AreEqual(new Tuple<int, int>(expectedX, expectedY), obj.ReferencePoint);
         }
@@ -182,7 +182,7 @@ namespace BaseModelTest
         [Test]
         public void Test_MultiPoly()
         {
-            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH);
+            World world = World.FromJSON("SerializingDummies\\test_world.json", POLYGON_JSON_PATH, REFERENCE_POINT_JSON_PATH);
             WorldObject obj = world.GetObjectsByType(WorldObject.Type._2_CROSSROAD_1).First();
             
             Assert.AreEqual(obj.Polygons[0].Type, Polygon.Type_t.LANE);

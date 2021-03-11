@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BaseModel
 {
-    class JSONPolygonDictionaryDeserializer: JSONDictionaryDeserializer<List<Polygon>>
+    class JSONPolygonDictionaryDeserializer: JSONDictionaryDeserializer<List<Polygon>, JObject>
     {
         public JSONPolygonDictionaryDeserializer(Dictionary<WorldObject.Type, string> typenamesStringDictionary) : base(typenamesStringDictionary)
         {

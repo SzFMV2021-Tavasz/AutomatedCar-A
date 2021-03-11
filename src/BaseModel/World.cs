@@ -27,6 +27,7 @@ namespace BaseModel
         }
 
         private Dictionary<WorldObject.Type, List<Polygon>> _polygonDictionary;
+        private Dictionary<WorldObject.Type, Tuple<int, int>> _referencePointDictionary;
 
         public Dictionary<WorldObject.Type, List<Polygon>> PolygonDictionary
         {
@@ -34,32 +35,38 @@ namespace BaseModel
             set
             {
                 this._polygonDictionary = value;
-
-                foreach (WorldObject worldObject in objects)
-                {
-                    worldObject.PolygonDictionary = this._polygonDictionary;
-                }
+                updateAllMappings();
             }
         }
 
-        public static World FromJSON(string worldJsonPath, string worldObjectPolygonsJsonPath)
+        public Dictionary<WorldObject.Type, Tuple<int, int>> ReferencePointDictionary
         {
-            return FromJSON(worldJsonPath, worldObjectPolygonsJsonPath, JSONWorldSerializer.TypenameStringDictionary);
+            get => _referencePointDictionary;
+            set
+            {
+                _referencePointDictionary = value;
+                updateAllMappings();
+            }
+        }
+
+        public static World FromJSON(string worldJsonPath, string worldObjectPolygonsJsonPath, string referencePointsJsonPath)
+        {
+            return FromJSON(worldJsonPath, worldObjectPolygonsJsonPath, referencePointsJsonPath, JSONWorldSerializer.TypenameStringDictionary);
         }
         
         public static World FromJSON(
             string worldJsonPath,
             string worldObjectPolygonsJsonPath,
+            string referencePointsJsonPath,
             Dictionary<WorldObject.Type, string> typenameStringDictionary)
         {
-            Dictionary<WorldObject.Type, List<Polygon>> polydict =
-                new JSONPolygonDictionaryDeserializer(typenameStringDictionary)
-                    .Load(worldObjectPolygonsJsonPath);
+            World world = new JSONWorldSerializer(JSONWorldSerializer.TypenameStringDictionary).Load(worldJsonPath);
             
-            JSONWorldSerializer serializer = new JSONWorldSerializer(JSONWorldSerializer.TypenameStringDictionary);
+            world.PolygonDictionary = new JSONPolygonDictionaryDeserializer(typenameStringDictionary)
+                .Load(worldObjectPolygonsJsonPath);
 
-            World world = serializer.Load(worldJsonPath);
-            world.PolygonDictionary = polydict;
+            world.ReferencePointDictionary = new JSONReferenceDictionaryDeserializer(typenameStringDictionary)
+                .Load(referencePointsJsonPath);
 
             return world;
         }
@@ -70,9 +77,28 @@ namespace BaseModel
             nextId++;
         }
 
+        private void updateAllMappings()
+        {
+            foreach (WorldObject worldObject in objects)
+            {
+                assignMappings(worldObject);
+            }
+        }
+
+        private void assignMappings(WorldObject obj)
+        {
+            assignPolygonDictionary(obj);
+            assignReferenceDictionary(obj);
+        }
+        
         private void assignPolygonDictionary(WorldObject obj)
         {
             obj.PolygonDictionary = _polygonDictionary;
+        }
+
+        private void assignReferenceDictionary(WorldObject obj)
+        {
+            obj.ReferencePointDictionary = _referencePointDictionary;
         }
 
         [JsonProperty("width")]
@@ -86,7 +112,7 @@ namespace BaseModel
         public void AddObject(WorldObject worldObject)
         {
             assignId(worldObject);
-            assignPolygonDictionary(worldObject);
+            assignMappings(worldObject);
             objects.Add(worldObject);
         }
         

@@ -9,53 +9,31 @@ namespace AutomatedCar.SystemComponents.Powertrain
 {
     public class Transmission : ITransmission
     {
+        public readonly (int minSpeed, int maxSpeed, int gear)[] DriveSpeedGearMapping = new (int, int, int)[]
+        {
+            (0, 10, 0),
+            (10, 15, 1),
+            (15, 20, 2),
+            (20, 30, 3),
+            (30, 40, 4),
+            (40, 52, 5),
+            (52, 70, 6),
+            (70, int.MaxValue, 7),
+        };
+
         public Gear Gear { get; set; }
         public int InsideGear { get; set; }
 
         public void SetInsideGear(int speed)
         {
-            if (Gear == Gear.D)
+            switch(Gear)
             {
-                if (speed < 10)
-                {
+                case Gear.D:
+                    InsideGear = DriveSpeedGearMapping.First(m => m.minSpeed <= speed && speed < m.maxSpeed).gear;
+                    break;
+                default:
                     InsideGear = 0;
-                }
-                else if (speed >= 10 && speed < 15)
-                {
-                    InsideGear = 1;
-                }
-                else if (speed >= 15 && speed < 20)
-                {
-                    InsideGear = 2;
-                }
-                else if (speed >= 20 && speed < 30)
-                {
-                    InsideGear = 3;
-                }
-                else if (speed >= 30 && speed < 40)
-                {
-                    InsideGear = 4;
-                }
-                else if (speed >= 40 && speed < 52)
-                {
-                    InsideGear = 5;
-                }
-                else if (speed >= 52 && speed < 70)
-                {
-                    InsideGear = 6;
-                }
-                else if (speed >= 70)
-                {
-                    InsideGear = 7;
-                }
-            }
-            if (Gear == Gear.P && Gear == Gear.N)
-            {
-                InsideGear = 0;
-            }
-            if (Gear == Gear.R)
-            {
-                InsideGear = 1;
+                    break;
             }
         }
     }

@@ -23,22 +23,23 @@ namespace Test.SystemComponents.Powertrain
         private ITransmission transmission = new Transmission();
 
         [Fact]
-        public void CarUpdaterUpdatesTheControlledCarProperties()
+        public void VelocityAngularVelocityAndSpeedAreUpdatedInAutomatedCar()
         {
-            Vector2 desiredVelocity = new Vector2(4, 3);
+            var desiredVelocity = new Vector2(4, 3);
+            var desiredSpeedKmh = desiredVelocity.Length() * 3.6f;
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
-            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(new Vector2(4, 4), 34, desiredVelocity, 15.1f));
+            var desiredHeading = (float)(Math.PI / 2);
+            var desiredAngularVelocity = 15.1f;
+            var desiredPositionMeters = new Vector2(192, 192);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(desiredPositionMeters, desiredHeading, desiredVelocity, desiredAngularVelocity));
 
             CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, null, new VehicleConstants());
             carUpdater.SetCurrentTransform();
             carUpdater.UpdateWorldObject();
 
-            Assert.True(World.Instance.ControlledCar.X == 4);
-            Assert.True(World.Instance.ControlledCar.Y == 4);
-            Assert.True(World.Instance.ControlledCar.Velocity == desiredVelocity);
-            Assert.True(World.Instance.ControlledCar.AngularVelocity == 15.1f);
-            Assert.True(World.Instance.ControlledCar.CarHeading == 34);
-            Assert.True(World.Instance.ControlledCar.Speed == desiredVelocity.Length() * 3.6);
+            Assert.Equal(desiredVelocity, World.Instance.ControlledCar.Velocity);
+            Assert.Equal(desiredAngularVelocity, World.Instance.ControlledCar.AngularVelocity);
+            Assert.Equal(desiredSpeedKmh, World.Instance.ControlledCar.Speed);
         }
 
         [Fact]
@@ -47,17 +48,42 @@ namespace Test.SystemComponents.Powertrain
             PowertrainComponentPacket packet = new PowertrainComponentPacket();
             World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
             Vector2 desiredVelocity = new Vector2(4, 3);
-            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(new Vector2(4, 4), 34.3f, desiredVelocity, 15.1f));
-            vfb.HMIPacket = new HMIPacket(0, 0, 0, Gear.D);
+            var desiredSpeedKmh = desiredVelocity.Length() * 3.6f;
+            var desiredPositionMeters = new Vector2(192, 192);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(desiredPositionMeters, 34.3f, desiredVelocity, 15.1f));
+            var desiredSteeringWheel = 0;
+            vfb.HMIPacket = new HMIPacket(0, 0, desiredSteeringWheel, Gear.D);
 
             CarUpdater carUpdater = new CarUpdater(vfb, null, mockIntegrator.Object, packet, new VehicleConstants());
+            var desiredPositionUnits = desiredPositionMeters / carUpdater.UnitsPerMeters;
             carUpdater.SetCurrentTransform();
             carUpdater.UpdatePacket();
 
-            Assert.True(packet.CarHeadingAngle == 0);
-            Assert.True(packet.Speed == desiredVelocity.Length() * 3.6);
-            Assert.True(packet.X == 4);
-            Assert.True(packet.Y == 4);
+            Assert.Equal(desiredSteeringWheel, packet.SteeringWheelAngleDegrees);
+            Assert.Equal(desiredSpeedKmh, packet.Speed);
+            Assert.Equal(desiredPositionUnits.X, packet.X);
+            Assert.Equal(desiredPositionUnits.Y, packet.Y);
+        }
+
+        [Fact]
+        public void CarUpdatesWritesSteeringWheelAngleInDegrees()
+        {
+            var steeringWheelMaxRotationDegrees = 60;
+            var inputSteeringWheel = 30;
+            var outputSteeringWheelAngleDegrees = (inputSteeringWheel * steeringWheelMaxRotationDegrees) / 100.0;
+            var packet = new PowertrainComponentPacket();
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0));
+            vfb.HMIPacket = new HMIPacket(0, 0, inputSteeringWheel, Gear.D);
+
+            var vehicleConstants = new VehicleConstants();
+            var vehicleForces = new VehicleForces(vehicleConstants);
+            CarUpdater carUpdater = new CarUpdater(vfb, vehicleForces, mockIntegrator.Object, packet, vehicleConstants);
+            carUpdater.Calculate();
+            carUpdater.SetCurrentTransform();
+            carUpdater.UpdatePacket();
+
+            Assert.Equal(outputSteeringWheelAngleDegrees, packet.SteeringWheelAngleDegrees);
         }
 
         [Fact]
@@ -120,6 +146,49 @@ namespace Test.SystemComponents.Powertrain
             mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Back, mockedVehicleForces.Object.GetDragForce(velocity)), Times.Once);
             mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Front, mockedVehicleForces.Object.GetWheelDirectionHackForce(wheelDirection, velocity)), Times.Once);
             mockIntegrator.Verify(mockIntegrator => mockIntegrator.AccumulateForce(WheelKind.Back, mockedVehicleForces.Object.GetWheelDirectionHackForce(wheelDirection, velocity)), Times.Once);
+        }
+
+        [Fact]
+        public void MetersAreConvertedToWorldUnits()
+        {
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            var nextPositionMeters = new Vector2(96, 0);
+            var nextVelocity = Vector2.Zero;
+            var wheelDirection = Vector2.UnitX;
+            var nextVehicleTransform = new VehicleTransform(nextPositionMeters, 0, nextVelocity, 0);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(nextVehicleTransform);
+
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null, null);
+            var nextPositionUnits = nextPositionMeters / carUpdater.UnitsPerMeters;
+            carUpdater.SetCurrentTransform();
+            carUpdater.UpdateWorldObject();
+
+            Assert.Equal(nextPositionUnits.X, World.Instance.ControlledCar.X);
+            Assert.Equal(nextPositionUnits.Y, World.Instance.ControlledCar.Y);
+        }
+
+        [Theory]
+        [InlineData(0f, 3f * Math.PI / 2f)]
+        [InlineData(Math.PI / 2f, 0f)]
+        [InlineData(Math.PI, Math.PI / 2f)]
+        [InlineData(2 * Math.PI, 3f * Math.PI / 2f)]
+        public void CarAngleIsOffsetBy90Degrees(float internalAngle, float expectedAngle)
+        {
+            World.Instance.ControlledCar = new AutomatedCar.Models.AutomatedCar(0, 0, "");
+            var nextPosition = new Vector2(0, 0);
+            var nextVelocity = Vector2.Zero;
+            var wheelDirection = Vector2.UnitX;
+            var nextVehicleTransform = new VehicleTransform(nextPosition, internalAngle, nextVelocity, 0);
+            mockIntegrator.Setup(m => m.NextVehicleTransform).Returns(nextVehicleTransform);
+
+            CarUpdater carUpdater = new CarUpdater(vfb, mockedVehicleForces.Object, mockIntegrator.Object, null, null);
+            carUpdater.SetCurrentTransform();
+            carUpdater.UpdateWorldObject();
+
+            var maxError = 0.005f;
+            var error = Math.Abs(expectedAngle - World.Instance.ControlledCar.CarHeading);
+
+            Assert.True(error < maxError);
         }
     }
 }

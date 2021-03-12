@@ -18,14 +18,16 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public ITransmission transmission { get; set; }
         public IPriorityChecker priorityChecker { get; set; }
         public IVehicleConstants VehicleConstants { get; }
+        public float UnitsPerMeters { get => unitsPerMeters; }
 
         private PowertrainComponentPacket powertrainComponentPacket;
         private VehicleTransform currentTransform;
-        private Vector2 carPos;
         private float currentSteering;
         private Vector2 currentWheelDirection;
         private float currentDirection;
         private float deltaTime = 0.05f;
+        private const float unitsPerMeters = 48f;
+
         public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket, IVehicleConstants vehicleConstants)
         {
             this.VirtualFunctionBus = virtualFunctionBus;
@@ -35,7 +37,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             this.VehicleConstants = vehicleConstants;
 
             currentSteering = 0;
-            currentWheelDirection = new Vector2((float)Math.Cos(currentDirection), (float)Math.Sin(currentDirection));
+            currentWheelDirection = currentDirection.MakeUnitVectorFromRadians();
             currentDirection = 0;
             priorityChecker = new PriorityChecker();
             transmission = new Transmission() {Gear = Gear.D};
@@ -45,13 +47,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         private void CreateCurrentTransform()
         {
-            this.carPos = Vector2.Zero;
-            currentTransform = new VehicleTransform(carPos, 0, Vector2.Zero, 0);
+            currentTransform = new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0);
         }
         private void SetCurrentWheelDirection()
         {
-            currentWheelDirection.X = (float)Math.Cos(currentDirection);
-            currentWheelDirection.Y = (float)Math.Sin(currentDirection);
+            currentDirection.MakeUnitVectorFromRadians(out currentWheelDirection.X, out currentWheelDirection.Y);
         }
         private void SetCurrentDirection()
         {
@@ -62,34 +62,40 @@ namespace AutomatedCar.SystemComponents.Powertrain
             PacketEnum priority = priorityChecker.SteeringPriorityCheck();
             if (priority == PacketEnum.HMI)
             {
-                currentSteering = (float)((VirtualFunctionBus.HMIPacket.SteeringWheelAngle * 0.6)*(Math.PI / 180));
+                currentSteering = (float)(VirtualFunctionBus.HMIPacket.SteeringWheelAngle * 0.6).DegreesToRadians();
             }
         }
         public void UpdateWorldObject()
         {
-            World.Instance.ControlledCar.X = (int)(currentTransform.Position.X);
-            World.Instance.ControlledCar.Y = (int)(currentTransform.Position.Y);
-            World.Instance.ControlledCar.CarHeading = currentTransform.AngularDisplacement;
-            World.Instance.ControlledCar.AngularVelocity = currentTransform.AngularVelocity;
+            var worldTransform = ConvertTransformToWorldSpace(currentTransform);
+
+            World.Instance.ControlledCar.X = (int)(worldTransform.Position.X);
+            World.Instance.ControlledCar.Y = (int)(worldTransform.Position.Y);
+            World.Instance.ControlledCar.CarHeading = worldTransform.AngularDisplacement;
+            World.Instance.ControlledCar.AngularVelocity = worldTransform.AngularVelocity;
             World.Instance.ControlledCar.CurrentSteering = currentSteering;
-            World.Instance.ControlledCar.Velocity = currentTransform.Velocity;
-            World.Instance.ControlledCar.Speed = (int)(currentTransform.Velocity.Length()*3.6);
+            World.Instance.ControlledCar.Velocity = worldTransform.Velocity;
+            World.Instance.ControlledCar.Speed = (int)(worldTransform.Velocity.Length()*3.6);
         }
+
         public void UpdatePacket()
         {
-            powertrainComponentPacket.X = (int)(currentTransform.Position.X);
-            powertrainComponentPacket.Y = (int)(currentTransform.Position.Y);
-            powertrainComponentPacket.Speed = (int)(currentTransform.Velocity.Length() * 3.6);
-            powertrainComponentPacket.CarHeadingAngle = VirtualFunctionBus.HMIPacket.SteeringWheelAngle;
+            var worldTransform = ConvertTransformToWorldSpace(currentTransform);
+
+            powertrainComponentPacket.X = (int)(worldTransform.Position.X);
+            powertrainComponentPacket.Y = (int)(worldTransform.Position.Y);
+            powertrainComponentPacket.Speed = (int)(worldTransform.Velocity.Length() * 3.6);
+            powertrainComponentPacket.SteeringWheelAngleDegrees = currentSteering.RadiansToDegrees();
             powertrainComponentPacket.Rpm = (int)Math.Max(1000,VehicleConstants.GetCrankshaftSpeed(VirtualFunctionBus.HMIPacket.GasPedal / 100f));
         }
+
         public void Calculate()
         {
-            Integrator.Reset(currentTransform, deltaTime);
             CalculateSteeringAngle();
             SetCurrentDirection();
             SetCurrentWheelDirection();
-           // transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
+            Integrator.Reset(currentTransform, deltaTime);
+            transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
             transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)
@@ -124,6 +130,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public void SetCurrentTransform()
         {
             currentTransform = Integrator.NextVehicleTransform;
+        }
+
+        private VehicleTransform ConvertTransformToWorldSpace(VehicleTransform original)
+        {
+            var worldPosition = original.Position / 48f;
+            var worldHeading = (float)(original.AngularDisplacement - Math.PI / 2).NormalizeRadians();
+            return original with { Position = worldPosition, AngularDisplacement = worldHeading };
         }
     }
 }

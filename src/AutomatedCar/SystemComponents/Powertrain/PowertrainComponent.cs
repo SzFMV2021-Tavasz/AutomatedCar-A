@@ -24,7 +24,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
             this.VehicleForces = vehicleForces;
             this.VehicleConstants = vehicleConstants;
             this.Integrator = integrator;
-            this.CarUpdater = new CarUpdater(this.virtualFunctionBus, this.VehicleForces, this.Integrator, powertrainPacket, this.VehicleConstants);
+            var forceMultiplier = 8.0f;
+            this.CarUpdater = new CarUpdater(this.virtualFunctionBus, this.VehicleForces, this.Integrator, powertrainPacket, this.VehicleConstants, forceMultiplier);
         }
 
         public override void Process()

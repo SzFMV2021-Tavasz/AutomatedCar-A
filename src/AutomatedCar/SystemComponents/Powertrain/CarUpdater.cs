@@ -23,39 +23,37 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private PowertrainComponentPacket powertrainComponentPacket;
         private VehicleTransform currentTransform;
         private float currentSteering;
-        private Vector2 currentWheelDirection;
-        private float currentDirection;
-        private float deltaTime = 0.05f;
+        private Vector2 wheelDirection;
+        private DateTime then;
+        private float deltaTime;
         private const float unitsPerMeters = 48f;
+        private readonly float forceMultiplier;
 
-        public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket, IVehicleConstants vehicleConstants)
+        private float wheelRotationVelocity = (float)Math.PI / 64;
+
+        public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket, IVehicleConstants vehicleConstants, float forceMultiplier)
         {
             this.VirtualFunctionBus = virtualFunctionBus;
             this.VehicleForces = vehicleForces;
             this.Integrator = integrator;
             this.powertrainComponentPacket = powertrainPacket;
             this.VehicleConstants = vehicleConstants;
+            this.forceMultiplier = forceMultiplier;
 
             currentSteering = 0;
-            currentWheelDirection = currentDirection.MakeUnitVectorFromRadians();
-            currentDirection = 0;
+            wheelDirection = Vector2.UnitX;
             priorityChecker = new PriorityChecker();
             transmission = new Transmission() {Gear = Gear.D};
             priorityChecker.virtualFunctionBus = this.VirtualFunctionBus;
             CreateCurrentTransform();
+
+            then = DateTime.Now;
+            deltaTime = 0.005f;
         }
 
         private void CreateCurrentTransform()
         {
             currentTransform = new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0);
-        }
-        private void SetCurrentWheelDirection()
-        {
-            currentDirection.MakeUnitVectorFromRadians(out currentWheelDirection.X, out currentWheelDirection.Y);
-        }
-        private void SetCurrentDirection()
-        {
-            currentDirection = currentTransform.AngularDisplacement + currentSteering;
         }
         private void CalculateSteeringAngle()
         {
@@ -76,6 +74,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
             World.Instance.ControlledCar.CurrentSteering = currentSteering;
             World.Instance.ControlledCar.Velocity = worldTransform.Velocity;
             World.Instance.ControlledCar.Speed = (int)(worldTransform.Velocity.Length()*3.6);
+
+            FillTransformationMatrix(World.Instance.ControlledCar, worldTransform.AngularDisplacement);
         }
 
         public void UpdatePacket()
@@ -92,51 +92,103 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public void Calculate()
         {
             CalculateSteeringAngle();
-            SetCurrentDirection();
-            SetCurrentWheelDirection();
-            Integrator.Reset(currentTransform, deltaTime);
+
+            var currentDirection = currentTransform.AngularDisplacement + currentSteering;
+            wheelDirection = currentDirection.MakeUnitVectorFromRadians();
+            var now = DateTime.Now;
+            var deltaTime = (now - then).TotalSeconds;
+            then = now;
+
+            var gasPedal = VirtualFunctionBus.HMIPacket.GasPedal/ 100f;
+            var brakePedal = VirtualFunctionBus.HMIPacket.BrakePedal / 100f;
+
+            Integrator.Reset(currentTransform, (float)deltaTime);
             transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
             transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)
             {
-                Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
+                Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
             }
             else if (priority == PacketEnum.HMI)
             {
                 if (transmission.Gear != Gear.R)
                 {
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
+                    Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
                     if (transmission.Gear == Gear.D)
                     {
-                        Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForce(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection, transmission.InsideGear));
+                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetTractiveForce(gasPedal, wheelDirection, transmission.InsideGear));
                     }
                 }
                 else
                 {
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetBrakingForce(VirtualFunctionBus.HMIPacket.BrakePedal / 100f, currentTransform.Velocity));
-                    Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetTractiveForceInReverse(VirtualFunctionBus.HMIPacket.GasPedal / 100f, currentWheelDirection));
+                    Integrator.AccumulateForce(WheelKind.Front, 8 * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
+                    Integrator.AccumulateForce(WheelKind.Front, 8 * VehicleForces.GetTractiveForceInReverse(gasPedal, wheelDirection));
                 }
-                 
             }
             else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)
             {
             }
-            Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetDragForce(currentTransform.Velocity));
-            Integrator.AccumulateForce(WheelKind.Back, VehicleForces.GetDragForce(currentTransform.Velocity));
-            Integrator.AccumulateForce(WheelKind.Front, VehicleForces.GetWheelDirectionHackForce(currentWheelDirection, currentTransform.Velocity));
-            Integrator.AccumulateForce(WheelKind.Back, VehicleForces.GetWheelDirectionHackForce(currentWheelDirection, currentTransform.Velocity));
+            Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
+            Integrator.AccumulateForce(WheelKind.Back, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
         }
+
         public void SetCurrentTransform()
         {
             currentTransform = Integrator.NextVehicleTransform;
+
+            // HACK: cap vehicle speed at 100m/s to prevent blow-up
+            if(currentTransform.Velocity.Length() > 100)
+            {
+                var fixedVelocity = 100 * Vector2.Normalize(currentTransform.Velocity);
+                currentTransform = currentTransform with { Velocity = fixedVelocity };
+            }
+
+            currentTransform = MakeCarRotateTowardsWheelDirection(currentTransform);
+        }
+
+        private VehicleTransform MakeCarRotateTowardsWheelDirection(VehicleTransform original)
+        {
+            var w = Vector2.Normalize(wheelDirection);
+            var v0_len = original.Velocity.Length();
+
+            if(v0_len < 0.01f)
+            {
+                return original;
+            }
+
+            var v0_normalized = original.Velocity / v0_len;
+            var d = Vector2.Dot(v0_normalized, w);
+            d = Math.Clamp(d, -1, 1);
+            var theta = (float)Math.Acos(d);
+            if(theta < 0.01f)
+            {
+                return original;
+            }
+            var alpha = Math.Min(theta, deltaTime * wheelRotationVelocity);
+            var t = alpha / theta;
+            Console.WriteLine($"theta: {theta} alpha: {alpha}");
+            var v1_normalized = t * w + (1f - t) * v0_normalized;
+            var v1 = v0_len * v1_normalized;
+            return original with { Velocity = v1 };
         }
 
         private VehicleTransform ConvertTransformToWorldSpace(VehicleTransform original)
         {
-            var worldPosition = original.Position / 48f;
-            var worldHeading = (float)(original.AngularDisplacement - Math.PI / 2).NormalizeRadians();
+            var worldPosition = 48 * original.Position;
+            var worldHeading = (float)(original.AngularDisplacement + Math.PI / 2).NormalizeRadians();
             return original with { Position = worldPosition, AngularDisplacement = worldHeading };
+        }
+
+        private void FillTransformationMatrix(RenderableWorldObject obj, float angle)
+        {
+            var sin = (float)Math.Sin(angle);
+            var cos = (float)Math.Cos(angle);
+
+            obj.M11 = cos;
+            obj.M12 = sin;
+            obj.M21 = -sin;
+            obj.M22 = -cos;
         }
     }
 }

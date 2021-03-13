@@ -1,4 +1,5 @@
-﻿using AutomatedCar.SystemComponents.Powertrain;
+﻿using AutomatedCar.Models.Enums;
+using AutomatedCar.SystemComponents.Powertrain;
 using Moq;
 using System.Numerics;
 using Xunit;
@@ -21,7 +22,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             var initialTransform = new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0);
             var integrator = new Integrator(constants.Object);
 
-            integrator.Reset(initialTransform, 0f);
+            integrator.Reset(initialTransform, 0f, Gear.D);
 
             var nextTransform = integrator.NextVehicleTransform;
 
@@ -35,7 +36,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             var integrator = new Integrator(constants.Object);
             var deltaTime = 0.1f;
 
-            integrator.Reset(initialTransform, deltaTime);
+            integrator.Reset(initialTransform, deltaTime, Gear.D);
             integrator.AccumulateForce(WheelKind.Front, Vector2.UnitX);
             integrator.AccumulateForce(WheelKind.Back, Vector2.UnitX);
             var nextTransform = integrator.NextVehicleTransform;
@@ -50,7 +51,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             var integrator = new Integrator(constants.Object);
             var deltaTime = 0.1f;
 
-            integrator.Reset(initialTransform, deltaTime);
+            integrator.Reset(initialTransform, deltaTime, Gear.D);
             integrator.AccumulateForce(WheelKind.Front, -initialTransform.Velocity);
             integrator.AccumulateForce(WheelKind.Back, -initialTransform.Velocity);
             var nextTransform = integrator.NextVehicleTransform;
@@ -77,7 +78,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             var integrator = new Integrator(constants.Object);
             var deltaTime = 0.1f;
 
-            integrator.Reset(initialTransform, deltaTime);
+            integrator.Reset(initialTransform, deltaTime, Gear.D);
             integrator.AccumulateForce(WheelKind.Front, +10 * Vector2.UnitY);
             integrator.AccumulateForce(WheelKind.Back, -10 * Vector2.UnitY);
             var nextTransform = integrator.NextVehicleTransform;
@@ -92,7 +93,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
             var integrator = new Integrator(constants.Object);
             var deltaTime = 0.01f;
 
-            integrator.Reset(initialTransform, deltaTime);
+            integrator.Reset(initialTransform, deltaTime, Gear.D);
             integrator.AccumulateForce(WheelKind.Front, 10 * new Vector2(1, 2));
             var nextTransform = integrator.NextVehicleTransform;
 

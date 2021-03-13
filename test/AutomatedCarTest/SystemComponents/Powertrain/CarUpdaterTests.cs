@@ -128,7 +128,7 @@ namespace Test.SystemComponents.Powertrain
             carUpdater.SetCurrentTransform();
             carUpdater.Calculate();
 
-            mockIntegrator.Verify(m => m.Reset(vehicleTransform, It.IsAny<float>()), Times.Once);
+            mockIntegrator.Verify(m => m.Reset(vehicleTransform, It.IsAny<float>(), Gear.D), Times.Once);
         }
 
         [Fact]

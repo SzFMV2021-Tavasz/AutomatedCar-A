@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Numerics;
+using AutomatedCar.Models.Enums;
 
 namespace AutomatedCar.SystemComponents.Powertrain
 {
@@ -11,6 +12,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private readonly Dictionary<WheelKind, ParticleIntegrator> particles;
         private float? deltaTime = null;
         private VehicleTransform? currentTransform = null;
+        private bool isReverseMode = false;
 
         public VehicleTransform NextVehicleTransform { get => CalculateNextVehicleTransform(); }
 
@@ -21,7 +23,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             particles = new Dictionary<WheelKind, ParticleIntegrator>();
         }
 
-        public void Reset(VehicleTransform vehicleTransform, float deltaTime)
+        public void Reset(VehicleTransform vehicleTransform, float deltaTime, Gear currentGear)
         {
             var wheelKinds = Enum.GetValues<WheelKind>();
             var perParticleMass = vehicleConstants.CurbWeight / wheelKinds.Length;
@@ -30,11 +32,19 @@ namespace AutomatedCar.SystemComponents.Powertrain
             {
                 var position = CalculatePositionOfWheel(wheelKind, vehicleTransform.Position, vehicleTransform.AngularDisplacement);
                 var velocity = vehicleTransform.Velocity;
-                particles[wheelKind] = new ParticleIntegrator(position, velocity, perParticleMass, deltaTime);
+                particles[wheelKind] = new ParticleIntegrator(position, velocity, perParticleMass, deltaTime, wheelKind);
             }
 
             this.currentTransform = vehicleTransform;
             this.deltaTime = deltaTime;
+
+            // HACK: when switching off reverse mode we zero out the velocity vector
+            var isReverseMode = currentGear == Gear.R;
+            if (this.isReverseMode != isReverseMode)
+            {
+                this.currentTransform = this.currentTransform with { Velocity = Vector2.Zero };
+            }
+            this.isReverseMode = isReverseMode;
         }
 
         public void AccumulateForce(WheelKind wheel, Vector2 force)
@@ -67,8 +77,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private VehicleTransform CalculateNextVehicleTransform()
         {
             var distanceFromCenterOfMass = vehicleConstants.WheelBase / 2;
+            var particleStates = particles.Values.Select(x => (x.WheelKind, x.NextState, x.Mass, x.AccumulatedForce)).ToArray();
 
-            var (positionSum, velocitySum, massSum) = particles.Values.Aggregate(
+            var (positionSum, velocitySum, massSum) = particleStates.Aggregate(
                 (PositionSum: Vector2.Zero, VelocitySum: Vector2.Zero, MassSum: 0f),
                 (acc, P) =>
                 {
@@ -80,7 +91,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
             var centerOfMass = positionSum / massSum;
 
-            var angularAccelerationSum = particles.Values.Aggregate(
+            var angularAccelerationSum = particleStates.Aggregate(
                 0f,
                 (acc, P) =>
                 {
@@ -118,7 +129,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
             // HACK: force heading to point in the direction of movement
             if(nextVelocity.Length() > float.Epsilon)
             {
-                nextAngularDisplacement = (float)Math.Atan2(Vector2.Normalize(nextVelocity).Y, Vector2.Normalize(nextVelocity).X);
+                var nextVelocityNormalized = Vector2.Normalize(nextVelocity);
+                if (!isReverseMode)
+                {
+                    nextAngularDisplacement = (float)Math.Atan2(nextVelocityNormalized.Y, nextVelocityNormalized.X);
+                }
             }
 
             return new VehicleTransform(nextPosition, nextAngularDisplacement, nextVelocity, 0);

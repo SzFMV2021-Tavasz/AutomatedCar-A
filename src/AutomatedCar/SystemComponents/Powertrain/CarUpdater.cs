@@ -102,9 +102,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
             var gasPedal = VirtualFunctionBus.HMIPacket.GasPedal/ 100f;
             var brakePedal = VirtualFunctionBus.HMIPacket.BrakePedal / 100f;
 
-            Integrator.Reset(currentTransform, (float)deltaTime);
             transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
             transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
+
+            Integrator.Reset(currentTransform, (float)deltaTime, transmission.Gear);
+
             PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
             if (priority == PacketEnum.AEB)
             {
@@ -150,6 +152,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private VehicleTransform MakeCarRotateTowardsWheelDirection(VehicleTransform original)
         {
             var w = Vector2.Normalize(wheelDirection);
+            if(transmission.Gear == Gear.R)
+            {
+                w = -w;
+            }
+
             var v0_len = original.Velocity.Length();
 
             if(v0_len < 0.01f)
@@ -165,9 +172,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
             {
                 return original;
             }
+
             var alpha = Math.Min(theta, deltaTime * wheelRotationVelocity);
             var t = alpha / theta;
-            Console.WriteLine($"theta: {theta} alpha: {alpha}");
             var v1_normalized = t * w + (1f - t) * v0_normalized;
             var v1 = v0_len * v1_normalized;
             return original with { Velocity = v1 };
@@ -175,7 +182,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         private VehicleTransform ConvertTransformToWorldSpace(VehicleTransform original)
         {
-            var worldPosition = 48 * original.Position;
+            var worldPosition =  unitsPerMeters * original.Position;
             var worldHeading = (float)(original.AngularDisplacement + Math.PI / 2).NormalizeRadians();
             return original with { Position = worldPosition, AngularDisplacement = worldHeading };
         }

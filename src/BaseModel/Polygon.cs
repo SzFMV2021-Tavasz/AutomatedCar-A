@@ -30,24 +30,6 @@ namespace BaseModel
         public Tuple<int, int>[] Points { get; }
         public List<Point> PPoints { get; set; }
 
-        public StreamGeometry getPolyByPointList(List<Point> poliList, bool isClosed)
-        {
-            StreamGeometry streamGeometry = new StreamGeometry();
-
-            using (StreamGeometryContext geometryContext = streamGeometry.Open())
-            {
-                geometryContext.BeginFigure(poliList[0], true, isClosed);
-
-                PointCollection points = new PointCollection();
-
-                poliList.ForEach(point => points.Add(point));
-
-                geometryContext.PolyLineTo(points, true, true);
-            }
-
-            return streamGeometry;
-        }
-
         private Point TupleToPointConvert(Tuple<int, int> tuple)
         {
             Point item = new Point();
@@ -56,10 +38,10 @@ namespace BaseModel
             return item;
         }
 
-        public List<Point> TupleListToPointList(List<Tuple<int, int>> tupleList)
+        public List<Point> TupleListToPointList(Tuple<int, int>[] tupleList)
         {
             List<Point> pointlist = new List<Point>();
-            for (int i = 0; i < tupleList.Count; i++)
+            for (int i = 0; i < tupleList.Length; i++)
             {
                 Point item = TupleToPointConvert(tupleList[i]);
                 pointlist.Add(item);

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using BaseModel.JsonHelper;
 using Newtonsoft.Json;
 using System.Windows;
-using System.Windows.Media;
 
 namespace BaseModel
 {
@@ -149,23 +148,46 @@ namespace BaseModel
 
         public WorldObject[] GetObjectsInAreaTriangle(Triangle triangle)
         {
-            List<WorldObject> worldObjects = new List<WorldObject>();
-            Polygon trianglePoli = new Polygon(Polygon.Type_t.STANDALONE, triangle.points);
-            StreamGeometry triangleGeom = trianglePoli.getPolyByPointList(trianglePoli.PPoints, true);
+            List<WorldObject> objectsInTriangle = new List<WorldObject>();
 
             foreach (WorldObject item in objects)
             {
-                foreach (StreamGeometry streamGeometry in item.objectGeometryList)
+                foreach (Polygon polygon in item.Polygons)
                 {
-                    if(triangleGeom.FillContainsWithDetail(streamGeometry) != IntersectionDetail.Empty || 
-                        triangleGeom.FillContainsWithDetail(streamGeometry) != IntersectionDetail.NotCalculated)
+                    polygon.PPoints = polygon.TupleListToPointList(polygon.Points);
+                    int i = 0;
+                    Point point = new Point();
+                    point.X = polygon.PPoints[i].X + item.X;
+                    point.Y = polygon.PPoints[i].Y + item.Y;
+                    while (!PointInTriangle(point, triangle.Item1, triangle.Item2, triangle.Item3) && polygon.PPoints.Count > i)
                     {
-                        worldObjects.Add(item);
-                        break;
+                        point.X = polygon.PPoints[i].X + item.X;
+                        point.Y = polygon.PPoints[i].Y + item.Y;
+                        i++;
                     }
-                }
+                    if (PointInTriangle(point, triangle.Item1, triangle.Item2, triangle.Item3))
+                    {
+                        objectsInTriangle.Add(item);
+                    }
+                }             
             }
-            return worldObjects.ToArray();
+            return objectsInTriangle.ToArray();
+        }
+
+        public static bool PointInTriangle(Point p, Point p1, Point p2, Point p3)
+        {
+            double a = ((p2.Y - p3.Y) * (p.X - p3.X) + (p3.X - p2.X) * (p.Y - p3.Y)) / ((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
+            double b = ((p3.Y - p1.Y) * (p.X - p3.X) + (p1.X - p3.X) * (p.Y - p3.Y)) / ((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
+            double c = 1 - a - b;
+
+            if (a >= 0 && a <= 1 && b >= 0 && b <= 1 && c >= 0 && c <= 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

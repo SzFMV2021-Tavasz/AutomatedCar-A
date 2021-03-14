@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using BaseModel;
 using BaseModel.WorldObjects;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -8,6 +9,7 @@ using NUnit.Framework;
 
 namespace BaseModelTest
 {
+    
     public class TriangleScanTest
     {
         public World GetPresetWorld(string worldJsonBasename = "FilteringDummy_1.json")
@@ -35,8 +37,10 @@ namespace BaseModelTest
         )
         {
             World world = GetPresetWorld();
-
-            WorldObject[] objs = world.GetObjectsInAreaTriangle(new Triangle(p0X, p0Y, p1X, p1Y, p2X, p2Y));
+            Point point1 = new Point(p0X, p0Y);
+            Point point2 = new Point(p1X, p1Y);
+            Point point3 = new Point(p2X, p2Y);
+            WorldObject[] objs = world.GetObjectsInAreaTriangle(new Triangle(point1, point2, point3));
             
             Assert.AreEqual(totalAmount, objs.Length);
 

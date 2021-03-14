@@ -9,6 +9,7 @@ namespace BaseModel
         public List<Point> points { get; set; }
         public Triangle(Point item1, Point item2, Point item3) : base(item1, item2, item3)
         {
+            this.points = new List<Point>();
             points.Add(item1);
             points.Add(item2);
             points.Add(item3);

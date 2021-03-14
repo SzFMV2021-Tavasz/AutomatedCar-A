@@ -50,6 +50,16 @@ namespace Test.Visualization
         }
 
         [Theory]
+        [InlineData(-100000, -100000, 0, 0)]
+        public void CameraCannotMoveOutOfBoundaries(double newX, double newY, double expectedX, double expectedY)
+        {
+            camera.UpdateMiddlePoint(newX, newY);
+
+            Assert.Equal(expectedX, camera.MiddleX);
+            Assert.Equal(expectedY, camera.MiddleY);
+        }
+
+        [Theory]
         [InlineData(10, 7, 5, 2)]
         [InlineData(16, 5, 11, 0)]
         public void CanTranslateGlobalCoordsToLocals(double x, double y, double expectedViewportX, double expectedViewportY)
@@ -106,6 +116,9 @@ namespace Test.Visualization
         {
             camera.Width = 960;
             camera.Height = 720;
+
+            camera.WorldWidth = 100000;
+            camera.WorldHeight = 100000;
 
             SetupVisibles();
             SetupFaraways();

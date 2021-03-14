@@ -279,6 +279,9 @@ namespace AutomatedCar.Visualization
 
             renderCamera.Width = ActualWidth;
             renderCamera.Height = ActualHeight;
+
+            renderCamera.WorldWidth = World.Width;
+            renderCamera.WorldHeight = World.Height;
         }
 
         private void Debug_EventCacher(object sender,DebugActionArgs args)

@@ -14,21 +14,26 @@ namespace AutomatedCar.Visualization
         public double MiddleX { get; private set; }
         public double MiddleY { get; private set; }
 
+        public double WorldWidth { get; set; }
+        public double WorldHeight { get; set; }
+
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);
 
         public void UpdateMiddlePoint(double originX, double originY)
         {
-            if (originX >= 0)
-            {
-                LeftX = originX - (Width / 2.0);
-                MiddleX = originX;
-            }
+            EnforceMiddlePointStaysInBoundaries(ref originX, ref originY);
 
-            if (originY >= 0)
-            {
-                TopY = originY - (Height / 2.0);
-                MiddleY = originY;
-            }
+            LeftX = originX - (Width / 2.0);
+            MiddleX = originX;
+
+            TopY = originY - (Height / 2.0);
+            MiddleY = originY;
+        }
+
+        private void EnforceMiddlePointStaysInBoundaries(ref double middleX, ref double middleY)
+        {
+            middleX = Math.Clamp(middleX, 0, WorldWidth);
+            middleY = Math.Clamp(middleY, 0, WorldHeight);
         }
 
         public List<IRenderableWorldObject> Filter(List<IRenderableWorldObject> renderables)

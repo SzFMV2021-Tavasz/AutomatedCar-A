@@ -5,6 +5,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
+using System.Windows.Media;
 
 namespace BaseModel.WorldObjects
 {
@@ -19,6 +20,7 @@ namespace BaseModel.WorldObjects
         internal WorldObject(Type type)
         {
             this._objectType = type;
+            ObjectGeometryList(this);
         }
 
         /// <summary>
@@ -211,6 +213,20 @@ namespace BaseModel.WorldObjects
             NATURE = 64,
             VEHICLE = 128,
             PEDESTRIAN = 256
+        }
+
+        public List<StreamGeometry> objectGeometryList = new();
+
+        public List<StreamGeometry> ObjectGeometryList(WorldObject obj)
+        {
+            List<StreamGeometry> streamGeometries = new List<StreamGeometry>();
+            foreach (Polygon polygon in obj.Polygons)
+            {
+                StreamGeometry geometry = polygon.getPolyByPointList(polygon.PPoints, true);
+                streamGeometries.Add(geometry);
+            }
+            
+            return streamGeometries;
         }
     }
 }

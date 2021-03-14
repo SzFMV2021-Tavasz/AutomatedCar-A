@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseModel.JsonHelper;
 using Newtonsoft.Json;
+using System.Windows;
+using System.Windows.Media;
 
 namespace BaseModel
 {
@@ -14,6 +16,8 @@ namespace BaseModel
         private int nextId = 0;
         
         public List<WorldObject> objects = new();
+
+        
 
         public World() {}
 
@@ -145,7 +149,23 @@ namespace BaseModel
 
         public WorldObject[] GetObjectsInAreaTriangle(Triangle triangle)
         {
-            throw new NotImplementedException();
+            List<WorldObject> worldObjects = new List<WorldObject>();
+            Polygon trianglePoli = new Polygon(Polygon.Type_t.STANDALONE, triangle.points);
+            StreamGeometry triangleGeom = trianglePoli.getPolyByPointList(trianglePoli.PPoints, true);
+
+            foreach (WorldObject item in objects)
+            {
+                foreach (StreamGeometry streamGeometry in item.objectGeometryList)
+                {
+                    if(triangleGeom.FillContainsWithDetail(streamGeometry) != IntersectionDetail.Empty || 
+                        triangleGeom.FillContainsWithDetail(streamGeometry) != IntersectionDetail.NotCalculated)
+                    {
+                        worldObjects.Add(item);
+                        break;
+                    }
+                }
+            }
+            return worldObjects.ToArray();
         }
     }
 }

@@ -157,6 +157,7 @@ namespace BaseModel.WorldObjects
             get => Transformation_m22;
             set => Transformation_m22 = value;
         }
+        public bool IsHighLighted { get; set; }
 
         public enum Type
         {

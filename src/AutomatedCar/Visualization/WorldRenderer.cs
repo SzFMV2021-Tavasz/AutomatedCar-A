@@ -4,11 +4,18 @@ using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Linq;
+using BaseModel.Interfaces;
+using BaseModel.WorldObjects;
+using Point = System.Windows.Point;
+using AutomatedCar.SystemComponents.SystemDebug;
 
 namespace AutomatedCar.Visualization
 {
@@ -18,11 +25,12 @@ namespace AutomatedCar.Visualization
         private readonly DispatcherTimer renderTimer = new DispatcherTimer();
         private readonly RenderCamera renderCamera = new RenderCamera();
 
-        private readonly Pen PolyPen = new Pen(Brushes.White, 2);
-        private readonly Pen PolyPenHighLight = new Pen(Brushes.Red, 2);
+        private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
+        private readonly Pen SensorPen = new Pen(Brushes.Black, 1);
+        private readonly Pen PolyPenHighLight = new Pen(Brushes.Yellow, 5);
 
-        private Boolean drawPolygons = true;
-        private Boolean drawDebugCamera = false;
+        private Boolean drawPolygons = false;
+        private Boolean drawDebugVideo = false;
         private Boolean drawDebugRadar = false;
         private Boolean drawDebugSonic = false;
 
@@ -39,7 +47,8 @@ namespace AutomatedCar.Visualization
 
         public WorldRenderer()
         {
-            Loaded += WorldRenderer_Loaded;
+            Loaded += WorldRenderer_Loaded;   
+            HMIDebug.DebugActionEventHandler += Debug_EventCacher;
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -49,63 +58,181 @@ namespace AutomatedCar.Visualization
                 return;
             }
 
+            var objectsInRange = renderCamera.Filter(World.Renderables);
+            
             var car = GetAutomatedCar();
-            List<IRenderableWorldObject> visibleWorldObjects = renderCamera.Filter(World.Renderables);
-
+            
             SetRenderCameraMiddle(car);
-            Render_Car(drawingContext, car);
-            RenderPolygons(drawingContext, visibleWorldObjects.ConvertAll( wo => (WorldObject)wo));
-
-            foreach (var worldObject in World.Renderables)
+            
+            foreach (var worldObject in objectsInRange)
             {
-                // worldObject.Render(drawingContext);              
+                RenderObject(drawingContext, worldObject);
             }
+
+            RenderCar(drawingContext, car);
         }
 
-        private void RenderPolygons(DrawingContext drawingContext, List<WorldObject> renderingWolrdObjects)
+        private void RenderObject(DrawingContext drawingContext, IRenderableWorldObject worldObject)
         {
+            DrawingGroup drawingGroup = RenderImage(worldObject);
+
             if (drawPolygons)
+                drawingGroup = RenderPolygon(drawingGroup, worldObject);
+
+            drawingGroup = RotateObjectOnDrawingGroup(drawingGroup, worldObject);
+            
+            drawingContext.DrawDrawing(drawingGroup);
+        }
+
+        private DrawingGroup RenderPolygon(DrawingGroup drawingGroup, IRenderableWorldObject renderable)
+        {
+            WorldObject worldObject = renderable as WorldObject; 
+
+            List<BaseModel.Polygon> poligons = worldObject.Polygons;
+
+            Point refPoint = this.renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+            
+            Vector delta = WorldObjectTransformer.GetDeltaVector(worldObject.Filename);
+            
+            Point center = new Point(refPoint.X - delta.X, refPoint.Y - delta.Y);
+
+            if (poligons != null)
             {
-                foreach (var item in renderingWolrdObjects)
+                foreach (var poligon in poligons)
                 {
-                    drawPolylineByFlagAndWorldObject(drawingContext, item);
+                    List<Point> displayPoints = new List<Point>();
+
+                    foreach (var points in poligon.Points)
+                        displayPoints.Add(new Point(points.Item1 + center.X, points.Item2 + center.Y));
+
+                    StreamGeometry streamGeometry = getPolyByPointList(displayPoints, false);
+                    GeometryDrawing drawingGeometry = new GeometryDrawing(null, renderable.IsHighLighted ? PolyPenHighLight : PolyPen, streamGeometry);
+
+                    drawingGroup.Children.Add(drawingGeometry);
                 }
             }
+
+            return drawingGroup;
+        }
+
+        private DrawingGroup RenderImage(IRenderableWorldObject worldObject)
+        {
+            DrawingGroup drawingGroup = new DrawingGroup();
+
+            BitmapImage bm = getBitMapImage(ref worldObject);
+
+            Point refPoint = renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+
+            Vector delta = WorldObjectTransformer.GetDeltaVector(worldObject.Filename);
+
+            Point topLeft = new Point(refPoint.X - delta.X, refPoint.Y - delta.Y);
+            
+            drawingGroup.Children.Add(
+                new ImageDrawing(
+                    bm,
+                    new Rect(topLeft, new Size(worldObject.Width, worldObject.Height)
+                    ))
+            );
+
+            return drawingGroup;
         }
 
         private void SetRenderCameraMiddle(Models.AutomatedCar car)
         {
             Point carMiddleReference = getMiddleReference(car.X, car.Y, car.Width, car.Height);
+            
             this.renderCamera.UpdateMiddlePoint(carMiddleReference.X, carMiddleReference.Y);
         }
 
-        private void Render_Car(DrawingContext drawingContext, Models.AutomatedCar car)
+        private void RenderCar(DrawingContext drawingContext, Models.AutomatedCar car)
         {
-            var carImage = getBitMapImageByName(car.Filename);
+            DrawingGroup drawingGroup = RenderImage(car);
 
-            Point carPointOnCanvas = this.renderCamera.TranslateToViewport(car.X , car.Y );
+            if (drawDebugVideo && car.Video != null)
+            {
+                List<Point> carPolyList = new List<Point>();
 
-            drawingContext.DrawImage(carImage, new Rect(carPointOnCanvas.X, carPointOnCanvas.Y, car.Width, car.Height));
+                foreach (var item in car.Video.Points)
+                {
+                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                }
+
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.DodgerBlue, SensorPen, carPoly);
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                );
+            }
+
+            if (drawDebugRadar && car.Radar != null)
+            {
+                List<Point> carPolyList = new List<Point>();
+
+                foreach (var item in car.Radar.Points)
+                {
+                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                }
+
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightPink, SensorPen, carPoly);
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                );
+            }
+
+            if (drawDebugSonic)
+            {
+                List<Point> carPolyList = new List<Point>();
+
+                foreach (var item in car.UltraSonic.Points)
+                {
+                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                }
+
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightGreen, SensorPen, carPoly);
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                );
+            }
 
             if (drawPolygons)
             {
                 List<Point> carPolyList = new List<Point>();
+
                 foreach (var item in car.Geometry.Points)
                 {
                     carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
                 }
 
-                StreamGeometry carPoly = getPolyByPointList(carPolyList);
-                drawingContext.DrawGeometry(null, PolyPen, carPoly);
+                StreamGeometry carPoly = getPolyByPointList(carPolyList, false);
+
+                GeometryDrawing geometryDrawing = new GeometryDrawing(null, car.IsHighLighted ? PolyPenHighLight : PolyPen, carPoly); 
+
+                drawingGroup.Children.Add(
+                    geometryDrawing
+                    );
             }
+
+            drawingGroup = RotateObjectOnDrawingGroup(drawingGroup, car);
+            
+            drawingContext.DrawDrawing(drawingGroup);
         }
 
-        private StreamGeometry getPolyByPointList(List<Point> poliList)
+        private StreamGeometry getPolyByPointList(List<Point> poliList, bool isClosed)
         {
             StreamGeometry streamGeometry = new StreamGeometry();
+
             using (StreamGeometryContext geometryContext = streamGeometry.Open())
             {
-                geometryContext.BeginFigure(poliList[0], true, true);
+                geometryContext.BeginFigure(poliList[0], true, isClosed);
+                
                 PointCollection points = new PointCollection();
 
                 poliList.ForEach(point => points.Add(point));
@@ -116,22 +243,22 @@ namespace AutomatedCar.Visualization
             return streamGeometry;
         }
 
-        private StreamGeometry getPolyByPointList(PointCollection poliCollection)
+        private BitmapImage getBitMapImage(ref IRenderableWorldObject worldObject)
         {
-            StreamGeometry streamGeometry = new StreamGeometry();
-            using (StreamGeometryContext geometryContext = streamGeometry.Open())
+            if (worldObject.Filename == null)
             {
-                geometryContext.BeginFigure(poliCollection[0], true, true);
-                                           
-                geometryContext.PolyLineTo(poliCollection, true, true);
+                worldObject.Filename = Enum.GetName((worldObject as WorldObject).ObjectType).ToLower() + ".png";
             }
 
-            return streamGeometry;
-        }
+            BitmapImage bm = WorldObjectTransformer.GetCachedImage(worldObject.Filename);
 
-        private BitmapImage getBitMapImageByName(string filename)
-        {
-            return WorldObjectTransformer.GetCachedImage(filename);
+            if (worldObject.Width <= 0)
+                worldObject.Width = (int)bm.PixelWidth;
+
+            if (worldObject.Height <= 0)
+                worldObject.Height = (int)bm.PixelHeight;
+
+            return bm;
         }
 
         private AutomatedCar.Models.AutomatedCar GetAutomatedCar()
@@ -154,27 +281,32 @@ namespace AutomatedCar.Visualization
             renderCamera.Height = ActualHeight;
         }
 
+        private void Debug_EventCacher(object sender,DebugActionArgs args)
+        {
+            drawDebugVideo = args.DebugVideo;
+            drawDebugRadar = args.DebugRadar;
+            drawDebugSonic = args.DebugSonic;
+            drawPolygons = args.DebugPolys;
+        }
+
         private Point getMiddleReference(Double x, Double y, Double width, Double height)
         {
             return new Point(x + (width / 2), y + (height / 2));
         }
 
-        private void drawPolylineByFlagAndWorldObject(DrawingContext drawingContext, WorldObject worldObject)
+        public DrawingGroup RotateObjectOnDrawingGroup(DrawingGroup drawingGroup, IRenderableWorldObject worldObject)
         {
-            List<BaseModel.Polygon> poligons = worldObject.Polygons;
+            Point refPoint = renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
 
-            foreach (var poligon in poligons)
-            {
-                List<Point> displayPoints = new List<Point>();
-                foreach (var points in poligon.Points)
-                {
-                    //TODO itt lehet van neki forgatása
-                    displayPoints.Add(renderCamera.TranslateToViewport(points.Item1 + worldObject.X,points.Item2 + worldObject.Y));
-                }
+            double rotationAngle = WorldObjectTransformer.GetRotationAngle(worldObject);
 
-                StreamGeometry drawingGeometry = getPolyByPointList(displayPoints);
-                drawingContext.DrawGeometry(null, PolyPen, drawingGeometry);
-            }                 
+            drawingGroup.Transform = new RotateTransform(
+                rotationAngle,
+                refPoint.X,
+                refPoint.Y
+            );
+
+            return drawingGroup;
         }
     }
 }

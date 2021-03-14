@@ -6,7 +6,25 @@
 
         public PacketEnum AccelerationPriorityCheck()
         {
-            return PacketEnum.AEB;
+            if (virtualFunctionBus.AEBPacket != null)
+            {
+                return PacketEnum.AEB;
+            }
+            else if (virtualFunctionBus.HMIPacket != null)
+            {
+                return PacketEnum.HMI;
+            }
+            else
+            {
+                if (virtualFunctionBus.ACCPacket != null)
+                {
+                    return PacketEnum.ACC;
+                }
+                else
+                {
+                    return PacketEnum.PP;
+                }
+            }
         }
 
         public PacketEnum SteeringPriorityCheck()

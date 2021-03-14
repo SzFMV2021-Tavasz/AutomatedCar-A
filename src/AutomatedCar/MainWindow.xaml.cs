@@ -30,22 +30,16 @@ namespace AutomatedCar
         public MainWindow()
         {
             ViewModel = new MainWindowViewModel(world);
-            var dashBoardViewModel = new DashboardViewModel(world.ControlledCar);
-            ViewModel.Dashboard = dashBoardViewModel;
-                       
+                      
             InitializeComponent();
            
             hmiDebug = new HMIDebug();
-            keyboardHandler = new KeyboardHandler(tickInterval);
-            BindKeysForDashboardFunctions(dashBoardViewModel);
-
+            keyboardHandler = new KeyboardHandler(tickInterval);          
             timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
             timer.Tick += logic;
-            timer.Tick += dashBoardViewModel.HandlePackets;
             timer.Start();
             // make my dockpanel focus of this game
             MainDockPanel.Focus();
-
 
             //world.Width = 2000;
             //world.Height = 1000;
@@ -64,6 +58,7 @@ namespace AutomatedCar
             var controlledCar = new Models.AutomatedCar(50, 50, "car_1_white.png");
             controlledCar.Width = 108;
             controlledCar.Height = 240;
+            controlledCar.IsHighLighted = true;
 
             // read the world object polygons, get the one for the car in a primitive way
             // this is just a sample, the proecssing shold be much more general
@@ -78,9 +73,31 @@ namespace AutomatedCar
             // add polyline to the car
             controlledCar.Geometry = geom;
 
+            var video = new Polyline();
+            video.Points.Add(new Point(54,120));
+            video.Points.Add(new Point(0,-120));
+            video.Points.Add(new Point(108, -120));
+            controlledCar.Video = video;
+
+            var radar = new Polyline();
+            radar.Points.Add(new Point(54, 120));
+            radar.Points.Add(new Point(0, -300));
+            radar.Points.Add(new Point(108, -300));
+            controlledCar.Radar = radar;
+
+            var sonic = new Polyline();
+            sonic.Points.Add(new Point(6, 20));
+            sonic.Points.Add(new Point(-144, -159));
+            sonic.Points.Add(new Point(-144, 199));
+            controlledCar.UltraSonic = sonic;
+
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();
+            var dashBoardViewModel = new DashboardViewModel(world.ControlledCar);
+            ViewModel.Dashboard = dashBoardViewModel;
+            BindKeysForDashboardFunctions(dashBoardViewModel);
+            timer.Tick += dashBoardViewModel.HandlePackets;
         }
 
         private void BindKeysForDashboardFunctions(DashboardViewModel dashBoardViewModel)

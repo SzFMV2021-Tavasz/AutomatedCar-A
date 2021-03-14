@@ -27,6 +27,12 @@
       <None Update="SerializingDummies\reference_points.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="TriangleFilteringDummies\FilteringDummy_1.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="TriangleFilteringDummies\FilteringDummy_Empty.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

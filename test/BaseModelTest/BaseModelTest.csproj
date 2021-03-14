@@ -24,6 +24,9 @@
       <None Update="SerializingDummies\worldobject_polygons.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="SerializingDummies\reference_points.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

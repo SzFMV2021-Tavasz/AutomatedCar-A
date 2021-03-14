@@ -28,18 +28,23 @@ namespace BaseModel.WorldObjects
         {
             ValidateType(this._objectType, AllowedTypes);
         }
-
+        
         /// <summary>
         /// If a type is not found in the dictionary, then it is interpreted as the object
         /// not being able to collide with other objects possessing this trait.
         /// </summary>
+        [JsonIgnore]
         public Dictionary<Type, List<Polygon>> PolygonDictionary { private get; set; }
+        
+        [JsonIgnore]
+        public Dictionary<Type, Tuple<int, int>> ReferencePointDictionary { private get; set; }
 
         [JsonIgnore]
         public int ID { get; set; }
 
         /// <summary>
         /// If the object is able to collide with other object possessing the same trait,
+        /// then a collision polygon, null otherwise.
         /// </summary>
         [JsonIgnore]
         public List<Polygon> Polygons
@@ -53,6 +58,29 @@ namespace BaseModel.WorldObjects
                 catch (KeyNotFoundException)
                 {
                     return null;
+                }
+                catch (NullReferenceException)
+                {
+                    return null;
+                }
+            }
+        }
+
+        public Tuple<int, int> ReferencePoint
+        {
+            get
+            {
+                try
+                {
+                    return ReferencePointDictionary[this._objectType];
+                }
+                catch (KeyNotFoundException)
+                {
+                    return new Tuple<int, int>(0, 0);
+                }
+                catch (NullReferenceException)
+                {
+                    return new Tuple<int, int>(0, 0);
                 }
             }
         }
@@ -129,6 +157,7 @@ namespace BaseModel.WorldObjects
             get => Transformation_m22;
             set => Transformation_m22 = value;
         }
+        public bool IsHighLighted { get; set; }
 
         public enum Type
         {

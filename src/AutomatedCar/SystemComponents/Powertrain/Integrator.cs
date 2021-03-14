@@ -58,18 +58,10 @@ namespace AutomatedCar.SystemComponents.Powertrain
             }
 
             var distanceFromCenterOfMass = vehicleConstants.WheelBase / 2;
-            var direction = GetDirectionVector(carHeading);
+            var direction = carHeading.MakeUnitVectorFromRadians();
             var particlePosition = carPosition + (multiplier * distanceFromCenterOfMass * direction);
 
             return particlePosition;
-        }
-
-        private Vector2 GetDirectionVector(float carHeading)
-        {
-            var x = (float)Math.Cos(carHeading);
-            var y = (float)Math.Sin(carHeading);
-
-            return new Vector2(x, y);
         }
 
         private VehicleTransform CalculateNextVehicleTransform()

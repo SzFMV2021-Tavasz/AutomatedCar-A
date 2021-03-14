@@ -228,7 +228,7 @@ namespace AutomatedCar.ViewModels
                         this.CarInfoViewModel.Y = bus.PowertrainPacket.Y;
                         this.SpeedGaugeViewModel.SetValue(bus.PowertrainPacket.Speed);
                         this.RpmGaugeViewModel.SetValue(bus.PowertrainPacket.Rpm);
-                        this.CarInfoViewModel.SteeringWheelAngle = (int)bus.PowertrainPacket.CarHeadingAngle;
+                        this.CarInfoViewModel.SteeringWheelAngle = (int)bus.PowertrainPacket.SteeringWheelAngleDegrees;
                     }
                 }
             }

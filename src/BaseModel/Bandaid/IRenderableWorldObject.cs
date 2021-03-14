@@ -12,5 +12,6 @@
         float M12 { get; set; }
         float M21 { get; set; }
         float M22 { get; set; }
+        bool IsHighLighted { get; set; }
     }
 }

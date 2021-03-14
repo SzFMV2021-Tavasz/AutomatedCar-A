@@ -19,14 +19,14 @@ namespace Test.SystemComponents.Powertrain
         [Fact]
         public  void PowertrainAutomaticallyGetsRegisteredToVFB()
         {
-            PowertrainComponent ptr = new PowertrainComponent(mockBus.Object);
+            PowertrainComponent ptr = new PowertrainComponent(mockBus.Object, null, null, null);
             mockBus.Verify(m => m.RegisterComponent(ptr), Times.Once);
         }
 
         [Fact]
         public void VFBGetsPowertrainPacketAfterCreatingPowertrainComponent()
         {
-            PowertrainComponent powertrain = new PowertrainComponent(virtualFunctionBus);
+            PowertrainComponent powertrain = new PowertrainComponent(virtualFunctionBus, null, null, null);
             Assert.True(virtualFunctionBus.PowertrainPacket != null);
         }
     }

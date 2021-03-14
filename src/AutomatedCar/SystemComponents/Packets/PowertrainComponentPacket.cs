@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutomatedCar.SystemComponents.Packets
 {
-    class PowertrainComponentPacket : ReactiveObject, IReadOnlyPowertrainComponentPacket
+    public class PowertrainComponentPacket : ReactiveObject, IReadOnlyPowertrainComponentPacket
     {
         private int x;
         private int y;
@@ -39,7 +39,7 @@ namespace AutomatedCar.SystemComponents.Packets
             set => this.RaiseAndSetIfChanged(ref this.rpm, value);
         }
 
-        public double CarHeadingAngle
+        public double SteeringWheelAngleDegrees
         {
             get => this.carHeadingAngle;
             set => this.RaiseAndSetIfChanged(ref this.carHeadingAngle, value);

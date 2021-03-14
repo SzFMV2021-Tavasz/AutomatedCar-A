@@ -46,7 +46,7 @@ namespace AutomatedCar
             var path = $"{Directory.GetCurrentDirectory()}/Assets";
             var worldPath = $"{path}/test_world.json";
             var polygonsPath = $"{path}/worldobject_polygons.json";
-            var referencePointsPath = $"{path}/worldobject_polygons.json";
+            var referencePointsPath = $"{path}/reference_points.json";
             world.LoadFromJSON(worldPath, polygonsPath, referencePointsPath);
 
             var circle = new Circle(400, 200, "circle.png", 20);

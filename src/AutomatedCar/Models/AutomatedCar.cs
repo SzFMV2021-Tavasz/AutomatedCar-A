@@ -4,6 +4,8 @@ namespace AutomatedCar.Models
     using System.Windows.Shapes;
     using System.Numerics;
     using global::AutomatedCar.SystemComponents.Powertrain;
+    using System.Collections.Generic;
+    using BaseModel.Sensors;
 
     public class AutomatedCar : Car
     {
@@ -46,9 +48,9 @@ namespace AutomatedCar.Models
         }
 
         public Polyline Geometry { get; set; }
-        public Polyline Video { get; set; }
-        public Polyline Radar { get; set; }
-        public Polyline UltraSonic { get; set; }
+        public List<IDisplaySensor> Video { get; set; }
+        public List<IDisplaySensor> Radar { get; set; }
+        public List<IDisplaySensor> UltraSonic { get; set; }
         
         public float CarHeading { get; set; }
         public float AngularVelocity { get; set; }

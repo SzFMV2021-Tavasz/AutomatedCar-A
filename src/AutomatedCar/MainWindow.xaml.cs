@@ -2,8 +2,10 @@
 using AutomatedCar.Models;
 using AutomatedCar.SystemComponents.SystemDebug;
 using AutomatedCar.ViewModels;
+using BaseModel.Sensors;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -72,23 +74,28 @@ namespace AutomatedCar
             // add polyline to the car
             controlledCar.Geometry = geom;
 
-            var video = new Polyline();
-            video.Points.Add(new Point(54,120));
-            video.Points.Add(new Point(0,-120));
-            video.Points.Add(new Point(108, -120));
-            controlledCar.Video = video;
 
+            List<IDisplaySensor> cameraSensores = new List<IDisplaySensor>();
+            cameraSensores.Add(new CameraSensor() { x1 = new Point(54, 120), x2 = new Point(0, -120), x3= new Point(108, -120) });
+            controlledCar.Video = cameraSensores;
+
+            List<IDisplaySensor> radarSensores = new List<IDisplaySensor>();
+            //Radar points example, clear in  #127 issue
             var radar = new Polyline();
             radar.Points.Add(new Point(54, 120));
             radar.Points.Add(new Point(0, -300));
             radar.Points.Add(new Point(108, -300));
-            controlledCar.Radar = radar;
+            //controlledCar.Radar = radar;
+            controlledCar.Radar = null;
 
+            List<IDisplaySensor> sonicSensores = new List<IDisplaySensor>();
+            //Sonic points example, clear in  #127 issue
             var sonic = new Polyline();
             sonic.Points.Add(new Point(6, 20));
             sonic.Points.Add(new Point(-144, -159));
             sonic.Points.Add(new Point(-144, 199));
-            controlledCar.UltraSonic = sonic;
+            //controlledCar.UltraSonic = sonic;
+            controlledCar.UltraSonic = null;
 
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;

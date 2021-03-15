@@ -16,6 +16,7 @@ using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
 using AutomatedCar.SystemComponents.SystemDebug;
+using BaseModel.Sensors;
 
 namespace AutomatedCar.Visualization
 {
@@ -150,56 +151,38 @@ namespace AutomatedCar.Visualization
 
             if (drawDebugVideo && car.Video != null)
             {
-                List<Point> carPolyList = new List<Point>();
+                List<StreamGeometry> videoStreamGemometrys = GetStreamGeometryListOf(car.Video, new Point(car.X, car.Y));
 
-                foreach (var item in car.Video.Points)
-                {
-                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
-                }
-
-                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
-
-                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.DodgerBlue, SensorPen, carPoly);
-
-                drawingGroup.Children.Add(
-                    geometryDrawing
-                );
+                foreach (StreamGeometry streamGeometry in videoStreamGemometrys)
+                {                   
+                    drawingGroup.Children.Add(
+                        createVideoGeometryDrawingBy(streamGeometry)
+                    );
+                }             
             }
 
             if (drawDebugRadar && car.Radar != null)
             {
-                List<Point> carPolyList = new List<Point>();
+                List<StreamGeometry> radarStreamGemometrys = GetStreamGeometryListOf(car.Video, new Point(car.X, car.Y));
 
-                foreach (var item in car.Radar.Points)
+                foreach (StreamGeometry streamGeometry in radarStreamGemometrys)
                 {
-                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                    drawingGroup.Children.Add(
+                        createRadarGeometryDrawingBy(streamGeometry)
+                    );
                 }
-
-                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
-
-                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightPink, SensorPen, carPoly);
-
-                drawingGroup.Children.Add(
-                    geometryDrawing
-                );
             }
 
-            if (drawDebugSonic)
+            if (drawDebugSonic && car.UltraSonic != null)
             {
-                List<Point> carPolyList = new List<Point>();
+                List<StreamGeometry> sonicStreamGemometrys = GetStreamGeometryListOf(car.UltraSonic, new Point(car.X, car.Y));
 
-                foreach (var item in car.UltraSonic.Points)
+                foreach (StreamGeometry streamGeometry in sonicStreamGemometrys)
                 {
-                    carPolyList.Add(renderCamera.TranslateToViewport(item.X + car.X, item.Y + car.Y));
+                    drawingGroup.Children.Add(
+                        createSonicGeometryDrawingBy(streamGeometry)
+                    );
                 }
-
-                StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
-
-                GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightGreen, SensorPen, carPoly);
-
-                drawingGroup.Children.Add(
-                    geometryDrawing
-                );
             }
 
             if (drawPolygons)
@@ -223,6 +206,60 @@ namespace AutomatedCar.Visualization
             drawingGroup = RotateObjectOnDrawingGroup(drawingGroup, car);
             
             drawingContext.DrawDrawing(drawingGroup);
+        }
+
+        private Drawing createSonicGeometryDrawingBy(StreamGeometry streamGeometry)
+        {
+            return createGeometryDrawingBy(Brushes.LightGreen, SensorPen, streamGeometry);
+        }
+
+        private Drawing createRadarGeometryDrawingBy(StreamGeometry streamGeometry)
+        {
+            return createGeometryDrawingBy(Brushes.LightPink, SensorPen, streamGeometry);
+        }
+
+        private Drawing createVideoGeometryDrawingBy(StreamGeometry streamGeometry)
+        {       
+            return createGeometryDrawingBy(Brushes.DodgerBlue, SensorPen, streamGeometry);
+        }
+
+        private Drawing createGeometryDrawingBy(SolidColorBrush brush, Pen sensorPen, StreamGeometry streamGeometry)
+        {
+            return new GeometryDrawing(brush, SensorPen, streamGeometry);
+        }
+
+        private List<StreamGeometry> GetStreamGeometryListOf(List<IDisplaySensor> sensorList, Point refPoint)
+        {
+            List<StreamGeometry> geometryList = new List<StreamGeometry>();
+            foreach (IDisplaySensor item in sensorList)
+            {
+                geometryList.Add(GetStreamGeometryOf(item,refPoint));
+            }
+            return geometryList;
+        }
+
+        private StreamGeometry GetStreamGeometryOf(IDisplaySensor sensor, Point refPoint)
+        {
+            if (sensor != null)
+            {
+                List<Point> sensorDrawingPointsOnViewPort = GetSensorPointsOnViewPort(sensor, refPoint);
+
+                return getPolyByPointList(sensorDrawingPointsOnViewPort, true);
+              
+            }
+
+            return null;
+        }
+
+        private List<Point> GetSensorPointsOnViewPort(IDisplaySensor sensor,Point refPoint)
+        {
+            List<Point> sensorDrawingPointsOnViewPort = new List<Point>();
+
+            sensorDrawingPointsOnViewPort.Add(renderCamera.TranslateToViewport(sensor.x1.X + refPoint.X, sensor.x1.Y + refPoint.Y));
+            sensorDrawingPointsOnViewPort.Add(renderCamera.TranslateToViewport(sensor.x2.X + refPoint.X, sensor.x2.Y + refPoint.Y));
+            sensorDrawingPointsOnViewPort.Add(renderCamera.TranslateToViewport(sensor.x3.X + refPoint.X, sensor.x3.Y + refPoint.Y));
+
+            return sensorDrawingPointsOnViewPort;
         }
 
         private StreamGeometry getPolyByPointList(List<Point> poliList, bool isClosed)

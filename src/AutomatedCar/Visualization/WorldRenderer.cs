@@ -244,10 +244,8 @@ namespace AutomatedCar.Visualization
             {
                 List<Point> sensorDrawingPointsOnViewPort = GetSensorPointsOnViewPort(sensor, refPoint);
 
-                return getPolyByPointList(sensorDrawingPointsOnViewPort, true);
-              
+                return getPolyByPointList(sensorDrawingPointsOnViewPort, true);           
             }
-
             return null;
         }
 

@@ -74,7 +74,6 @@ namespace AutomatedCar
             // add polyline to the car
             controlledCar.Geometry = geom;
 
-
             List<IDisplaySensor> cameraSensores = new List<IDisplaySensor>();
             cameraSensores.Add(new CameraSensor() { x1 = new Point(54, 120), x2 = new Point(0, -120), x3= new Point(108, -120) });
             controlledCar.Video = cameraSensores;

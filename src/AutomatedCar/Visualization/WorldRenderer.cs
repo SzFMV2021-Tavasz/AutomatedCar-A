@@ -281,7 +281,7 @@ namespace AutomatedCar.Visualization
 
             renderCamera.Width = ActualWidth;
             renderCamera.Height = ActualHeight;
-            renderCamera.viewPortSkin = 0.5;
+            renderCamera.viewPortSkin = 2;
 
             renderCamera.WorldWidth = World.Width;
             renderCamera.WorldHeight = World.Height;

@@ -18,7 +18,7 @@ namespace BaseModel.WorldObjects
 
         internal WorldObject(Type type)
         {
-            this._objectType = type;
+            this._objectType = type;           
         }
 
         /// <summary>

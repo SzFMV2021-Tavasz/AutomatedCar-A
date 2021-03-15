@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseModel.JsonHelper;
 using Newtonsoft.Json;
+using System.Windows;
 
 namespace BaseModel
 {
@@ -14,6 +15,8 @@ namespace BaseModel
         private int nextId = 0;
         
         public List<WorldObject> objects = new();
+
+        
 
         public World() {}
 
@@ -145,7 +148,46 @@ namespace BaseModel
 
         public WorldObject[] GetObjectsInAreaTriangle(Triangle triangle)
         {
-            throw new NotImplementedException();
+            List<WorldObject> objectsInTriangle = new List<WorldObject>();
+
+            foreach (WorldObject item in objects)
+            {
+                foreach (Polygon polygon in item.Polygons)
+                {
+                    polygon.PPoints = polygon.TupleListToPointList(polygon.Points);
+                    int i = 0;
+                    Point point = new Point();
+                    point.X = polygon.PPoints[i].X + item.X;
+                    point.Y = polygon.PPoints[i].Y + item.Y;
+                    while (!PointInTriangle(point, triangle.Item1, triangle.Item2, triangle.Item3) && polygon.PPoints.Count > i)
+                    {
+                        point.X = polygon.PPoints[i].X + item.X;
+                        point.Y = polygon.PPoints[i].Y + item.Y;
+                        i++;
+                    }
+                    if (PointInTriangle(point, triangle.Item1, triangle.Item2, triangle.Item3))
+                    {
+                        objectsInTriangle.Add(item);
+                    }
+                }             
+            }
+            return objectsInTriangle.ToArray();
+        }
+
+        public static bool PointInTriangle(Point p, Point p1, Point p2, Point p3)
+        {
+            double a = ((p2.Y - p3.Y) * (p.X - p3.X) + (p3.X - p2.X) * (p.Y - p3.Y)) / ((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
+            double b = ((p3.Y - p1.Y) * (p.X - p3.X) + (p1.X - p3.X) * (p.Y - p3.Y)) / ((p2.Y - p3.Y) * (p1.X - p3.X) + (p3.X - p2.X) * (p1.Y - p3.Y));
+            double c = 1 - a - b;
+
+            if (a >= 0 && a <= 1 && b >= 0 && b <= 1 && c >= 0 && c <= 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

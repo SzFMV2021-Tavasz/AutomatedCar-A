@@ -66,6 +66,9 @@ namespace BaseModel.WorldObjects
             }
         }
 
+        public int RefX { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int RefY { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public Tuple<int, int> ReferencePoint
         {
             get

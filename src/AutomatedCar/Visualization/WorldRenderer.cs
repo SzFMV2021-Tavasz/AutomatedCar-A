@@ -72,18 +72,6 @@ namespace AutomatedCar.Visualization
             }
 
             RenderCar(drawingContext, car);
-
-            log.Clear();
-            log.Append($"car pos: {car.X} {car.Y}\n");
-            log.Append($"camera pos: {renderCamera.MiddleX} {renderCamera.MiddleY}\n");
-            log.Append($"viewport coords: {renderCamera.ViewportRect.X} {renderCamera.ViewportRect.Y} {renderCamera.ViewportRect.Width} {renderCamera.ViewportRect.Height}\n");
-            log.Append($"object in viewport: {objectsInRange.Count}");
-            RenderDebugText(drawingContext, log.ToString());
-        }
-
-        private void RenderDebugText(DrawingContext drawingContext, string text)
-        {
-            drawingContext.DrawText(new FormattedText(text, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Consolas"), 14, Brushes.Black), new Point(0, 0));
         }
 
         private void RenderObject(DrawingContext drawingContext, IRenderableWorldObject worldObject)
@@ -293,7 +281,7 @@ namespace AutomatedCar.Visualization
 
             renderCamera.Width = ActualWidth;
             renderCamera.Height = ActualHeight;
-            renderCamera.viewportSkinPercent = 0.5d;
+            renderCamera.viewPortSkin = 0.5;
 
             renderCamera.WorldWidth = World.Width;
             renderCamera.WorldHeight = World.Height;

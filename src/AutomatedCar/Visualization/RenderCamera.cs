@@ -17,9 +17,10 @@ namespace AutomatedCar.Visualization
         public double WorldWidth { get; set; }
         public double WorldHeight { get; set; }
 
-        public double viewportSkinPercent { get; set; }
+        public double viewPortSkin { get; set; }
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);
-        
+
+
         public void UpdateMiddlePoint(double originX, double originY)
         {
             EnforceMiddlePointStaysInBoundaries(ref originX, ref originY);
@@ -43,7 +44,7 @@ namespace AutomatedCar.Visualization
 
             foreach (var renderable in renderables)
             {
-                if (IsVisibleInViewport(renderable))
+                if (IsWithinDrawingDistance(renderable))
                 {
                     visible.Add(renderable);
                 }
@@ -52,15 +53,18 @@ namespace AutomatedCar.Visualization
             return visible;
         }
 
-        public bool IsVisibleInViewport(IRenderableWorldObject renderable)
+        public bool IsWithinDrawingDistance(IRenderableWorldObject renderable)
         {
-            var filterRect = new Rect(CushionSide(LeftX), CushionSide(TopY), CushionSide(Width), CushionSide(Height));
-            return filterRect.IntersectsWith(WorldObjectTransformer.GetBoundary(renderable));
+            var reference = Math.Max(Width, Height);
+            var range = reference * (1 + viewPortSkin);
+            var distance = Math.Sqrt(Math.Pow(renderable.X - MiddleX, 2) + Math.Pow(renderable.Y - MiddleY, 2));
+
+            return distance <= range;
         }
 
         private double CushionSide(double side)
         {
-            return side + (side * viewportSkinPercent);
+            return side + (side * viewPortSkin);
         }
 
         public Point TranslateToViewport(double worldX, double worldY)

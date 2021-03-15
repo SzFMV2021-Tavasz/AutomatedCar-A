@@ -77,7 +77,7 @@ namespace Test.Visualization
         [InlineData(5, 5, 10, 10)]
         [InlineData(0, 0, 20, 30)]
         [InlineData(450, 500, 150, 30)]
-        [InlineData(-500, -1500, 5000, 5000)]
+        [InlineData(-500, -500, 5000, 5000)]
         public void CameraDetectsIntersectionsCorrectly(int x, int y, int width, int height)
         {
             var renderable = new Mock<IRenderableWorldObject>();
@@ -86,7 +86,7 @@ namespace Test.Visualization
             renderable.Setup(r => r.Width).Returns(width);
             renderable.Setup(r => r.Height).Returns(height);
 
-            var result = camera.IsVisibleInViewport(renderable.Object);
+            var result = camera.IsWithinDrawingDistance(renderable.Object);
             Assert.True(result);
         }
 

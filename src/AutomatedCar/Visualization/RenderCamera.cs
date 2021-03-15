@@ -20,7 +20,6 @@ namespace AutomatedCar.Visualization
         public double viewPortSkin { get; set; }
         public Rect ViewportRect => new Rect(LeftX, TopY, Width, Height);
 
-
         public void UpdateMiddlePoint(double originX, double originY)
         {
             EnforceMiddlePointStaysInBoundaries(ref originX, ref originY);

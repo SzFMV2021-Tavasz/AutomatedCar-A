@@ -16,6 +16,8 @@ using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
 using AutomatedCar.SystemComponents.SystemDebug;
+using System.Globalization;
+using System.Text;
 
 namespace AutomatedCar.Visualization
 {
@@ -24,6 +26,7 @@ namespace AutomatedCar.Visualization
         public readonly double tickRate = 20;
         private readonly DispatcherTimer renderTimer = new DispatcherTimer();
         private readonly RenderCamera renderCamera = new RenderCamera();
+        private readonly StringBuilder log = new StringBuilder();
 
         private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
         private readonly Pen SensorPen = new Pen(Brushes.Black, 1);
@@ -57,19 +60,30 @@ namespace AutomatedCar.Visualization
             {
                 return;
             }
-
-            var objectsInRange = renderCamera.Filter(World.Renderables);
             
             var car = GetAutomatedCar();
             
             SetRenderCameraMiddle(car);
-            
+            var objectsInRange = renderCamera.Filter(World.Renderables);
+
             foreach (var worldObject in objectsInRange)
             {
                 RenderObject(drawingContext, worldObject);
             }
 
             RenderCar(drawingContext, car);
+
+            log.Clear();
+            log.Append($"car pos: {car.X} {car.Y}\n");
+            log.Append($"camera pos: {renderCamera.MiddleX} {renderCamera.MiddleY}\n");
+            log.Append($"viewport coords: {renderCamera.ViewportRect.X} {renderCamera.ViewportRect.Y} {renderCamera.ViewportRect.Width} {renderCamera.ViewportRect.Height}\n");
+            log.Append($"object in viewport: {objectsInRange.Count}");
+            RenderDebugText(drawingContext, log.ToString());
+        }
+
+        private void RenderDebugText(DrawingContext drawingContext, string text)
+        {
+            drawingContext.DrawText(new FormattedText(text, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Consolas"), 14, Brushes.Black), new Point(0, 0));
         }
 
         private void RenderObject(DrawingContext drawingContext, IRenderableWorldObject worldObject)

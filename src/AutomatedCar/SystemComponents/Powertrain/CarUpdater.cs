@@ -2,11 +2,7 @@
 using AutomatedCar.Models.Enums;
 using AutomatedCar.SystemComponents.Packets;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutomatedCar.SystemComponents.Powertrain
 {
@@ -28,8 +24,9 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private float deltaTime;
         private const float unitsPerMeters = 48f;
         private readonly float forceMultiplier;
+        private readonly ReverseMovement reverseMovement = new ReverseMovement();
 
-        private float wheelRotationVelocity = (float)Math.PI / 64;
+        private float wheelRotationVelocity = (float)Math.PI / 128;
 
         public CarUpdater(IVirtualFunctionBus virtualFunctionBus, IVehicleForces vehicleForces, IIntegrator integrator, PowertrainComponentPacket powertrainPacket, IVehicleConstants vehicleConstants, float forceMultiplier)
         {
@@ -102,51 +99,80 @@ namespace AutomatedCar.SystemComponents.Powertrain
             var gasPedal = VirtualFunctionBus.HMIPacket.GasPedal/ 100f;
             var brakePedal = VirtualFunctionBus.HMIPacket.BrakePedal / 100f;
 
+            var oldGear = transmission.Gear;
+            var nextGear = VirtualFunctionBus.HMIPacket.Gear;
+
+            if((oldGear == Gear.D && nextGear == Gear.R) || (oldGear == Gear.R && nextGear == Gear.D))
+            {
+                currentTransform = currentTransform with { Velocity = Vector2.Zero };
+            }
+
             transmission.Gear = VirtualFunctionBus.HMIPacket.Gear;
             transmission.SetInsideGear((int)(currentTransform.Velocity.Length() * 3.6));
 
-            Integrator.Reset(currentTransform, (float)deltaTime, transmission.Gear);
+            var priority = priorityChecker.AccelerationPriorityCheck();
+            if (transmission.Gear != Gear.R)
+            {
+                Integrator.Reset(currentTransform, (float)deltaTime, transmission.Gear);
+                switch (priority)
+                {
+                    case PacketEnum.AEB:
+                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
+                        break;
+                    case PacketEnum.HMI:
+                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
+                        if (transmission.Gear == Gear.D)
+                        {
+                            Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetTractiveForce(gasPedal, wheelDirection, transmission.InsideGear));
+                        }
+                        break;
+                    case PacketEnum.ACC:
+                    case PacketEnum.PP:
+                        break;
+                }
 
-            PacketEnum priority = priorityChecker.AccelerationPriorityCheck();
-            if (priority == PacketEnum.AEB)
-            {
-                Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
+                Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
+                Integrator.AccumulateForce(WheelKind.Back, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
             }
-            else if (priority == PacketEnum.HMI)
+            else
             {
-                if (transmission.Gear != Gear.R)
+                reverseMovement.Reset(currentTransform, (float)deltaTime);
+                reverseMovement.SteeringWheel = wheelDirection;
+                switch (priority)
                 {
-                    Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
-                    if (transmission.Gear == Gear.D)
-                    {
-                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetTractiveForce(gasPedal, wheelDirection, transmission.InsideGear));
-                    }
-                }
-                else
-                {
-                    Integrator.AccumulateForce(WheelKind.Front, 8 * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
-                    Integrator.AccumulateForce(WheelKind.Front, 8 * VehicleForces.GetTractiveForceInReverse(gasPedal, wheelDirection));
+                    case PacketEnum.AEB:
+                        reverseMovement.Braking = 1f;
+                        break;
+                    case PacketEnum.HMI:
+                        reverseMovement.Braking = brakePedal;
+                        reverseMovement.Accelerator = gasPedal;
+                        break;
+                    case PacketEnum.ACC:
+                    case PacketEnum.PP:
+                        break;
                 }
             }
-            else if (priority == PacketEnum.ACC || priority == PacketEnum.PP)
-            {
-            }
-            Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
-            Integrator.AccumulateForce(WheelKind.Back, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
         }
 
         public void SetCurrentTransform()
         {
-            currentTransform = Integrator.NextVehicleTransform;
-
-            // HACK: cap vehicle speed at 100m/s to prevent blow-up
-            if(currentTransform.Velocity.Length() > 100)
+            if (transmission.Gear != Gear.R)
             {
-                var fixedVelocity = 100 * Vector2.Normalize(currentTransform.Velocity);
-                currentTransform = currentTransform with { Velocity = fixedVelocity };
-            }
+                currentTransform = Integrator.NextVehicleTransform;
 
-            currentTransform = MakeCarRotateTowardsWheelDirection(currentTransform);
+                // HACK: cap vehicle speed at 100m/s to prevent blow-up
+                if (currentTransform.Velocity.Length() > 100)
+                {
+                    var fixedVelocity = 100 * Vector2.Normalize(currentTransform.Velocity);
+                    currentTransform = currentTransform with { Velocity = fixedVelocity };
+                }
+
+                currentTransform = MakeCarRotateTowardsWheelDirection(currentTransform);
+            }
+            else
+            {
+                currentTransform = reverseMovement.NextTransform;
+            }
         }
 
         private VehicleTransform MakeCarRotateTowardsWheelDirection(VehicleTransform original)
@@ -177,7 +203,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             var t = alpha / theta;
             var v1_normalized = t * w + (1f - t) * v0_normalized;
             var v1 = v0_len * v1_normalized;
-            return original with { Velocity = v1 };
+            return original with { Velocity = v1, AngularDisplacement = (float)Math.Atan2(v1_normalized.Y, v1_normalized.X) };
         }
 
         private VehicleTransform ConvertTransformToWorldSpace(VehicleTransform original)

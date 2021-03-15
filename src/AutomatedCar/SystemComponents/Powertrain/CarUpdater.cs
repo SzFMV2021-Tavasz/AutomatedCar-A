@@ -52,6 +52,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
         {
             currentTransform = new VehicleTransform(Vector2.Zero, 0, Vector2.Zero, 0);
         }
+        private void SetCurrentWheelDirection()
+        {
+            var currentDirection = currentTransform.AngularDisplacement + currentSteering;
+            wheelDirection = currentDirection.MakeUnitVectorFromRadians();
+        }
         private void CalculateSteeringAngle()
         {
             PacketEnum priority = priorityChecker.SteeringPriorityCheck();
@@ -89,9 +94,8 @@ namespace AutomatedCar.SystemComponents.Powertrain
         public void Calculate()
         {
             CalculateSteeringAngle();
+            SetCurrentWheelDirection();
 
-            var currentDirection = currentTransform.AngularDisplacement + currentSteering;
-            wheelDirection = currentDirection.MakeUnitVectorFromRadians();
             var now = DateTime.Now;
             var deltaTime = (now - then).TotalSeconds;
             then = now;
@@ -113,44 +117,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
             var priority = priorityChecker.AccelerationPriorityCheck();
             if (transmission.Gear != Gear.R)
             {
-                Integrator.Reset(currentTransform, (float)deltaTime, transmission.Gear);
-                switch (priority)
-                {
-                    case PacketEnum.AEB:
-                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
-                        break;
-                    case PacketEnum.HMI:
-                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
-                        if (transmission.Gear == Gear.D)
-                        {
-                            Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetTractiveForce(gasPedal, wheelDirection, transmission.InsideGear));
-                        }
-                        break;
-                    case PacketEnum.ACC:
-                    case PacketEnum.PP:
-                        break;
-                }
-
-                Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
-                Integrator.AccumulateForce(WheelKind.Back, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
+                DoPhysicsCalculations((float)deltaTime, priority, gasPedal, brakePedal);
             }
             else
             {
-                reverseMovement.Reset(currentTransform, (float)deltaTime);
-                reverseMovement.SteeringWheel = wheelDirection;
-                switch (priority)
-                {
-                    case PacketEnum.AEB:
-                        reverseMovement.Braking = 1f;
-                        break;
-                    case PacketEnum.HMI:
-                        reverseMovement.Braking = brakePedal;
-                        reverseMovement.Accelerator = gasPedal;
-                        break;
-                    case PacketEnum.ACC:
-                    case PacketEnum.PP:
-                        break;
-                }
+                DoPhysicsCalculationsInReverseMode((float)deltaTime, priority, gasPedal, brakePedal);
             }
         }
 
@@ -222,6 +193,53 @@ namespace AutomatedCar.SystemComponents.Powertrain
             obj.M12 = sin;
             obj.M21 = -sin;
             obj.M22 = -cos;
+        }
+
+        private void DoPhysicsCalculations(float deltaTime, PacketEnum priority, float gasPedal, float brakePedal)
+        {
+            Integrator.Reset(currentTransform, deltaTime, transmission.Gear);
+            switch (priority)
+            {
+                case PacketEnum.AEB:
+                    Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(1f, currentTransform.Velocity));
+                    break;
+                case PacketEnum.HMI:
+                    Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetBrakingForce(brakePedal, currentTransform.Velocity));
+                    if (transmission.Gear == Gear.D)
+                    {
+                        Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetTractiveForce(gasPedal, wheelDirection, transmission.InsideGear));
+                    }
+                    break;
+                case PacketEnum.ACC:
+                case PacketEnum.PP:
+                    break;
+            }
+
+            Integrator.AccumulateForce(WheelKind.Front, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
+            Integrator.AccumulateForce(WheelKind.Back, forceMultiplier * VehicleForces.GetDragForce(currentTransform.Velocity));
+        }
+
+        private void DoPhysicsCalculationsInReverseMode(float deltaTime, PacketEnum priority, float gasPedal, float brakePedal)
+        {
+            reverseMovement.Reset(currentTransform, deltaTime);
+            reverseMovement.SteeringWheel = wheelDirection;
+            switch (priority)
+            {
+                case PacketEnum.AEB:
+                    reverseMovement.Braking = 1f;
+                    break;
+                case PacketEnum.HMI:
+                    reverseMovement.Braking = brakePedal;
+                    reverseMovement.Accelerator = gasPedal;
+                    break;
+                case PacketEnum.ACC:
+                case PacketEnum.PP:
+                    break;
+            }
+        }
+
+        private void CalculateWheelDirection()
+        {
         }
     }
 }

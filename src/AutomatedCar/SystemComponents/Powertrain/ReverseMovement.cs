@@ -25,13 +25,13 @@ namespace AutomatedCar.SystemComponents.Powertrain
             var steeringWheelAngle = Math.Acos(SteeringWheel.X);
             var rotationDirection = steeringWheelAngle - transform.AngularDisplacement;
 
-            var nextVelocity = (transform.Velocity + Accelerator * deltaTime * movementDirection) * (1f - Braking);
-            var nextPosition = transform.Position + deltaTime * nextVelocity;
+            var nextVelocity = (transform.Velocity + (Accelerator * deltaTime * movementDirection)) * (1f - Braking);
+            var nextPosition = transform.Position + (deltaTime * nextVelocity);
 
             var nextOrientation = transform.AngularDisplacement;
             if (nextVelocity.Length() > 0)
             {
-                nextOrientation = (float)(transform.AngularDisplacement + deltaTime * rotationDirection);
+                nextOrientation = (float)(transform.AngularDisplacement + (deltaTime * rotationDirection));
             }
 
             return new VehicleTransform(nextPosition, nextOrientation, nextVelocity, 0);

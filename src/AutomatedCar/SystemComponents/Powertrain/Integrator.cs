@@ -12,7 +12,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
         private readonly Dictionary<WheelKind, ParticleIntegrator> particles;
         private float? deltaTime = null;
         private VehicleTransform? currentTransform = null;
-        private bool isReverseMode = false;
+        private bool isParkingMode = false;
 
         public VehicleTransform NextVehicleTransform { get => CalculateNextVehicleTransform(); }
 
@@ -38,13 +38,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             this.currentTransform = vehicleTransform;
             this.deltaTime = deltaTime;
 
-            // HACK: when switching off reverse mode we zero out the velocity vector
-            var isReverseMode = currentGear == Gear.R;
-            if (this.isReverseMode != isReverseMode)
-            {
-                this.currentTransform = this.currentTransform with { Velocity = Vector2.Zero };
-            }
-            this.isReverseMode = isReverseMode;
+            this.isParkingMode = currentGear == Gear.P;
         }
 
         public void AccumulateForce(WheelKind wheel, Vector2 force)
@@ -76,6 +70,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
 
         private VehicleTransform CalculateNextVehicleTransform()
         {
+            if(isParkingMode)
+            {
+                return currentTransform with { Velocity = Vector2.Zero, AngularVelocity = 0f };
+            }
+
             var distanceFromCenterOfMass = vehicleConstants.WheelBase / 2;
             var particleStates = particles.Values.Select(x => (x.WheelKind, x.NextState, x.Mass, x.AccumulatedForce)).ToArray();
 
@@ -130,10 +129,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
             if(nextVelocity.Length() > float.Epsilon)
             {
                 var nextVelocityNormalized = Vector2.Normalize(nextVelocity);
-                if (!isReverseMode)
-                {
-                    nextAngularDisplacement = (float)Math.Atan2(nextVelocityNormalized.Y, nextVelocityNormalized.X);
-                }
+                nextAngularDisplacement = (float)Math.Atan2(nextVelocityNormalized.Y, nextVelocityNormalized.X);
             }
 
             return new VehicleTransform(nextPosition, nextAngularDisplacement, nextVelocity, 0);

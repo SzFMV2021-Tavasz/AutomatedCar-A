@@ -157,7 +157,11 @@ namespace AutomatedCar
 
         private void BindControlsDisplay()
         {
-            keyboardHandler.PressableKeys.Add(new PressableKey(ControlsInfoKey, "Other", "Display Controls", () => controlsDisplayer.DisplayControls()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(ControlsInfoKey, "Other", "Display Controls", () =>
+            {
+                onFocusLost();
+                controlsDisplayer.DisplayControls();
+            }));
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)
@@ -167,6 +171,11 @@ namespace AutomatedCar
         private void onKeyUp(object sender, KeyEventArgs e)
         {
             keyboardHandler.OnKeyUp(e.Key);
+        }
+
+        private void onFocusLost()
+        {
+            keyboardHandler.HoldableKeys.ForEach(holdableKey => keyboardHandler.OnKeyUp(holdableKey.Key));
         }
 
         private void logic(object sender, EventArgs e)

@@ -146,7 +146,7 @@ namespace AutomatedCar.Visualization
 
         private void SetRenderCameraMiddle(Models.AutomatedCar car)
         {
-            Point carMiddleReference = getMiddleReference(car.X, car.Y, car.Width, car.Height);
+            Point carMiddleReference = GetMiddleReference(car.X, car.Y, car.Width, car.Height);
             
             this.renderCamera.UpdateMiddlePoint(carMiddleReference.X, carMiddleReference.Y);
         }
@@ -310,7 +310,7 @@ namespace AutomatedCar.Visualization
             drawPolygons = args.DebugPolys;
         }
 
-        private Point getMiddleReference(Double x, Double y, Double width, Double height)
+        private Point GetMiddleReference(Double x, Double y, Double width, Double height)
         {
             return new Point(x + (width / 2), y + (height / 2));
         }
@@ -321,8 +321,7 @@ namespace AutomatedCar.Visualization
 
             if (worldObject is Models.AutomatedCar)
             {
-                refPoint.X = refPoint.X + (worldObject.Width / 2.0);
-                refPoint.Y = refPoint.Y + (worldObject.Height / 2.0);
+                refPoint = GetMiddleReference(refPoint.X, refPoint.Y, worldObject.Width, worldObject.Height);
             }
 
             double rotationAngle = WorldObjectTransformer.GetRotationAngle(worldObject);

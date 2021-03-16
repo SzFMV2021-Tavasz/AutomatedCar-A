@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutomatedCar.Visualization;
 using System.Windows;
 
-namespace BaseModel.Sensors
+namespace AutomatedCar.SystemComponents
 {
     public class CameraSensor : IDisplaySensor
    {

@@ -1,24 +1,15 @@
 ﻿using AutomatedCar.Models;
-using AutomatedCar.Models.Enums;
+using AutomatedCar.SystemComponents.SystemDebug;
 using BaseModel.Interfaces;
 using BaseModel.WorldObjects;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Xml.Linq;
-using BaseModel.Interfaces;
-using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
-using AutomatedCar.SystemComponents.SystemDebug;
-using BaseModel.Sensors;
-using System.Globalization;
-using System.Text;
 
 namespace AutomatedCar.Visualization
 {

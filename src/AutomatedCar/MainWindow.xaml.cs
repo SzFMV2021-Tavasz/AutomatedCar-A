@@ -1,8 +1,9 @@
 ﻿using AutomatedCar.KeyboardHandling;
 using AutomatedCar.Models;
+using AutomatedCar.SystemComponents;
 using AutomatedCar.SystemComponents.SystemDebug;
 using AutomatedCar.ViewModels;
-using BaseModel.Sensors;
+using AutomatedCar.Visualization;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

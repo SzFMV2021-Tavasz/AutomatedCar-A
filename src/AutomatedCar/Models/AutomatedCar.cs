@@ -1,11 +1,12 @@
 namespace AutomatedCar.Models
 {
-    using SystemComponents;
-    using System.Windows.Shapes;
-    using System.Numerics;
     using global::AutomatedCar.SystemComponents.Powertrain;
+    using global::AutomatedCar.Visualization;
     using System.Collections.Generic;
-    using BaseModel.Sensors;
+    using System.Numerics;
+    using System.Windows.Shapes;
+    using SystemComponents;
+
 
     public class AutomatedCar : Car
     {

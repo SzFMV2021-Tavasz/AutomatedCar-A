@@ -321,8 +321,8 @@ namespace AutomatedCar.Visualization
 
             if (worldObject is Models.AutomatedCar)
             {
-                refPoint.X = refPoint.X + worldObject.Width / 2;
-                refPoint.Y = refPoint.Y + worldObject.Height / 2;
+                refPoint.X = refPoint.X + (worldObject.Width / 2.0);
+                refPoint.Y = refPoint.Y + (worldObject.Height / 2.0);
             }
 
             double rotationAngle = WorldObjectTransformer.GetRotationAngle(worldObject);

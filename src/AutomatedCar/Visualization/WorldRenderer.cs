@@ -52,6 +52,9 @@ namespace AutomatedCar.Visualization
         {
             Loaded += WorldRenderer_Loaded;   
             HMIDebug.DebugActionEventHandler += Debug_EventCacher;
+            PolyPen.Freeze();
+            SensorPen.Freeze();
+            PolyPenHighLight.Freeze();
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -83,6 +86,8 @@ namespace AutomatedCar.Visualization
 
             drawingGroup = RotateObjectOnDrawingGroup(drawingGroup, worldObject);
             
+            drawingGroup.Freeze();
+
             drawingContext.DrawDrawing(drawingGroup);
         }
 
@@ -113,7 +118,7 @@ namespace AutomatedCar.Visualization
                     drawingGroup.Children.Add(drawingGeometry);
                 }
             }
-
+            
             return drawingGroup;
         }
 
@@ -163,6 +168,8 @@ namespace AutomatedCar.Visualization
 
                 GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.DodgerBlue, SensorPen, carPoly);
 
+                geometryDrawing.Freeze();
+
                 drawingGroup.Children.Add(
                     geometryDrawing
                 );
@@ -180,6 +187,8 @@ namespace AutomatedCar.Visualization
                 StreamGeometry carPoly = getPolyByPointList(carPolyList, true);
 
                 GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightPink, SensorPen, carPoly);
+
+                geometryDrawing.Freeze();
 
                 drawingGroup.Children.Add(
                     geometryDrawing
@@ -199,6 +208,8 @@ namespace AutomatedCar.Visualization
 
                 GeometryDrawing geometryDrawing = new GeometryDrawing(Brushes.LightGreen, SensorPen, carPoly);
 
+                geometryDrawing.Freeze();
+
                 drawingGroup.Children.Add(
                     geometryDrawing
                 );
@@ -215,7 +226,9 @@ namespace AutomatedCar.Visualization
 
                 StreamGeometry carPoly = getPolyByPointList(carPolyList, false);
 
-                GeometryDrawing geometryDrawing = new GeometryDrawing(null, car.IsHighLighted ? PolyPenHighLight : PolyPen, carPoly); 
+                GeometryDrawing geometryDrawing = new GeometryDrawing(null, car.IsHighLighted ? PolyPenHighLight : PolyPen, carPoly);
+
+                geometryDrawing.Freeze();
 
                 drawingGroup.Children.Add(
                     geometryDrawing
@@ -223,6 +236,8 @@ namespace AutomatedCar.Visualization
             }
 
             drawingGroup = RotateObjectOnDrawingGroup(drawingGroup, car);
+
+            drawingGroup.Freeze();
             
             drawingContext.DrawDrawing(drawingGroup);
         }
@@ -303,6 +318,12 @@ namespace AutomatedCar.Visualization
         public DrawingGroup RotateObjectOnDrawingGroup(DrawingGroup drawingGroup, IRenderableWorldObject worldObject)
         {
             Point refPoint = renderCamera.TranslateToViewport(worldObject.X, worldObject.Y);
+
+            if (worldObject is Models.AutomatedCar)
+            {
+                refPoint.X = refPoint.X + worldObject.Width / 2;
+                refPoint.Y = refPoint.Y + worldObject.Height / 2;
+            }
 
             double rotationAngle = WorldObjectTransformer.GetRotationAngle(worldObject);
 

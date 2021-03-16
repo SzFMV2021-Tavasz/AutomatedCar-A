@@ -1,8 +1,8 @@
-﻿using AutomatedCar.KeyboardHandling;
+﻿using AutomatedCar.Controls;
 using NUnit.Framework;
 using System.Windows.Input;
 
-namespace AutomatedCarTest.KeyboardHandling
+namespace AutomatedCarTest.Controls
 {
     public class HoldableKeyTest
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace AutomatedCar.KeyboardHandling
+namespace AutomatedCar.Controls
 {
     public class PressableKey : InputKey
     {

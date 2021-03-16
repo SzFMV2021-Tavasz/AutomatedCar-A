@@ -1,9 +1,8 @@
-﻿using AutomatedCar.KeyboardHandling;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 
-namespace AutomatedCar
+namespace AutomatedCar.Controls
 {
     public class ControlsDisplayer
     {

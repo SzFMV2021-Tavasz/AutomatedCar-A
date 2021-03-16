@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace AutomatedCar.KeyboardHandling
+namespace AutomatedCar.Controls
 {
     public abstract class InputKey
     {

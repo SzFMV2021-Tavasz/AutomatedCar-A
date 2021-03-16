@@ -11,6 +11,6 @@ namespace AutomatedCar.ViewModels
             this.controlsInfoKey = controlsInfoKey;
         }
 
-        public string Caption => $"Press {controlsInfoKey} to see controls";
+        public string Caption => $"Press {controlsInfoKey} to display controls";
     }
 }

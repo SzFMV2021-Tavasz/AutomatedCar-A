@@ -17,11 +17,11 @@ namespace AutomatedCarTest.KeyboardHandling
         {
             keyboardHandler = new KeyboardHandler(20);
 
-            PressableKey key1 = new PressableKey(Key.A, () => testInt1++);
-            PressableKey key2 = new PressableKey(Key.D, () => testInt1--);
+            PressableKey key1 = new PressableKey(Key.A, "Cat1", "Con1", () => testInt1++);
+            PressableKey key2 = new PressableKey(Key.D, "Cat2", "Con2", () => testInt1--);
 
-            HoldableKey key3 = new HoldableKey(Key.Q, (x) => testInt2 += 2, (x) => testInt2 -= 2);
-            HoldableKey key4 = new HoldableKey(Key.E, (x) => testDouble += x, (x) => testDouble -= x);
+            HoldableKey key3 = new HoldableKey(Key.Q, "Cat3", "Con3", (x) => testInt2 += 2, (x) => testInt2 -= 2);
+            HoldableKey key4 = new HoldableKey(Key.E, "Cat3", "Con4", (x) => testDouble += x, (x) => testDouble -= x);
 
             keyboardHandler.PressableKeys.Add(key1);
             keyboardHandler.PressableKeys.Add(key2);

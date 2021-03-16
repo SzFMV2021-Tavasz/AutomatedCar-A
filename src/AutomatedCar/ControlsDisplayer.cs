@@ -7,20 +7,28 @@ namespace AutomatedCar
 {
     public class ControlsDisplayer
     {
-        private List<PressableKey> pressableKeys;
-        private List<HoldableKey> holdableKeys;
+        private List<InputKey> inputKeys;
 
-        public ControlsDisplayer(List<PressableKey> pressableKeys, List<HoldableKey> holdableKeys)
+        public ControlsDisplayer(List<InputKey> inputKeys)
         {
-            this.pressableKeys = pressableKeys;
-            this.holdableKeys = holdableKeys;
+            this.inputKeys = inputKeys;
         }
 
         public void DisplayControls()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            holdableKeys.ForEach(key => stringBuilder.Append($"{key.Control}: {key.Key}\n"));
-            pressableKeys.ForEach(key => stringBuilder.Append($"{key.Control}: {key.Key}\n"));
+            string prevCategory = "";
+            foreach (InputKey key in inputKeys)
+            {
+                if (prevCategory != key.Category)
+                {
+                    stringBuilder.Append($"\n{key.Category.ToUpper()}\n");
+                    prevCategory = key.Category;
+                }
+
+                stringBuilder.Append($"{key.Control}: {key.Key}\n");
+            }
+
             MessageBox.Show(stringBuilder.ToString());
         }
     }

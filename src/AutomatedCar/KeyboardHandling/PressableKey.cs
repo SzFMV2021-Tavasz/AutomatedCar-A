@@ -5,7 +5,7 @@ namespace AutomatedCar.KeyboardHandling
 {
     public class PressableKey : InputKey
     {
-        public PressableKey(Key key, string control, Action onPress) : base(key, control)
+        public PressableKey(Key key, string category, string control, Action onPress) : base(key, category, control)
         {
             this.OnPress = onPress;
         }

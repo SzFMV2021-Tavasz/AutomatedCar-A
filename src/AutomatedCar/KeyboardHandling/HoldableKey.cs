@@ -5,7 +5,7 @@ namespace AutomatedCar.KeyboardHandling
 {
     public class HoldableKey : InputKey
     {
-        public HoldableKey(Key key, string control, Action<double> onHold, Action<double> onIdle) : base(key, control)
+        public HoldableKey(Key key, string category, string control, Action<double> onHold, Action<double> onIdle) : base(key, category, control)
         {
             this.OnHold = onHold;
             this.OnIdle = onIdle;

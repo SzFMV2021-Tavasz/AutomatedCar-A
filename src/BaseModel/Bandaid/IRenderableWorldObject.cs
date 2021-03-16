@@ -7,6 +7,8 @@
         int Width { get; set; }
         int X { get; set; }
         int Y { get; set; }
+        int RefX { get; }
+        int RefY { get; }
         int ZIndex { get; set; }
         float M11 { get; set; }
         float M12 { get; set; }

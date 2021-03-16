@@ -14,7 +14,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         [Fact]
         public void ForceSumming()
         {
-            var integrator = new ParticleIntegrator(Vector2.Zero, Vector2.Zero, 0, 0);
+            var integrator = new ParticleIntegrator(Vector2.Zero, Vector2.Zero, 0, 0, WheelKind.Front);
 
             var force0 = new Vector2(7, -5);
             var force1 = new Vector2(-3, 11);
@@ -32,7 +32,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         public void MassProperty()
         {
             var massInit = 100f;
-            var integrator = new ParticleIntegrator(Vector2.Zero, Vector2.Zero, massInit, 0);
+            var integrator = new ParticleIntegrator(Vector2.Zero, Vector2.Zero, massInit, 0, WheelKind.Front);
 
             var mass = integrator.Mass;
 
@@ -48,7 +48,7 @@ namespace AutomatedCarTest.SystemComponents.Powertrain
         [MemberData(nameof(integrationTestCases))]
         public void NextStateCalculatedIsCorrect(Vector2 initialPosition, Vector2 initialVelocity, float mass, float deltaTime, Vector2 netForce, Vector2 expectedPosition, Vector2 expectedVelocity)
         {
-            var integrator = new ParticleIntegrator(initialPosition, initialVelocity, mass, deltaTime);
+            var integrator = new ParticleIntegrator(initialPosition, initialVelocity, mass, deltaTime, WheelKind.Front);
 
             integrator.AccumulateForce(netForce);
             var (nextPosition, nextVelocity) = integrator.NextState;

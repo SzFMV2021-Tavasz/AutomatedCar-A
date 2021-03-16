@@ -11,7 +11,7 @@ namespace AutomatedCar.SystemComponents.Powertrain
     {
         public readonly (int minSpeed, int maxSpeed, int gear)[] DriveSpeedGearMapping = new (int, int, int)[]
         {
-            (0, 10, 0),
+            (int.MinValue, 10, 0),
             (10, 15, 1),
             (15, 20, 2),
             (20, 30, 3),

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System.Windows.Input;
 
-namespace Test.KeyboardHandling
+namespace AutomatedCarTest.KeyboardHandling
 {
     public class HoldableKeyTest
     {

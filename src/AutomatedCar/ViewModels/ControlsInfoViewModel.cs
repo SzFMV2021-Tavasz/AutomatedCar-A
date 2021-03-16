@@ -1,16 +1,23 @@
-﻿using System.Windows.Input;
+﻿using ReactiveUI;
 
 namespace AutomatedCar.ViewModels
 {
     public class ControlsInfoViewModel : ViewModelBase
     {
-        private string controlsInfoKey;
+        private string _controlsInfoKey;
 
-        public ControlsInfoViewModel(string controlsInfoKey)
+        public ControlsInfoViewModel()
         {
-            this.controlsInfoKey = controlsInfoKey;
         }
 
-        public string Caption => $"Press {controlsInfoKey} to display controls";
+        public string ControlsInfoKey
+        {
+            get => this._controlsInfoKey;
+            set => this.RaiseAndSetIfChanged(ref this._controlsInfoKey, value);
+        }
+
+        public string Caption => $"Press {_controlsInfoKey} to display controls";
+
+        public void SetControlsInfoKey(string key) => this.ControlsInfoKey = key;
     }
 }

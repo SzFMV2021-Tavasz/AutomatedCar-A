@@ -96,10 +96,11 @@ namespace AutomatedCar
             world.AddObject(controlledCar);
             world.ControlledCar = controlledCar;
             controlledCar.Start();
-            var dashBoardViewModel = new DashboardViewModel(world.ControlledCar, ControlsInfoKey.ToString());
+            var dashBoardViewModel = new DashboardViewModel(world.ControlledCar);
             ViewModel.Dashboard = dashBoardViewModel;
             BindKeysForDashboardFunctions(dashBoardViewModel);
             timer.Tick += dashBoardViewModel.HandlePackets;
+            dashBoardViewModel.SetControlsInfoKey(ControlsInfoKey.ToString());
 
             List<InputKey> inputKeys = new List<InputKey>();
             inputKeys.AddRange(keyboardHandler.HoldableKeys);

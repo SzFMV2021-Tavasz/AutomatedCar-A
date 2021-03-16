@@ -65,11 +65,7 @@ namespace AutomatedCar.ViewModels
             this.CarInfoViewModel.Y = 500;
 
             this.SteeringWheelViewModel = new SteeringWheelViewModel();
-        }
-
-        public DashboardViewModel(AutomatedCar controlledCar, string controlsInfoKey) : this(controlledCar)
-        {
-            this.ControlsInfoViewModel = new ControlsInfoViewModel(controlsInfoKey);
+            this.ControlsInfoViewModel = new ControlsInfoViewModel();
         }
 
         public AutomatedCar ControlledCar
@@ -245,5 +241,7 @@ namespace AutomatedCar.ViewModels
                 }
             }
         }
+
+        public void SetControlsInfoKey(string key) => this.ControlsInfoViewModel.SetControlsInfoKey(key);
     }
 }

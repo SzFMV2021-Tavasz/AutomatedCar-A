@@ -3,16 +3,13 @@ using System.Windows.Input;
 
 namespace AutomatedCar.KeyboardHandling
 {
-    public class PressableKey
+    public class PressableKey : InputKey
     {
-        public Key Key { get; }
-
-        public Action OnPress { get; }
-
-        public PressableKey(Key key, Action onPress)
+        public PressableKey(Key key, string control, Action onPress) : base(key, control)
         {
-            this.Key = key;
             this.OnPress = onPress;
         }
+
+        public Action OnPress { get; }
     }
 }

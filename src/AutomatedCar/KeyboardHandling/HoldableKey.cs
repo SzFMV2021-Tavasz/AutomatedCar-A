@@ -3,20 +3,18 @@ using System.Windows.Input;
 
 namespace AutomatedCar.KeyboardHandling
 {
-    public class HoldableKey
+    public class HoldableKey : InputKey
     {
-        public Key Key { get; }
-
-        public Action<double> OnHold { get; }
-        public Action<double> OnIdle { get; }
-
-        public bool IsBeingHeld { get; set; }
-
-        public HoldableKey(Key key, Action<double> onHold, Action<double> onIdle)
+        public HoldableKey(Key key, string control, Action<double> onHold, Action<double> onIdle) : base(key, control)
         {
-            this.Key = key;
             this.OnHold = onHold;
             this.OnIdle = onIdle;
         }
+
+        public Action<double> OnHold { get; }
+
+        public Action<double> OnIdle { get; }
+
+        public bool IsBeingHeld { get; set; }
     }
 }

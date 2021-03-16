@@ -50,6 +50,16 @@ namespace Test.Visualization
         }
 
         [Theory]
+        [InlineData(-100000, -100000, 0, 0)]
+        public void CameraCannotMoveOutOfBoundaries(double newX, double newY, double expectedX, double expectedY)
+        {
+            camera.UpdateMiddlePoint(newX, newY);
+
+            Assert.Equal(expectedX, camera.MiddleX);
+            Assert.Equal(expectedY, camera.MiddleY);
+        }
+
+        [Theory]
         [InlineData(10, 7, 5, 2)]
         [InlineData(16, 5, 11, 0)]
         public void CanTranslateGlobalCoordsToLocals(double x, double y, double expectedViewportX, double expectedViewportY)
@@ -67,7 +77,7 @@ namespace Test.Visualization
         [InlineData(5, 5, 10, 10)]
         [InlineData(0, 0, 20, 30)]
         [InlineData(450, 500, 150, 30)]
-        [InlineData(-500, -1500, 5000, 5000)]
+        [InlineData(-500, -500, 5000, 5000)]
         public void CameraDetectsIntersectionsCorrectly(int x, int y, int width, int height)
         {
             var renderable = new Mock<IRenderableWorldObject>();
@@ -76,7 +86,7 @@ namespace Test.Visualization
             renderable.Setup(r => r.Width).Returns(width);
             renderable.Setup(r => r.Height).Returns(height);
 
-            var result = camera.IsVisibleInViewport(renderable.Object);
+            var result = camera.IsWithinDrawingDistance(renderable.Object);
             Assert.True(result);
         }
 
@@ -106,6 +116,9 @@ namespace Test.Visualization
         {
             camera.Width = 960;
             camera.Height = 720;
+
+            camera.WorldWidth = 100000;
+            camera.WorldHeight = 100000;
 
             SetupVisibles();
             SetupFaraways();

@@ -10,6 +10,11 @@ namespace AutomatedCar.SystemComponents.Powertrain
             return new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians));
         }
 
+        public static Vector2 MakeUnitVectorFromRadians(this double radians)
+        {
+            return new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians));
+        }
+
         public static float RadiansToDegrees(this float radians)
         {
             return (float)(radians / Math.PI * 180);

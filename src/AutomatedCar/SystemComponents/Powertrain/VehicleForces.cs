@@ -53,16 +53,6 @@ namespace AutomatedCar.SystemComponents.Powertrain
             return brakePedal * vehicleConstants.BrakingConstant * -squareVelocity;
         }
 
-        public Vector2 GetWheelDirectionHackForce(Vector2 wheelDirection, Vector2 velocity)
-        {
-            // Project velocity into wheelDirection
-            var proj = Vector2.Dot(velocity, wheelDirection) * wheelDirection;
-            // Compute the vector component of velocity orthogonal to wheelDirection
-            var velocityOrthogonal = velocity - proj;
-
-            return velocityOrthogonal.Length() * velocityOrthogonal;
-        }
-
         private Vector2 CalculateTractiveForce(float gasPedal, Vector2 wheelDirection, float gearRatio)
         {
             var engineTorque = vehicleConstants.GetEngineTorque(vehicleConstants.GetCrankshaftSpeed(gasPedal));

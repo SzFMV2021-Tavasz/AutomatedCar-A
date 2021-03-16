@@ -17,6 +17,8 @@ using BaseModel.WorldObjects;
 using Point = System.Windows.Point;
 using AutomatedCar.SystemComponents.SystemDebug;
 using BaseModel.Sensors;
+using System.Globalization;
+using System.Text;
 
 namespace AutomatedCar.Visualization
 {
@@ -25,6 +27,7 @@ namespace AutomatedCar.Visualization
         public readonly double tickRate = 20;
         private readonly DispatcherTimer renderTimer = new DispatcherTimer();
         private readonly RenderCamera renderCamera = new RenderCamera();
+        private readonly StringBuilder log = new StringBuilder();
 
         private readonly Pen PolyPen = new Pen(Brushes.Red, 2);
         private readonly Pen SensorPen = new Pen(Brushes.Black, 1);
@@ -58,13 +61,12 @@ namespace AutomatedCar.Visualization
             {
                 return;
             }
-
-            var objectsInRange = renderCamera.Filter(World.Renderables);
             
             var car = GetAutomatedCar();
             
             SetRenderCameraMiddle(car);
-            
+            var objectsInRange = renderCamera.Filter(World.Renderables);
+
             foreach (var worldObject in objectsInRange)
             {
                 RenderObject(drawingContext, worldObject);
@@ -314,6 +316,10 @@ namespace AutomatedCar.Visualization
 
             renderCamera.Width = ActualWidth;
             renderCamera.Height = ActualHeight;
+            renderCamera.viewPortSkin = 2;
+
+            renderCamera.WorldWidth = World.Width;
+            renderCamera.WorldHeight = World.Height;
         }
 
         private void Debug_EventCacher(object sender,DebugActionArgs args)

@@ -1,4 +1,4 @@
-﻿using AutomatedCar.KeyboardHandling;
+﻿using AutomatedCar.Controls;
 using AutomatedCar.Models;
 using AutomatedCar.SystemComponents;
 using AutomatedCar.SystemComponents.SystemDebug;
@@ -20,7 +20,7 @@ namespace AutomatedCar
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly double tickInterval = 20;
+        private readonly double TickInterval = 20;
 
         public MainWindowViewModel ViewModel { get; set; }
 
@@ -28,6 +28,7 @@ namespace AutomatedCar
         World world = World.Instance;
 
         private KeyboardHandler keyboardHandler;
+        private ControlsDisplayer controlsDisplayer;
         private HMIDebug hmiDebug;
 
         public MainWindow()
@@ -37,8 +38,8 @@ namespace AutomatedCar
             InitializeComponent();
            
             hmiDebug = new HMIDebug();
-            keyboardHandler = new KeyboardHandler(tickInterval);          
-            timer.Interval = TimeSpan.FromMilliseconds(tickInterval);
+            keyboardHandler = new KeyboardHandler(TickInterval);
+            timer.Interval = TimeSpan.FromMilliseconds(TickInterval);
             timer.Tick += logic;
             timer.Start();
             // make my dockpanel focus of this game
@@ -49,7 +50,8 @@ namespace AutomatedCar
             var path = $"{Directory.GetCurrentDirectory()}/Assets";
             var worldPath = $"{path}/test_world.json";
             var polygonsPath = $"{path}/worldobject_polygons.json";
-            world.LoadFromJSON(worldPath, polygonsPath);
+            var referencePointsPath = $"{path}/reference_points.json";
+            world.LoadFromJSON(worldPath, polygonsPath, referencePointsPath);
 
             var circle = new Circle(400, 200, "circle.png", 20);
             circle.Width = 40;
@@ -100,53 +102,69 @@ namespace AutomatedCar
             ViewModel.Dashboard = dashBoardViewModel;
             BindKeysForDashboardFunctions(dashBoardViewModel);
             timer.Tick += dashBoardViewModel.HandlePackets;
+            dashBoardViewModel.SetControlsInfoKey(KeyBindings.DisplayControls.ToString());
+
+            List<InputKey> inputKeys = new List<InputKey>();
+            inputKeys.AddRange(keyboardHandler.HoldableKeys);
+            inputKeys.AddRange(keyboardHandler.PressableKeys);
+            controlsDisplayer = new ControlsDisplayer(inputKeys);
         }
 
         private void BindKeysForDashboardFunctions(DashboardViewModel dashBoardViewModel)
         {
+            BindCarControls(dashBoardViewModel);
+            BindShiftingAndSignaling(dashBoardViewModel);
             BindACCFeatures(dashBoardViewModel);
             BindParkingPilotAndLaneKeepingFeatures(dashBoardViewModel);
             BindDebugFeatures();
-            BindCarControls(dashBoardViewModel);
-            BindShiftingAndSignaling(dashBoardViewModel);
+            BindControlsDisplay();
         }
 
         private void BindShiftingAndSignaling(DashboardViewModel dashBoardViewModel)
         {
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.M, () => dashBoardViewModel.ToggleRightIndicator()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.N, () => dashBoardViewModel.ToggleLeftIndicator()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.G, () => dashBoardViewModel.ShiftUp()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.F, () => dashBoardViewModel.ShiftDown()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.IndicatorRight, "Indicator", "Toggle Right Indicator", () => dashBoardViewModel.ToggleRightIndicator()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.IndicatorLeft, "Indicator", "Toggle Left Indicator", () => dashBoardViewModel.ToggleLeftIndicator()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.GearUp, "Gear", "Shift Gear Up", () => dashBoardViewModel.ShiftUp()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.GearDown, "Gear", "Shift Gear Down", () => dashBoardViewModel.ShiftDown()));
         }
 
         private void BindParkingPilotAndLaneKeepingFeatures(DashboardViewModel dashBoardViewModel)
         {
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.L, () => dashBoardViewModel.ToggleLaneKeeping()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.P, () => dashBoardViewModel.ToggleParkingPilot()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.LaneKeeping, "Driving Assistance Extras", "Toggle Lane Keeping", () => dashBoardViewModel.ToggleLaneKeeping()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.ParkingPilot, "Driving Assistance Extras", "Toggle Parking Pilot", () => dashBoardViewModel.ToggleParkingPilot()));
         }
 
         private void BindDebugFeatures()
         {
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D1, () => hmiDebug.OnDebugAction(1)));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D2, () => hmiDebug.OnDebugAction(2)));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D3, () => hmiDebug.OnDebugAction(3)));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.D4, () => hmiDebug.OnDebugAction(4)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.DebugAction1, "Debug Actions", "Toggle Debug Action 1", () => hmiDebug.OnDebugAction(1)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.DebugAction2, "Debug Actions", "Toggle Debug Action 2", () => hmiDebug.OnDebugAction(2)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.DebugAction3, "Debug Actions", "Toggle Debug Action 3", () => hmiDebug.OnDebugAction(3)));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.DebugAction4, "Debug Actions", "Toggle Debug Action 4", () => hmiDebug.OnDebugAction(4)));
         }
 
         private void BindACCFeatures(DashboardViewModel dashBoardViewModel)
         {
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.Add, () => dashBoardViewModel.IncreaseACCDesiredSpeed()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.Subtract, () => dashBoardViewModel.DecreaseACCDesiredSpeed()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.T, () => dashBoardViewModel.SetToNextACCDesiredDistance()));
-            keyboardHandler.PressableKeys.Add(new PressableKey(Key.RightCtrl, () => dashBoardViewModel.ToggleACC()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.ACCToggle, "ACC", "Toggle ACC", () => dashBoardViewModel.ToggleACC()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.ACCSpeedUp, "ACC", "Increase ACC Desired Speed", () => dashBoardViewModel.IncreaseACCDesiredSpeed()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.ACCSpeedDown, "ACC", "Decrease ACC Desired Speed", () => dashBoardViewModel.DecreaseACCDesiredSpeed()));
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.ACCDistance, "ACC", "Set To Next ACC Desired Distance", () => dashBoardViewModel.SetToNextACCDesiredDistance()));
         }
 
         private void BindCarControls(DashboardViewModel dashBoardViewModel)
         {
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.W, (duration) => dashBoardViewModel.MoveGasPedalDown(duration), (duration) => dashBoardViewModel.MoveGasPedalUp(duration)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.S, (duration) => dashBoardViewModel.MoveBrakePedalDown(duration), (duration) => dashBoardViewModel.MoveBrakePedalUp(duration)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.A, (duration) => dashBoardViewModel.SteerLeft(duration), (duration) => dashBoardViewModel.SteerRightToIdle(duration)));
-            keyboardHandler.HoldableKeys.Add(new HoldableKey(Key.D, (duration) => dashBoardViewModel.SteerRight(duration), (duration) => dashBoardViewModel.SteerLeftToIdle(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(KeyBindings.Gas, "Car Controls", "Gas Pedal", (duration) => dashBoardViewModel.MoveGasPedalDown(duration), (duration) => dashBoardViewModel.MoveGasPedalUp(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(KeyBindings.Brake, "Car Controls", "Brake Pedal", (duration) => dashBoardViewModel.MoveBrakePedalDown(duration), (duration) => dashBoardViewModel.MoveBrakePedalUp(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(KeyBindings.SteerLeft, "Car Controls", "Steer Left", (duration) => dashBoardViewModel.SteerLeft(duration), (duration) => dashBoardViewModel.SteerRightToIdle(duration)));
+            keyboardHandler.HoldableKeys.Add(new HoldableKey(KeyBindings.SteerRight, "Car Controls", "Steer Right", (duration) => dashBoardViewModel.SteerRight(duration), (duration) => dashBoardViewModel.SteerLeftToIdle(duration)));
+        }
+
+        private void BindControlsDisplay()
+        {
+            keyboardHandler.PressableKeys.Add(new PressableKey(KeyBindings.DisplayControls, "Other", "Display Controls", () =>
+            {
+                onFocusLost();
+                controlsDisplayer.DisplayControls();
+            }));
         }
 
         private void onKeyDown(object sender, KeyEventArgs e)
@@ -156,6 +174,11 @@ namespace AutomatedCar
         private void onKeyUp(object sender, KeyEventArgs e)
         {
             keyboardHandler.OnKeyUp(e.Key);
+        }
+
+        private void onFocusLost()
+        {
+            keyboardHandler.HoldableKeys.ForEach(holdableKey => keyboardHandler.OnKeyUp(holdableKey.Key));
         }
 
         private void logic(object sender, EventArgs e)

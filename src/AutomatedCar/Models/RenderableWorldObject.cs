@@ -43,6 +43,9 @@ namespace AutomatedCar.Models
             set => this.RaiseAndSetIfChanged(ref this._y, value);
         }
 
+        public int RefX { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public int RefY { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+
         public float M11
         {
             get => this._m11;

@@ -38,9 +38,9 @@
             this.WorldObjects.Add(worldObject);
         }
 
-        public void LoadFromJSON(string worldJsonPath, string worldObjectPolygonsJsonPath)
+        public void LoadFromJSON(string worldJsonPath, string worldObjectPolygonsJsonPath, string referencePointsJsonPath)
         {
-            _world = BaseModel.World.FromJSON(worldJsonPath, worldObjectPolygonsJsonPath);
+            _world = BaseModel.World.FromJSON(worldJsonPath, worldObjectPolygonsJsonPath, referencePointsJsonPath);
             Renderables = new List<IRenderableWorldObject>();
             _world.objects.ForEach(o => Renderables.Add(o));
         }

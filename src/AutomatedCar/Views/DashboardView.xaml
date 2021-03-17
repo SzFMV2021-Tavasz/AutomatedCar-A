@@ -41,6 +41,7 @@
             <uc:LastSignView Width="Auto" Grid.Column="1" Grid.RowSpan="2" HorizontalContentAlignment="Center" VerticalAlignment="Center" DataContext="{Binding LastSignViewModel}"/>
         </Grid>
         <uc:CarInfoView Margin="5" DataContext="{Binding CarInfoViewModel}"/>
+        <uc:ControlsInfoView Margin="5" DataContext="{Binding ControlsInfoViewModel}"/>
 
     </StackPanel>
 </UserControl>

@@ -5,7 +5,6 @@ namespace AutomatedCar.SystemComponents.Sensores
 {
     public class RadarSensor : SystemComponent,IDisplaySensor
     {
-
         private RadarPacket radarPacket;
 
         public RadarSensor(VirtualFunctionBus virtualFunctionBus)

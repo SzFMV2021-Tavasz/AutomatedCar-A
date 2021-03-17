@@ -8,7 +8,6 @@ namespace AutomatedCar.Models
     using System.Windows.Shapes;
     using SystemComponents;
 
-
     public class AutomatedCar : Car
     {
         private VirtualFunctionBus virtualFunctionBus;
@@ -21,7 +20,6 @@ namespace AutomatedCar.Models
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
-
             this.Radar = new List<IDisplaySensor>();
 
             this.virtualFunctionBus = new VirtualFunctionBus();

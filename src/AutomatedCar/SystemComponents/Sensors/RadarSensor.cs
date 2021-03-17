@@ -1,7 +1,7 @@
 ﻿using AutomatedCar.Visualization;
 using System.Windows;
 
-namespace AutomatedCar.SystemComponents.Sensores
+namespace AutomatedCar.SystemComponents.Sensors
 {
     public class RadarSensor : SystemComponent,IDisplaySensor
     {

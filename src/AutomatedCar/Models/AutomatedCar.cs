@@ -1,7 +1,7 @@
 namespace AutomatedCar.Models
 {
     using global::AutomatedCar.SystemComponents.Powertrain;
-    using global::AutomatedCar.SystemComponents.Sensores;
+    using global::AutomatedCar.SystemComponents.Sensors;
     using global::AutomatedCar.Visualization;
     using System.Collections.Generic;
     using System.Numerics;

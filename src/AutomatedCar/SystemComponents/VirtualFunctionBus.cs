@@ -16,6 +16,7 @@ namespace AutomatedCar.SystemComponents
         public IReadOnlyAEBPacket AEBPacket { get; set; }
         public IReadOnlyHMIPacket HMIPacket { get; set; }
         public IReadOnlyLKAPacket LKAPacket { get; set; }
+        public IReadOnlyDummyPacket CameraPacket { get; set; }
 
         private DispatcherTimer timer = new DispatcherTimer();
 

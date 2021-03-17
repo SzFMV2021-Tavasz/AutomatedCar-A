@@ -156,7 +156,7 @@ namespace AutomatedCar.Visualization
 
             if (drawDebugRadar && car.Radar != null)
             {
-                List<StreamGeometry> radarStreamGemometrys = GetStreamGeometryListOf(car.Video, new Point(car.X, car.Y));
+                List<StreamGeometry> radarStreamGemometrys = GetStreamGeometryListOf(car.Radar, new Point(car.X, car.Y));
 
                 foreach (StreamGeometry streamGeometry in radarStreamGemometrys)
                 {

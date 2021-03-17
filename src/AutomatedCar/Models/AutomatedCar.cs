@@ -1,6 +1,7 @@
 namespace AutomatedCar.Models
 {
     using global::AutomatedCar.SystemComponents.Powertrain;
+    using global::AutomatedCar.SystemComponents.Sensores;
     using global::AutomatedCar.Visualization;
     using System.Collections.Generic;
     using System.Numerics;
@@ -20,8 +21,12 @@ namespace AutomatedCar.Models
         public AutomatedCar(int x, int y, string filename)
             : base(x, y, filename)
         {
+
+            this.Radar = new List<IDisplaySensor>();
+
             this.virtualFunctionBus = new VirtualFunctionBus();
             this.dummySensor = new DummySensor(this.virtualFunctionBus);
+            this.Radar.Add(new RadarSensor(this.virtualFunctionBus));
             this.VehicleConstants = new VehicleConstants();
             this.VehicleForces = new VehicleForces(VehicleConstants);
             this.Integrator = new Integrator(VehicleConstants);

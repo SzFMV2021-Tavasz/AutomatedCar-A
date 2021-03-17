@@ -1,4 +1,4 @@
-namespace AutomatedCar.SystemComponents
+namespace AutomatedCar.SystemComponents.Sensores
 {
     using AutomatedCar.Models;
     using AutomatedCar.SystemComponents.Packets;

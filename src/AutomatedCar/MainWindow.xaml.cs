@@ -75,20 +75,16 @@ namespace AutomatedCar
             // add polyline to the car
             controlledCar.Geometry = geom;
 
-            List<IDisplaySensor> cameraSensores = new List<IDisplaySensor>();
-            cameraSensores.Add(new CameraSensor() { x1 = new Point(54, 120), x2 = new Point(0, -120), x3= new Point(108, -120) });
-            controlledCar.Video = cameraSensores;
-
-            List<IDisplaySensor> radarSensores = new List<IDisplaySensor>();
-            //Radar points example, clear in  #127 issue
-            var radar = new Polyline();
-            radar.Points.Add(new Point(54, 120));
-            radar.Points.Add(new Point(0, -300));
-            radar.Points.Add(new Point(108, -300));
+            List<IDisplaySensor> videoSensors = new List<IDisplaySensor>();
+            //Camera points example, clear in  #127 issue
+            var video = new Polyline();
+            video.Points.Add(new Point(54, 120));
+            video.Points.Add(new Point(0, -120));
+            video.Points.Add(new Point(108, -120));
             //controlledCar.Radar = radar;
-            controlledCar.Radar = null;
+            controlledCar.Video = null;
 
-            List<IDisplaySensor> sonicSensores = new List<IDisplaySensor>();
+            List<IDisplaySensor> sonicSensors = new List<IDisplaySensor>();
             //Sonic points example, clear in  #127 issue
             var sonic = new Polyline();
             sonic.Points.Add(new Point(6, 20));
